@@ -10,4 +10,4 @@ This should point to your local fivem-servers appropriate resource folder.
 
 To start developing, just run `npm run watch-scripts` (for fivem client/server scripts) and `npm run watch` (for the Angular NUI application).
 
-`fivem-js` and `@citizenfx/client` are included, so you have full autocompletion for fiveM/citizenFX/gta natives related stuff.
+`fivem-js` and `@citizenfx/client` are included, so you have full autocompletion for fiveM/citizenFX/gta-natives related stuff.
