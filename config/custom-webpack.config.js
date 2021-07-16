@@ -3,7 +3,7 @@ const ShellPlugin = require("webpack-shell-plugin-next");
 module.exports = {
     plugins: [
         new ShellPlugin({
-            onBuildEnd: {
+            onAfterDone: {
                 scripts: [ "npm run fivem:create" ]
             }
         })
