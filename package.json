@@ -9,7 +9,8 @@
     "fivem:watch": "npm run fivem:clean && tsc-watch --project config/tsconfig.fivem.json --onSuccess \"npm run fivem:create\"",
     "fivem:create": "node build-scripts/create-fivem-resource.js",
     "test": "ng test",
-    "fivem:clean": "rimraf dist/*client* && rimraf dist/*server*"
+    "fivem:clean": "rimraf dist/*client* && rimraf dist/*server*",
+    "clean": "rimraf dist"
   },
   "private": true,
   "dependencies": {
