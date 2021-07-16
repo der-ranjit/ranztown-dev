@@ -11,7 +11,7 @@ if (!resourcePath) {
 }
 
 const DIST_PATH = path.resolve(__dirname + "/../dist");
-const MANIFEST_TEMPLATE_PATH = path.resolve(__dirname + "/../src/fivem-resource-scripts/fxmanifest.lua");
+const MANIFEST_TEMPLATE_PATH = path.resolve(__dirname + "/../config/fxmanifest.lua");
 const MANIFEST_TARGET_PATH = path.resolve(__dirname + "/../dist/fxmanifest.lua");
 const RESOURCE_SCRIPTS_PATH = path.resolve(__dirname + "/../src/fivem-resource-scripts");
 const TARGET_PATH = path.resolve(resourcePath);
@@ -22,9 +22,9 @@ const description = resourceConfig.description ?? "Angular-NUI";
 
 /* relative paths for fxmanifest.lua */
 const resourceFilesNames = Glob.sync(`${DIST_PATH}/**/*`).concat(Glob.sync(`${RESOURCE_SCRIPTS_PATH}/*.lua`))
-    .map(file => path.basename(file))
     // filter out possibly existing fxmanifest.lua; it should not appear in the files list
-    .filter(file => file.indexOf("fxmanifest") === -1);
+    .filter(file => file.indexOf("fxmanifest") === -1)
+    .map(file => path.basename(file));
 const clientFiles = resourceFilesNames.filter(file => file.indexOf("client") !== -1);
 const serverFiles = resourceFilesNames.filter(file => file.indexOf("server") !== -1);
 
