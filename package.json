@@ -1,13 +1,15 @@
 {
-  "name": "ranztown-dev",
+  "name": "angular-nui",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "watch": "ng build --watch",
-    "watch-scripts": "tsc --project tsconfig.fivem.json --watch",
-    "test": "ng test"
+    "nui:watch": "ng build --watch",
+    "fivem:watch": "npm run fivem:clean && tsc-watch --project config/tsconfig.fivem.json --onSuccess \"npm run fivem:create\"",
+    "fivem:create": "node build-scripts/create-fivem-resource.js",
+    "test": "ng test",
+    "fivem:clean": "rimraf dist/*client* && rimraf dist/*server*"
   },
   "private": true,
   "dependencies": {
@@ -39,6 +41,9 @@
     "karma-coverage": "~2.0.3",
     "karma-jasmine": "~4.0.0",
     "karma-jasmine-html-reporter": "^1.5.0",
-    "typescript": "~4.3.2"
+    "rimraf": "^3.0.2",
+    "tsc-watch": "^4.4.0",
+    "typescript": "~4.3.2",
+    "webpack-shell-plugin-next": "^2.2.2"
   }
 }

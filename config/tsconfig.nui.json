@@ -2,15 +2,14 @@
 {
     "extends": "./tsconfig.json",
     "compilerOptions": {
-      "outDir": "dist/fivem-scripts",
-      "types": [],
-      "sourceMap": false
+        "outDir": "./out-tsc/nui-app",
+        "types": []
     },
     "files": [
-      "src/fivem-scripts/client.ts",
-      "src/fivem-scripts/server.ts",
+        "../src/main.ts",
+        "../src/polyfills.ts"
     ],
     "include": [
-      "src/**/*.d.ts"
+        "../src/**/*.d.ts"
     ]
-  }
+}

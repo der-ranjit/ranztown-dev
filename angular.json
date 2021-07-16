@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "ranztown-dev": {
+    "angular-nui": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -21,14 +21,14 @@
           "builder": "@angular-builders/custom-webpack:browser",
           "options": {
             "customWebpackConfig": {
-                "path": "./extra-webpack.config.js",
+                "path": "config/custom-webpack.config.js",
                 "replaceDuplicatePlugins": true
              },
-            "outputPath": "I:/fivem_server/txData/CFXDefault_EF456A.base/resources/[ranz]/testmenu",
+            "outputPath": "dist",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
-            "tsConfig": "tsconfig.app.json",
+            "tsConfig": "config/tsconfig.nui.json",
             "inlineStyleLanguage": "scss",
             "assets": [
               "src/assets"
@@ -76,10 +76,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "ranztown-dev:build:production"
+              "browserTarget": "angular-nui:build:production"
             },
             "development": {
-              "browserTarget": "ranztown-dev:build:development"
+              "browserTarget": "angular-nui:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -87,7 +87,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "ranztown-dev:build"
+            "browserTarget": "angular-nui:build"
           }
         },
         "test": {
@@ -95,8 +95,8 @@
           "options": {
             "main": "src/test.ts",
             "polyfills": "src/polyfills.ts",
-            "tsConfig": "tsconfig.spec.json",
-            "karmaConfig": "karma.conf.js",
+            "tsConfig": "config/tsconfig.spec.json",
+            "karmaConfig": "config/karma.conf.js",
             "inlineStyleLanguage": "scss",
             "assets": [
               "src/favicon.ico",
@@ -111,5 +111,5 @@
       }
     }
   },
-  "defaultProject": "ranztown-dev"
+  "defaultProject": "angular-nui"
 }
