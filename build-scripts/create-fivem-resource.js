@@ -10,9 +10,10 @@ if (!resourcePath) {
     return;
 }
 
-const DIST_PATH = path.resolve(__dirname + "/../dist/");
+const DIST_PATH = path.resolve(__dirname + "/../dist");
 const MANIFEST_TEMPLATE_PATH = path.resolve(__dirname + "/../src/fivem-resource-scripts/fxmanifest.lua");
 const MANIFEST_TARGET_PATH = path.resolve(__dirname + "/../dist/fxmanifest.lua");
+const RESOURCE_SCRIPTS_PATH = path.resolve(__dirname + "/../src/fivem-resource-scripts");
 const TARGET_PATH = path.resolve(resourcePath);
 
 const author = resourceConfig.author ?? "Author";
@@ -20,7 +21,7 @@ const version = resourceConfig.version ?? "0.0.0";
 const description = resourceConfig.description ?? "Angular-NUI";
 
 /* relative paths for fxmanifest.lua */
-const resourceFilesNames = Glob.sync(DIST_PATH + "**/*")
+const resourceFilesNames = Glob.sync(`${DIST_PATH}/**/*`).concat(Glob.sync(`${RESOURCE_SCRIPTS_PATH}/*.lua`))
     .map(file => path.basename(file))
     // filter out possibly existing fxmanifest.lua; it should not appear in the files list
     .filter(file => file.indexOf("fxmanifest") === -1);
@@ -41,7 +42,8 @@ const contents = template({
 fs.writeFileSync(MANIFEST_TARGET_PATH, contents);
 
 // copy all files in dist to resourcePath specified in config
-const files = Glob.sync(DIST_PATH + "**/*").map(file => path.resolve(file));
+const files = Glob.sync(`${DIST_PATH}/**/*`).concat(Glob.sync(`${RESOURCE_SCRIPTS_PATH}/*.lua`))
+    .map(file => path.resolve(file));
 for (let file of files) {
     fs.copyFileSync(file, `${TARGET_PATH}/${path.basename(file)}`)
 }
