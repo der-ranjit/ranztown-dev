@@ -38,7 +38,10 @@ export class FiveMClientService {
     private initListeningToClientEvents(): void {
         window.addEventListener("message", event => {
             if (event.data.type === 'notification') {
-                this.snackBar.open(event.data.message, 'Ok');
+                const snackbar = this.snackBar.open(event.data.message, 'Ok');
+                setTimeout(() => {
+                    snackbar.dismiss();
+                },2000)
             }
         });
     }
