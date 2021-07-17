@@ -1,1 +1,1 @@
-console.log("hey from server");
+console.log("server.js loaded");

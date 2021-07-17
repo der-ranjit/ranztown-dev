@@ -7,7 +7,7 @@ const Handlebars = require('handlebars');
 const resourceConfig = require("../config/fivem-resource.json");
 const resourcePath = resourceConfig.resourcePath;
 if (!resourcePath) {
-    console.error("NO RESOURCE PATH SPECIFIED");
+    console.error("NO TARGET RESOURCE PATH SPECIFIED. PLEASE CHECK 'config/fivem-resource.json'");
     return;
 }
 
@@ -17,6 +17,9 @@ const TARGET_PATH = path.resolve(resourcePath);
 
 createFXManifest();
 copyFilesToResourceTarget();
+console.info("---------------------------------------------------------------");
+console.info("---- FIVEM RESOURCE CREATED AND COPIED TO TARGET DIRECTORY ----");
+console.info("---------------------------------------------------------------");
 
 function createFXManifest() {
     const MANIFEST_FILE_NAME = "fxmanifest.lua";
@@ -57,7 +60,6 @@ function copyFilesToResourceTarget() {
     const luaResourceFiles = Glob.sync(`${RESOURCE_SCRIPTS_PATH}/*.lua`)
         .forEach(file => fs.copyFileSync(file, `${DIST_PATH}/${path.basename(file)}`))
     fse.copySync(DIST_PATH, TARGET_PATH)
-    console.log("---- CREATING AND COPYING RESOURCE DONE ----");
 }
 
 function formatArrayForManifest(stringArray) {
