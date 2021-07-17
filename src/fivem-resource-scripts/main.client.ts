@@ -1,16 +1,18 @@
 import * as Cfx from "fivem-js";
 
+const RESPONSE_OK = { status: "ok" };
+
 let nuiActive = false;
 
-RegisterCommand(
-    'adder',
-    async (source:any, args:any) => {
-        const playerCoords = Cfx.Game.PlayerPed.Position;
-        const vehicle = await Cfx.World.createVehicle(new Cfx.Model('adder'), playerCoords, 4);
-        Cfx.Game.PlayerPed.setIntoVehicle(vehicle, Cfx.VehicleSeat.Driver);
-    },
-    false,
-);
+RegisterNuiCallbackType("spawnCar");
+on(`__cfx_nui:spawnCar`, async (data: {model: string}, cb: any) => {
+    const playerCoords = Cfx.Game.PlayerPed.Position;
+    const vehicle = await Cfx.World.createVehicle(new Cfx.Model(data.model), playerCoords, 4);
+    Cfx.Game.PlayerPed.setIntoVehicle(vehicle, Cfx.VehicleSeat.Driver);
+    // notify nui about spawned car
+    SendNuiMessage(JSON.stringify({ type: "notification", message: `Spawned car: "${data.model}"`}))
+    cb(RESPONSE_OK);
+});
 
 function toggleNUI(): void {
     nuiActive = !nuiActive;
