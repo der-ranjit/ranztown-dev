@@ -3,12 +3,11 @@
     "extends": "../tsconfig.json",
     "compilerOptions": {
         "outDir": "../dist",
-        "types": ["../node_modules/@citizenfx/client/"],
+        "types": ["@citizenfx/client", "fivem-js"],
         "sourceMap": false,
         "strict": false
     },
     "include": [
-        "../src/fivem-resource-scripts/*client*",
-        "../src/**/*.d.ts"
+        "../src/fivem-resource-scripts/**/*"
     ]
 }

@@ -1,4 +1,16 @@
+import * as Cfx from "fivem-js";
+
 let nuiActive = false;
+
+RegisterCommand(
+    'adder',
+    async (source:any, args:any) => {
+        const playerCoords = Cfx.Game.PlayerPed.Position;
+        const vehicle = await Cfx.World.createVehicle(new Cfx.Model('adder'), playerCoords, 4);
+        Cfx.Game.PlayerPed.setIntoVehicle(vehicle, Cfx.VehicleSeat.Driver);
+    },
+    false,
+);
 
 function toggleNUI(): void {
     nuiActive = !nuiActive;

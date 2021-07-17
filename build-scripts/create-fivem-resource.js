@@ -35,8 +35,7 @@ function createFXManifest() {
     // clean from possible duplicate entries resulting from an already populated dist folder
     resourceFilesNames = [...new Set(resourceFilesNames)];
     const clientScripts = resourceFilesNames.filter(file => file.indexOf("client") !== -1);
-    // filter out *.js files for serverScripts since fivem does not allow .js as server scripts
-    const serverScripts = resourceFilesNames.filter(file => file.indexOf("server") !== -1 && file.indexOf(".js") === -1);
+    const serverScripts = resourceFilesNames.filter(file => file.indexOf("server") !== -1);
     // scriptFiles do not need to be referenced in files array
     resourceFilesNames = resourceFilesNames.filter(file => !clientScripts.includes(file) && !serverScripts.includes(file));
 
