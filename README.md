@@ -7,6 +7,6 @@ It is configured via `config/fivem-resource.json`. By default all files that con
 
 All necessary files of the NUI, the fivem client/server scripts and an auto-created fxmanifest.lua will be copied to the specified output dir configured in `config/fivem-resource.json` each time a file has changed (almost; .lua file changes are not watched but can be triggered by any change to other watched files)
 
-To start developing, just run `npm run fivem:watch` (for fivem client/server scripts) and `npm run nui:watch` (for the Angular NUI application).
+To start developing, just run `npm run all:watch`
 
 `fivem-js` and `@citizenfx/client` are included, so you have full autocompletion for fiveM/citizenFX/gta-natives related stuff.
