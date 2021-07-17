@@ -7,7 +7,7 @@ let nuiActive = false;
 RegisterNuiCallbackType("spawnCar");
 on(`__cfx_nui:spawnCar`, async (data: {model: string}, cb: any) => {
     const playerCoords = Cfx.Game.PlayerPed.Position;
-    const vehicle = await Cfx.World.createVehicle(new Cfx.Model(data.model), playerCoords, 4);
+    const vehicle = await Cfx.World.createVehicle(new Cfx.Model(data.model), playerCoords, Cfx.Game.PlayerPed.Heading);
     Cfx.Game.PlayerPed.setIntoVehicle(vehicle, Cfx.VehicleSeat.Driver);
     // notify nui about spawned car
     SendNuiMessage(JSON.stringify({ type: "notification", message: `Spawned car: "${data.model}"`}))
@@ -35,3 +35,4 @@ setTick(() => {
         DisableControlAction(0, 106, nuiActive);
     }
 })
+
