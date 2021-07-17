@@ -11,6 +11,7 @@ import { CommonModule } from '@angular/common';
 import { AppRoutingModule } from './app-routing.module';
 import { AppRootComponent } from './app-root.component';
 import { FormsModule } from '@angular/forms';
+import { NotificationService } from './core/notification.service';
 
 @NgModule({
     declarations: [
@@ -32,4 +33,6 @@ import { FormsModule } from '@angular/forms';
     ],
     bootstrap: [AppRootComponent]
 })
-export class AppModule { }
+export class AppModule {
+    constructor(notificationService: NotificationService) {}
+}

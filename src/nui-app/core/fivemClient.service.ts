@@ -11,10 +11,6 @@ export class FiveMClientService {
     /* cache observables created for events */
     private eventObservables = new Map<string, Observable<any>>();
 
-    public constructor(private snackBar: MatSnackBar) {
-        this.initListeningToClientEvents();
-    }
-
     public async invoke(eventName: string, data: any): Promise<any>{
         const result = await fetch(`https://${this.parentResourceName}/${eventName}`, {
             method: 'POST',
@@ -28,21 +24,9 @@ export class FiveMClientService {
 
     public getEventObservable(eventName: string): Observable<any> {
         if (!this.eventObservables.has(eventName)) {
-            const observable = fromEvent(window, "message").pipe(filter(event => event.type === eventName));
+            const observable = fromEvent(window, "message").pipe(filter((event: any) => event.data.type === eventName));
             this.eventObservables.set(eventName, observable)
         }
         return this.eventObservables.get(eventName)!;
-    }
-
-
-    private initListeningToClientEvents(): void {
-        window.addEventListener("message", event => {
-            if (event.data.type === 'notification') {
-                const snackbar = this.snackBar.open(event.data.message, 'Ok');
-                setTimeout(() => {
-                    snackbar.dismiss();
-                },2000)
-            }
-        });
     }
 }
