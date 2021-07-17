@@ -1,5 +1,6 @@
 const path = require("path");
 const fs = require("fs");
+const fse = require('fs-extra');
 const Glob = require("glob");
 const Handlebars = require('handlebars');
 
@@ -56,9 +57,7 @@ function copyFilesToResourceTarget() {
     // *.ts/*.js files are automatically moved to dist path by tsc, but *.lua files have to be copied manually
     const luaResourceFiles = Glob.sync(`${RESOURCE_SCRIPTS_PATH}/*.lua`)
         .forEach(file => fs.copyFileSync(file, `${DIST_PATH}/${path.basename(file)}`))
-    const files = Glob.sync(`${DIST_PATH}/**/*`)
-        .map(file => path.resolve(file))
-        .forEach(file => fs.copyFileSync(file, `${TARGET_PATH}/${path.basename(file)}`))
+    fse.copySync(DIST_PATH, TARGET_PATH)
     console.log("---- CREATING AND COPYING RESOURCE DONE ----");
 }
 
