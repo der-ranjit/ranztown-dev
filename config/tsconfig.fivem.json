@@ -8,7 +8,7 @@
         "strict": false
     },
     "include": [
-        "../src/fivem-resource-scripts/*",
+        "../src/fivem-resource-scripts/*client*",
         "../src/**/*.d.ts"
     ]
 }
