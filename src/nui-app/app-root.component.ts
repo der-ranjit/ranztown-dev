@@ -22,6 +22,6 @@ export class AppRootComponent {
     }
 
     public async handleSpawnCar(carModel: string): Promise<void> {
-        const result = await this.fivemClient.invoke("spawnCar", { model: carModel })
+        const result = await this.fivemClient.invoke("spawnCar", { model: carModel });
     }
 }
