@@ -5,7 +5,7 @@ import { FiveMClientService } from './core/fivemClient.service';
     selector: 'app-root',
     template: `
         <input type="text" #carModel>
-        <button matButton (click)="handleSpawnCar(carModel.value)">Spawn car</button>
+        <button mat-raised-button (click)="handleSpawnCar(carModel.value)">Spawn car</button>
     `
 })
 export class AppRootComponent {
