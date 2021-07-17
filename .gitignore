@@ -44,4 +44,4 @@ testem.log
 .DS_Store
 Thumbs.db
 
-/config/fivem-resource.json
+config/fivem-resource.json
