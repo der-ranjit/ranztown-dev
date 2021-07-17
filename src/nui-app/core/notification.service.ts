@@ -10,7 +10,6 @@ export class NotificationService {
     private notifications$: Observable<any>;
 
     public constructor(private snackBar: MatSnackBar, private fivemClient: FiveMClientService) {
-        console.log("constructed")
         this.notifications$ = this.fivemClient.getEventObservable("notification");
         this.notifications$.subscribe(event => {
             const snackbar = this.snackBar.open(event.data.message, 'Ok');
