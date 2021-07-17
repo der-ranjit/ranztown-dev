@@ -21,8 +21,7 @@
           "builder": "@angular-builders/custom-webpack:browser",
           "options": {
             "customWebpackConfig": {
-                "path": "config/nui-webpack.config.js",
-                "replaceDuplicatePlugins": true
+                "path": "config/nui-webpack.config.js"
              },
             "outputPath": "dist",
             "index": "src/index.html",
