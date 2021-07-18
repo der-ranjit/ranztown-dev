@@ -13,7 +13,6 @@ import { FiveMClientService } from './core/fivemClient.service';
     styles: [`
         .field {
             background-color: white;
-            margin: 8px;
         }
     `]
 })
