@@ -1,7 +1,7 @@
 import * as Cfx from "fivem-js";
 
 import { NuiService } from "./NuiService";
-import * as NuiActions from "src/actions/nui.actions";
+import { Events } from "../../events";
 
 const RESPONSE_OK = { status: "VehicleSpawner: ok" };
 
@@ -25,7 +25,7 @@ export class VehicleSpawner {
         on(`__cfx_nui:spawnCar`, async (data: {model: string}, cb: any) => {
             await this.spawnCar(data.model);
             // notify nui about spawned car
-            this.nuiService.sendMessage<NuiActions.Notification>({name: "notification", data: { message: `Spawned car: "${data.model}"` }})
+            this.nuiService.sendMessage(Events.Notification, { message: `Spawned car: "${data.model}"` })
             cb(RESPONSE_OK);
         });
     }

@@ -1,6 +1,6 @@
 import * as Cfx from "fivem-js";
 
-import * as NuiActions from "src/actions/nui.actions";
+import { Events } from "../../events";
 
 export class NuiService {
     private static instance: NuiService | null = null;
@@ -37,7 +37,9 @@ export class NuiService {
         SetNuiFocusKeepInput(this.nuiActive);
     }
 
-    public sendMessage<T extends NuiActions.Action>(action: T): void {
-        SendNuiMessage(JSON.stringify({ type: action.name, data: action.data }))
+    public sendMessage<D, T extends Events.Event<D>>(eventType: { new(arg:D): T }, data: D): void {
+        // SendNuiMessage uses window.message system; therefore we need some special object formatting
+        const event = new eventType(data);
+        SendNuiMessage(JSON.stringify({ type: event.name, data: event.data }))
     }
 }

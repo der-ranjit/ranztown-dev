@@ -2,6 +2,8 @@ import { Injectable } from "@angular/core";
 import { fromEvent, Observable } from "rxjs";
 import { filter, map } from "rxjs/operators";
 
+import { Events } from "../../events";
+
 @Injectable({providedIn: "root"})
 export class FiveMClientService {
     // get parent resource name by call to GetParentResourceName()
@@ -21,14 +23,15 @@ export class FiveMClientService {
         return result.json();
     }
 
-    public getEventObservable<T>(eventName: string): Observable<T> {
-        if (!this.eventObservables.has(eventName)) {
+    public getEventObservable<D, T extends Events.Event<D>>(eventType: { new(arg?: D): T}): Observable<T> {
+        const event = new eventType();
+        if (!this.eventObservables.has(event.name)) {
             const observable = fromEvent(window, "message").pipe(
-                filter((event: any) => event.data.type === eventName),
-                map(event => { return { name: event.data.type, data: event.data.data } })
+                filter((messageEvent: any) => messageEvent.data.type === event.name),
+                map(messageEvent => { return { name: messageEvent.data.type, data: messageEvent.data.data } })
             );
-            this.eventObservables.set(eventName, observable)
+            this.eventObservables.set(event.name, observable)
         }
-        return this.eventObservables.get(eventName)!;
+        return this.eventObservables.get(event.name)!;
     }
 }
