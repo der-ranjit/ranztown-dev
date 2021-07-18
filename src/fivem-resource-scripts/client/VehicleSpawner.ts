@@ -20,14 +20,16 @@ export class VehicleSpawner {
         this.initActions();
     }
 
+
+
     private initActions(): void {
-        RegisterNuiCallbackType("spawnCar");
-        on(`__cfx_nui:spawnCar`, async (data: {model: string}, cb: any) => {
-            await this.spawnCar(data.model);
-            // notify nui about spawned car
-            this.nuiService.sendMessage(Events.Notification, { message: `Spawned car: "${data.model}"` })
-            cb(RESPONSE_OK);
-        });
+        this.nuiService.createNuiCallbackListener("spawnCar", this.handleSpawnCarEvent.bind(this));
+    }
+
+    private async handleSpawnCarEvent(data: any, cb: Function): Promise<void> {
+        await this.spawnCar(data.model);
+        this.nuiService.sendMessage(Events.Notification, { message: `Spawned car: "${data.model}"` })
+        cb(RESPONSE_OK);
     }
 
     public async spawnCar(model: string): Promise<void> {
