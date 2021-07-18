@@ -20,10 +20,9 @@ export class VehicleSpawner {
     }
 
     private initListeners(): void {
-        this.eventsService.createNuiCallbackListener(Events.SpawnVehicle, this.handleSpawnVehicleEvent.bind(this));
-        this.eventsService.createNuiCallbackListener(
-            Events.GetAvailableVehicleNames,
-            this.handleGetAvailableVehicleNamesEvent.bind(this));
+        this.eventsService.on(Events.SpawnVehicle).subscribe(event => this.handleSpawnVehicleEvent(event.data, event.cb));
+        this.eventsService.on(Events.GetAvailableVehicleNames)
+            .subscribe(event => this.handleGetAvailableVehicleNamesEvent(event.data, event.cb));
     }
 
     private async handleSpawnVehicleEvent(
