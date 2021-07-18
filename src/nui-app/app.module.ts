@@ -12,10 +12,12 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppRootComponent } from './app-root.component';
 import { FormsModule } from '@angular/forms';
 import { NotificationService } from './core/notification.service';
+import { VehicleMenuComponent } from './vehicleMenu/vehicle-menu.component';
 
 @NgModule({
     declarations: [
-        AppRootComponent
+        AppRootComponent,
+        VehicleMenuComponent
     ],
     imports: [
         BrowserModule,

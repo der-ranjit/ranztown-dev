@@ -15,7 +15,7 @@
       },
       "root": "",
       "sourceRoot": "src",
-      "prefix": "app",
+      "prefix": "nui-app",
       "architect": {
         "build": {
           "builder": "@angular-builders/custom-webpack:browser",
