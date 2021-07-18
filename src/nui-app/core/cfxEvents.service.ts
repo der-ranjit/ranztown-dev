@@ -3,16 +3,14 @@ import { fromEvent, Observable } from "rxjs";
 import { filter, map } from "rxjs/operators";
 
 import { Events } from "../../shared/events";
+import { EventsService } from "../../shared/events/EventsService";
 
 @Injectable({providedIn: "root"})
-export class FiveMClientService {
+export class CfxEventsService extends EventsService {
     // get parent resource name by call to GetParentResourceName()
     private parentResourceName = "testmenu";
 
-    /* cache observables created for events */
-    private eventObservables = new Map<string, Observable<any>>();
-
-    public async invoke<D, T extends Events.Event<D>>(eventType: { new(arg:D | null): T }, data: D | null): Promise<D | null>{
+    public async emit<D, T extends Events.Event<D>>(eventType: { new(arg:D | null): T }, data: D | null): Promise<D | null>{
         const event = new eventType(data);
         const result = await fetch(`https://${this.parentResourceName}/${event.name}`, {
             method: 'POST',
@@ -24,15 +22,15 @@ export class FiveMClientService {
         return result.json();
     }
 
-    public getEventObservable<D, T extends Events.Event<D>>(eventType: { new(arg: D | null): T}): Observable<T> {
+    public on<D, T extends Events.Event<D>>(eventType: { new(arg: D | null): T}): Observable<T> {
         const event = new eventType(null);
-        if (!this.eventObservables.has(event.name)) {
+        if (!this.cachedObservables.has(event.name)) {
             const observable = fromEvent(window, "message").pipe(
                 filter((messageEvent: any) => messageEvent.data.type === event.name),
                 map(messageEvent => { return { name: messageEvent.data.type, data: messageEvent.data.data } })
             );
-            this.eventObservables.set(event.name, observable)
+            this.cachedObservables.set(event.name, observable)
         }
-        return this.eventObservables.get(event.name)!;
+        return this.cachedObservables.get(event.name)!;
     }
 }

@@ -1,5 +1,5 @@
-import { NuiService } from "./client/NuiService";
+import { NuiEventsService } from "./client/NuiEventsService";
 import { VehicleSpawner } from "./client/VehicleSpawner";
 
 const vehicleSpawner = VehicleSpawner.getInstance();
-const nuiService = NuiService.getInstance();
+const eventsService = NuiEventsService.getInstance();

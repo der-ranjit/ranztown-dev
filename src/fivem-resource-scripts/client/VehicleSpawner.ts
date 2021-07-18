@@ -1,6 +1,6 @@
 import * as Cfx from "fivem-js";
 
-import { NuiService } from "./NuiService";
+import { NuiEventsService } from "./NuiEventsService";
 import { Events } from "../../shared/events";
 import * as Utils from "../../shared/utils";
 
@@ -13,26 +13,26 @@ export class VehicleSpawner {
         return VehicleSpawner.instance;
     }
 
-    private nuiService = NuiService.getInstance();
+    private eventsService = NuiEventsService.getInstance();
 
     constructor() {
         this.initListeners();
     }
 
     private initListeners(): void {
-        this.nuiService.createNuiCallbackListener(Events.SpawnCar, this.handleSpawnCarEvent.bind(this));
-        this.nuiService.createNuiCallbackListener(
+        this.eventsService.createNuiCallbackListener(Events.SpawnVehicle, this.handleSpawnVehicleEvent.bind(this));
+        this.eventsService.createNuiCallbackListener(
             Events.GetAvailableVehicleNames,
             this.handleGetAvailableVehicleNamesEvent.bind(this));
     }
 
-    private async handleSpawnCarEvent(
-        data: Events.SpawnCarData | null,
-        cb: (response: Events.SpawnCarData | null) => void
+    private async handleSpawnVehicleEvent(
+        data: Events.SpawnVehicleData | null,
+        cb: (response: Events.SpawnVehicleData | null) => void
     ): Promise<void> {
         if (data != null) {
-            await this.spawnCar(data.model);
-            this.nuiService.sendMessage(Events.Notification, { message: `Spawned car: "${data.model}"` })
+            await this.spawnVehicle(data.model);
+            this.eventsService.emit(Events.Notification, { message: `Spawned vehicle: "${data.model}"` })
             cb(null);
         }
     }
@@ -45,7 +45,7 @@ export class VehicleSpawner {
         cb({ vehicleNames });
     }
 
-    public async spawnCar(model: string): Promise<void> {
+    public async spawnVehicle(model: string): Promise<void> {
         const playerCoords = Cfx.Game.PlayerPed.Position;
         const vehicle = await Cfx.World.createVehicle(new Cfx.Model(model), playerCoords, Cfx.Game.PlayerPed.Heading);
         Cfx.Game.PlayerPed.setIntoVehicle(vehicle, Cfx.VehicleSeat.Driver);

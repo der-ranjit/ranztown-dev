@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Events } from 'src/shared/events';
-import { FiveMClientService } from './core/fivemClient.service';
+import { CfxEventsService } from './core/cfxEvents.service';
 
 @Component({
     selector: 'app-root',
@@ -21,20 +21,20 @@ import { FiveMClientService } from './core/fivemClient.service';
 export class AppRootComponent implements OnInit {
     public availableVehicleNames: string[] = [];
 
-    constructor(private fivemClient: FiveMClientService) {
+    constructor(private events: CfxEventsService) {
     }
 
     public async ngOnInit(): Promise<void> {
-        const result = await this.fivemClient.invoke(Events.GetAvailableVehicleNames, null);
+        const result = await this.events.emit(Events.GetAvailableVehicleNames, null);
         this.availableVehicleNames = result?.vehicleNames ?? [];
     }
 
     public async handleSpawnCar(carModel: string): Promise<void> {
-        const result = await this.fivemClient.invoke(Events.SpawnCar, { model: carModel });
+        const result = await this.events.emit(Events.SpawnVehicle, { model: carModel });
     }
 
     public async getAvailableVehicleNames(): Promise<void> {
-        const result = await this.fivemClient.invoke(Events.GetAvailableVehicleNames, null);
+        const result = await this.events.emit(Events.GetAvailableVehicleNames, null);
         console.log(result?.vehicleNames);
     }
 }

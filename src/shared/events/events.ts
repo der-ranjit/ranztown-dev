@@ -5,9 +5,9 @@ export abstract class Event<D> {
     constructor(public data: D | null = null){}
 }
 
-export type SpawnCarData = { model: string };
-export class SpawnCar extends Event<SpawnCarData> {
-    name = "spawnCar"
+export type SpawnVehicleData = { model: string };
+export class SpawnVehicle extends Event<SpawnVehicleData> {
+    name = "spawnVehicle"
 }
 
 export type GetAvailableVehicleNamesData = { vehicleNames: string[] }
