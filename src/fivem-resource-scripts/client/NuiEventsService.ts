@@ -17,6 +17,10 @@ export class NuiEventsService extends EventsService {
     }
 
     private nuiActive = false;
+    private nuiActivating = false;
+    /* the game is too fast and registers the menu key multiple times, toggling it more than one time. debounce! */
+    private nuiDebounceMS = 500;
+
     protected cachedObservables = new Map<string, Observable<any>>()
 
     constructor() {
@@ -46,14 +50,25 @@ export class NuiEventsService extends EventsService {
 
     private init(): void {
         setTick(() => {
-            if (Cfx.Game.isControlPressed(Cfx.InputMode.MouseAndKeyboard, Cfx.Control.InteractionMenu)) {
+            if (Cfx.Game.isControlPressed(Cfx.InputMode.MouseAndKeyboard, Cfx.Control.InteractionMenu) && !this.nuiActivating) {
                 this.toggleNUI();
+                this.nuiActivating = true;
             }
             if (this.nuiActive) {
                 DisableControlAction(Cfx.InputMode.MouseAndKeyboard, Cfx.Control.LookLeftRight, this.nuiActive);
                 DisableControlAction(Cfx.InputMode.MouseAndKeyboard, Cfx.Control.LookUpDown, this.nuiActive);
+                DisableControlAction(Cfx.InputMode.MouseAndKeyboard, Cfx.Control.MoveLeftRight, this.nuiActive);
+                DisableControlAction(Cfx.InputMode.MouseAndKeyboard, Cfx.Control.MoveUpDown, this.nuiActive);
+                DisableControlAction(Cfx.InputMode.MouseAndKeyboard, Cfx.Control.VehicleMoveLeftRight, this.nuiActive);
+                DisableControlAction(Cfx.InputMode.MouseAndKeyboard, Cfx.Control.VehicleMoveUpDown, this.nuiActive);
+                DisableControlAction(Cfx.InputMode.MouseAndKeyboard, Cfx.Control.VehicleAccelerate, this.nuiActive);
+                DisableControlAction(Cfx.InputMode.MouseAndKeyboard, Cfx.Control.VehicleBrake, this.nuiActive);
+                DisableControlAction(Cfx.InputMode.MouseAndKeyboard, Cfx.Control.VehicleExit, this.nuiActive);
                 DisableControlAction(Cfx.InputMode.MouseAndKeyboard, Cfx.Control.MeleeAttackAlternate, this.nuiActive);
                 DisableControlAction(Cfx.InputMode.MouseAndKeyboard, Cfx.Control.VehicleMouseControlOverride, this.nuiActive);
+                DisableControlAction(Cfx.InputMode.MouseAndKeyboard, Cfx.Control.VehicleHorn, this.nuiActive);
+                DisableControlAction(Cfx.InputMode.MouseAndKeyboard, Cfx.Control.Enter, this.nuiActive);
+                DisableControlAction(Cfx.InputMode.MouseAndKeyboard, Cfx.Control.VehicleRadioWheel, this.nuiActive);
             }
         })
     }
@@ -62,6 +77,7 @@ export class NuiEventsService extends EventsService {
         this.nuiActive = !this.nuiActive;
         SetNuiFocus(this.nuiActive, this.nuiActive);
         SetNuiFocusKeepInput(this.nuiActive);
+        setTimeout(() => this.nuiActivating = false, this.nuiDebounceMS)
     }
 
     private createObservableFromNuiCallback(eventName: string): Observable<NuiCallbackType> {
