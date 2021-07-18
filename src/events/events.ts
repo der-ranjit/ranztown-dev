@@ -2,15 +2,15 @@
 
 export abstract class Event<D = any> {
     abstract name: string;
-    constructor(public data?: D){}
+    constructor(public data: D | null = null){}
 }
 
-type SpawnCarData = { model: string };
+export type SpawnCarData = { model: string };
 export class SpawnCar extends Event<SpawnCarData> {
     name = "spawnCar"
 }
 
-type NotificationData = { message: string };
+export type NotificationData = { message: string };
 export class Notification extends Event<NotificationData> {
     name = "notification"
 }

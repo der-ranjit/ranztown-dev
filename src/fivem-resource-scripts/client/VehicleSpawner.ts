@@ -2,6 +2,7 @@ import * as Cfx from "fivem-js";
 
 import { NuiService } from "./NuiService";
 import { Events } from "../../events";
+import { SpawnCarData } from "src/events/events";
 
 const RESPONSE_OK = { status: "VehicleSpawner: ok" };
 
@@ -23,13 +24,15 @@ export class VehicleSpawner {
 
 
     private initActions(): void {
-        this.nuiService.createNuiCallbackListener("spawnCar", this.handleSpawnCarEvent.bind(this));
+        this.nuiService.createNuiCallbackListener(Events.SpawnCar, this.handleSpawnCarEvent.bind(this));
     }
 
-    private async handleSpawnCarEvent(data: any, cb: Function): Promise<void> {
-        await this.spawnCar(data.model);
-        this.nuiService.sendMessage(Events.Notification, { message: `Spawned car: "${data.model}"` })
-        cb(RESPONSE_OK);
+    private async handleSpawnCarEvent(data: SpawnCarData | null, cb: Function): Promise<void> {
+        if (data != null) {
+            await this.spawnCar(data.model);
+            this.nuiService.sendMessage(Events.Notification, { message: `Spawned car: "${data.model}"` })
+            cb(RESPONSE_OK);
+        }
     }
 
     public async spawnCar(model: string): Promise<void> {

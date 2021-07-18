@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Events } from 'src/events';
 import { FiveMClientService } from './core/fivemClient.service';
 
 @Component({
@@ -21,6 +22,6 @@ export class AppRootComponent {
     }
 
     public async handleSpawnCar(carModel: string): Promise<void> {
-        const result = await this.fivemClient.invoke("spawnCar", { model: carModel });
+        const result = await this.fivemClient.invoke(Events.SpawnCar, { model: carModel });
     }
 }

@@ -12,19 +12,20 @@ export class FiveMClientService {
     /* cache observables created for events */
     private eventObservables = new Map<string, Observable<any>>();
 
-    public async invoke(eventName: string, data: any): Promise<any>{
-        const result = await fetch(`https://${this.parentResourceName}/${eventName}`, {
+    public async invoke<D, T extends Events.Event<D>>(eventType: { new(arg:D | null): T }, data: D | null): Promise<any>{
+        const event = new eventType(data);
+        const result = await fetch(`https://${this.parentResourceName}/${event.name}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json; charset=UTF-8',
             },
-            body: JSON.stringify(data)
+            body: JSON.stringify(event.data)
         });
         return result.json();
     }
 
-    public getEventObservable<D, T extends Events.Event<D>>(eventType: { new(arg?: D): T}): Observable<T> {
-        const event = new eventType();
+    public getEventObservable<D, T extends Events.Event<D>>(eventType: { new(arg: D | null): T}): Observable<T> {
+        const event = new eventType(null);
         if (!this.eventObservables.has(event.name)) {
             const observable = fromEvent(window, "message").pipe(
                 filter((messageEvent: any) => messageEvent.data.type === event.name),
