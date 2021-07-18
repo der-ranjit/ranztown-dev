@@ -18,12 +18,10 @@ export class VehicleSpawner {
     private nuiService = NuiService.getInstance();
 
     constructor() {
-        this.initActions();
+        this.initListeners();
     }
 
-
-
-    private initActions(): void {
+    private initListeners(): void {
         this.nuiService.createNuiCallbackListener(Events.SpawnCar, this.handleSpawnCarEvent.bind(this));
     }
 
