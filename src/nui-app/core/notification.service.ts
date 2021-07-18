@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Observable } from "rxjs";
-import { Events } from "../../events";
+import { Events } from "../../shared/events";
 
 import { FiveMClientService } from "./fivemClient.service";
 

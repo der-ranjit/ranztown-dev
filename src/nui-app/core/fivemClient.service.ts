@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { fromEvent, Observable } from "rxjs";
 import { filter, map } from "rxjs/operators";
 
-import { Events } from "../../events";
+import { Events } from "../../shared/events";
 
 @Injectable({providedIn: "root"})
 export class FiveMClientService {

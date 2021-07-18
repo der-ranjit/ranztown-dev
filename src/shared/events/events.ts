@@ -10,6 +10,11 @@ export class SpawnCar extends Event<SpawnCarData> {
     name = "spawnCar"
 }
 
+export type GetAvailableVehicleNamesData = { vehicleNames: string[] }
+export class GetAvailableVehicleNames extends Event<GetAvailableVehicleNamesData> {
+    name = "getAvailableVehicleNames";
+}
+
 export type NotificationData = { message: string };
 export class Notification extends Event<NotificationData> {
     name = "notification"

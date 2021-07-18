@@ -1,6 +1,6 @@
 import * as Cfx from "fivem-js";
 
-import { Events } from "../../events";
+import { Events } from "../../shared/events";
 
 export class NuiService {
     private static instance: NuiService | null = null;

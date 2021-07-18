@@ -1,7 +1,8 @@
 import * as Cfx from "fivem-js";
 
 import { NuiService } from "./NuiService";
-import { Events } from "../../events";
+import { Events } from "../../shared/events";
+import * as Utils from "../../shared/utils";
 
 export class VehicleSpawner {
     private static instance: VehicleSpawner | null = null;
@@ -20,6 +21,9 @@ export class VehicleSpawner {
 
     private initListeners(): void {
         this.nuiService.createNuiCallbackListener(Events.SpawnCar, this.handleSpawnCarEvent.bind(this));
+        this.nuiService.createNuiCallbackListener(
+            Events.GetAvailableVehicleNames,
+            this.handleGetAvailableVehicleNamesEvent.bind(this));
     }
 
     private async handleSpawnCarEvent(
@@ -31,6 +35,14 @@ export class VehicleSpawner {
             this.nuiService.sendMessage(Events.Notification, { message: `Spawned car: "${data.model}"` })
             cb(null);
         }
+    }
+
+    private async handleGetAvailableVehicleNamesEvent(
+        data: Events.GetAvailableVehicleNamesData | null,
+        cb: (response: Events.GetAvailableVehicleNamesData | null) => void
+    ): Promise<void> {
+        const vehicleNames = Utils.GetEnumMemberNames(Cfx.VehicleHash);
+        cb({ vehicleNames });
     }
 
     public async spawnCar(model: string): Promise<void> {
