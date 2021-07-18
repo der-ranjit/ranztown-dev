@@ -30,8 +30,10 @@ export class NuiEventsService extends EventsService {
         return Promise.resolve(null);
     }
 
-    public on<D, T extends Events.Event<D>>(eventType: { new(arg: D | null): T}): Observable<T & {cb: (response: D | null) => void}> {
-        const event = new eventType(null);
+    public on<R, D, T extends Events.Event<D, R>>(
+        eventType: { new(data: D | null, response: R | null): T}
+    ): Observable<T & {cb: (response: R | null) => void}> {
+        const event = new eventType(null, null);
         if (!this.cachedObservables.has(event.name)) {
             RegisterNuiCallbackType(event.name);
             const nuiObservable = this.createObservableFromNuiCallback(event.name).pipe(

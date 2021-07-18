@@ -1,8 +1,10 @@
 /* Shared Data Types available for nui and fivem project. */
 
-export abstract class Event<D> {
+export abstract class Event<D, R = any> {
     abstract name: string;
-    constructor(public data: D | null = null){}
+    constructor(
+        public data: D | null = null,
+        public response: R | null = null){}
 }
 
 export type SpawnVehicleData = { model: string };
@@ -10,8 +12,8 @@ export class SpawnVehicle extends Event<SpawnVehicleData> {
     name = "spawnVehicle"
 }
 
-export type GetAvailableVehicleNamesData = { vehicleNames: string[] }
-export class GetAvailableVehicleNames extends Event<GetAvailableVehicleNamesData> {
+export type GetAvailableVehicleNamesResponse = { vehicleNames: string[] }
+export class GetAvailableVehicleNames extends Event<null, GetAvailableVehicleNamesResponse> {
     name = "getAvailableVehicleNames";
 }
 

@@ -10,8 +10,11 @@ export class CfxEventsService extends EventsService {
     // get parent resource name by call to GetParentResourceName()
     private parentResourceName = "testmenu";
 
-    public async emit<D, T extends Events.Event<D>>(eventType: { new(arg:D | null): T }, data: D | null): Promise<D | null>{
-        const event = new eventType(data);
+    public async emit<R, D, T extends Events.Event<D,R>>(
+        eventType: { new(data: D | null, response: R | null): T},
+        data: D | null
+    ): Promise<R | null>{
+        const event = new eventType(data, null);
         const result = await fetch(`https://${this.parentResourceName}/${event.name}`, {
             method: 'POST',
             headers: {

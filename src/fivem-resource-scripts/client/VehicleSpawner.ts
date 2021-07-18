@@ -25,10 +25,7 @@ export class VehicleSpawner {
             .subscribe(event => this.handleGetAvailableVehicleNamesEvent(event.data, event.cb));
     }
 
-    private async handleSpawnVehicleEvent(
-        data: Events.SpawnVehicleData | null,
-        cb: (response: Events.SpawnVehicleData | null) => void
-    ): Promise<void> {
+    private async handleSpawnVehicleEvent(data: Events.SpawnVehicleData | null,cb: Function): Promise<void> {
         if (data != null) {
             await this.spawnVehicle(data.model);
             this.eventsService.emit(Events.Notification, { message: `Spawned vehicle: "${data.model}"` })
@@ -37,8 +34,8 @@ export class VehicleSpawner {
     }
 
     private async handleGetAvailableVehicleNamesEvent(
-        data: Events.GetAvailableVehicleNamesData | null,
-        cb: (response: Events.GetAvailableVehicleNamesData | null) => void
+        data: any,
+        cb: (response: Events.GetAvailableVehicleNamesResponse) => void
     ): Promise<void> {
         const vehicleNames = Utils.GetEnumMemberNames(Cfx.VehicleHash);
         cb({ vehicleNames });
