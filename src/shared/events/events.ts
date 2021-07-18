@@ -12,11 +12,6 @@ export class SpawnVehicle extends Event<SpawnVehicleData> {
     name = "spawnVehicle"
 }
 
-export type GetAvailableVehicleNamesResponse = { vehicleNames: string[] }
-export class GetAvailableVehicleNames extends Event<null, GetAvailableVehicleNamesResponse> {
-    name = "getAvailableVehicleNames";
-}
-
 export type NotificationData = { message: string };
 export class Notification extends Event<NotificationData> {
     name = "notification"

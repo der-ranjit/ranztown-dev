@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { Events } from 'src/shared/events';
+import { Component } from '@angular/core';
+
+import { Events } from '../shared/events';
+import { Vehicles } from '../shared/Vehicles';
 import { CfxEventsService } from './core/cfxEvents.service';
 
 @Component({
@@ -10,7 +12,7 @@ import { CfxEventsService } from './core/cfxEvents.service';
             <input type="text" #carModel matInput>
         </mat-form-field>
         <button mat-raised-button (click)="handleSpawnCar(carModel.value)">Spawn car</button>
-        <button *ngFor="let vehicleName of availableVehicleNames" mat-raised-button (click)="handleSpawnCar(vehicleName)">{{vehicleName}}</button>
+        <button *ngFor="let vehicle of vehicles" mat-raised-button (click)="handleSpawnCar(vehicle.name)">{{vehicle.name}}</button>
     `,
     styles: [`
         .field {
@@ -18,23 +20,13 @@ import { CfxEventsService } from './core/cfxEvents.service';
         }
     `]
 })
-export class AppRootComponent implements OnInit {
-    public availableVehicleNames: string[] = [];
+export class AppRootComponent {
+    public vehicles = [...Object.values(Vehicles)];
 
     constructor(private events: CfxEventsService) {
     }
 
-    public async ngOnInit(): Promise<void> {
-        const result = await this.events.emit(Events.GetAvailableVehicleNames, null);
-        this.availableVehicleNames = result?.vehicleNames ?? [];
-    }
-
     public async handleSpawnCar(carModel: string): Promise<void> {
         const result = await this.events.emit(Events.SpawnVehicle, { model: carModel });
-    }
-
-    public async getAvailableVehicleNames(): Promise<void> {
-        const result = await this.events.emit(Events.GetAvailableVehicleNames, null);
-        console.log(result?.vehicleNames);
     }
 }
