@@ -1,6 +1,6 @@
 /* Shared Data Types available for nui and fivem project. */
 
-export abstract class Event<D = any> {
+export abstract class Event<D> {
     abstract name: string;
     constructor(public data: D | null = null){}
 }

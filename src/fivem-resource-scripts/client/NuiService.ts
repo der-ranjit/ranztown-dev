@@ -43,10 +43,13 @@ export class NuiService {
         SendNuiMessage(JSON.stringify({ type: event.name, data: event.data }))
     }
 
-    public createNuiCallbackListener<D, T extends Events.Event<D>>(eventType: { new(arg:D | null): T }, method: (data:D | null, cb: Function) => void) {
+    public createNuiCallbackListener<D, T extends Events.Event<D>>(
+        eventType: { new(arg:D | null): T },
+        method: (data:D | null, cb: (response: D | null) => void) => void
+    ) {
         const event = new eventType(null);
         RegisterNuiCallbackType(event.name);
-        on(`__cfx_nui:${event.name}`, (data: D, cb: Function) => {
+        on(`__cfx_nui:${event.name}`, (data: D | null, cb: (response: D | null) => void) => {
             method(data, cb);
         });
     }

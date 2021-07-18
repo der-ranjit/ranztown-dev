@@ -12,14 +12,14 @@ export class FiveMClientService {
     /* cache observables created for events */
     private eventObservables = new Map<string, Observable<any>>();
 
-    public async invoke<D, T extends Events.Event<D>>(eventType: { new(arg:D | null): T }, data: D | null): Promise<any>{
+    public async invoke<D, T extends Events.Event<D>>(eventType: { new(arg:D | null): T }, data: D | null): Promise<D | null>{
         const event = new eventType(data);
         const result = await fetch(`https://${this.parentResourceName}/${event.name}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json; charset=UTF-8',
             },
-            body: JSON.stringify(event.data)
+            body: event.data != null ? JSON.stringify(event.data) : null
         });
         return result.json();
     }
