@@ -29,7 +29,7 @@ import { AppNuiEventsService } from './core/nuiEvents.service';
         }
         nui-app-vehicle-menu {
             max-height: 600px;
-            max-width: 800px;
+            max-width: 500px;
         }
     `],
     animations: [
