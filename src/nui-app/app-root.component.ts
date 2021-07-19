@@ -1,8 +1,9 @@
-import { animate, style, transition, trigger } from '@angular/animations';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+
 import { Events } from '../shared/events';
+import { fade } from './core/animations';
 import { AppNuiEventsService } from './core/nuiEvents.service';
 
 @Component({
@@ -20,7 +21,6 @@ import { AppNuiEventsService } from './core/nuiEvents.service';
             max-height: 100%;
             overflow: hidden;
         }
-
         .menuInfo {
             position: absolute;
             left: 10px;
@@ -33,15 +33,7 @@ import { AppNuiEventsService } from './core/nuiEvents.service';
         }
     `],
     animations: [
-        trigger('fade', [
-            transition('void => *', [
-              style({opacity: 0}),
-              animate(300, style({opacity: 1}))
-            ]),
-            transition('* => void', [
-              animate(300, style({opacity: 0}))
-            ])
-          ])
+        fade
     ]
 })
 export class AppRootComponent implements OnInit, OnDestroy {
