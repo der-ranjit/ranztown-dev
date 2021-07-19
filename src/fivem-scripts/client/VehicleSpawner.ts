@@ -34,6 +34,7 @@ export class VehicleSpawner {
         const playerCoords = Cfx.Game.PlayerPed.Position;
         const vehicle = await Cfx.World.createVehicle(new Cfx.Model(model), playerCoords, Cfx.Game.PlayerPed.Heading);
         Cfx.Game.PlayerPed.setIntoVehicle(vehicle, Cfx.VehicleSeat.Driver);
+        vehicle.RadioStation = Cfx.RadioStation.RadioOff;
     }
 
 }
