@@ -49,6 +49,10 @@ export class NuiEventsService extends EventsService {
     };
 
     private init(): void {
+        this.initMenuControls();
+    }
+
+    private initMenuControls(): void {
         setTick(() => {
             if (Cfx.Game.isControlPressed(Cfx.InputMode.MouseAndKeyboard, Cfx.Control.InteractionMenu) && !this.nuiActivating) {
                 this.toggleNUI();
@@ -85,10 +89,17 @@ export class NuiEventsService extends EventsService {
                 DisableControlAction(Cfx.InputMode.MouseAndKeyboard, Cfx.Control.FrontendPauseAlternate, this.nuiActive);
                 DisableControlAction(Cfx.InputMode.MouseAndKeyboard, Cfx.Control.FrontendPause, this.nuiActive);
             }
+             // allow looking around when right mouse is pressed in vehicle
+             const isAiming = Cfx.Game.isControlPressed(Cfx.InputMode.MouseAndKeyboard, Cfx.Control.VehicleAim)
+                || Cfx.Game.isControlPressed(Cfx.InputMode.MouseAndKeyboard, Cfx.Control.Aim)
+             if (this.nuiActive && isAiming) {
+                EnableControlAction(Cfx.InputMode.MouseAndKeyboard, Cfx.Control.LookLeftRight, true);
+                EnableControlAction(Cfx.InputMode.MouseAndKeyboard, Cfx.Control.LookUpDown, true);
+            }
         })
     }
 
-    public toggleNUI(): void {
+    private toggleNUI(): void {
         this.nuiActive = !this.nuiActive;
         SetNuiFocus(this.nuiActive, this.nuiActive);
         SetNuiFocusKeepInput(this.nuiActive);
@@ -96,7 +107,7 @@ export class NuiEventsService extends EventsService {
         setTimeout(() => this.nuiActivating = false, this.nuiDebounceMS)
     }
 
-    public disableNUI(): void {
+    private disableNUI(): void {
         SetNuiFocus(false, false);
         SetNuiFocusKeepInput(false);
         this.emit(Events.setNuiVisibility, {nuiVisible: false});
