@@ -6,9 +6,9 @@ import { environment } from './environments/environment';
 
 import "@citizenfx/client";
 
-if (environment.production) {
+// if (environment.production) {
   enableProdMode();
-}
+// }
 
 platformBrowserDynamic().bootstrapModule(AppModule)
   .catch(err => console.error(err));

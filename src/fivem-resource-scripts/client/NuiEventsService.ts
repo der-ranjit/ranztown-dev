@@ -87,6 +87,7 @@ export class NuiEventsService extends EventsService {
         this.nuiActive = !this.nuiActive;
         SetNuiFocus(this.nuiActive, this.nuiActive);
         SetNuiFocusKeepInput(this.nuiActive);
+        this.emit(Events.setNuiVisibility, {nuiVisible: this.nuiActive});
         setTimeout(() => this.nuiActivating = false, this.nuiDebounceMS)
     }
 

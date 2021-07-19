@@ -24,10 +24,10 @@ import { CfxEventsService } from '../core/cfxEvents.service';
 `]
 })
 export class VehicleMenuComponent {
-    public vehicles = [...Object.values(Vehicles)];
+    // TODO large list loads too long
+    public vehicles = [...Object.values(Vehicles)].slice(0,10);
 
     constructor(private events: CfxEventsService) {
-        console.log("hey");
     }
 
     public async handleSpawnCar(carModel: string): Promise<void> {

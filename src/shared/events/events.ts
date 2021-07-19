@@ -16,3 +16,8 @@ export type NotificationData = { message: string };
 export class Notification extends Event<NotificationData> {
     name = "notification"
 }
+
+export type setNuiVisibilityData = { nuiVisible: boolean };
+export class setNuiVisibility extends Event<setNuiVisibilityData> {
+    name = "setNuiVisibility"
+}
