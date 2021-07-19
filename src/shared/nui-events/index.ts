@@ -1,2 +1,2 @@
 export * as Message from "./messages";
-export * as Callbacks from "./callbacks";
+export * as Callback from "./callbacks";

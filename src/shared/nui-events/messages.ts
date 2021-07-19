@@ -1,24 +1,21 @@
-/* Shared Data Types available for nui and fivem project. */
-
-export abstract class Base<D, R = any> {
+export abstract class AbstractMessage<Data> {
+    /* The name of the event. It is used to filter the specific event out of the NUI message bus */
     abstract name: string;
+
+    /**
+     * @param data - Optional data that can be sent with the message.
+     */
     constructor(
-        public data: D | null = null,
-        public response: R | null = null
+        public data: Data | null = null
     ){}
 }
 
-export type SpawnVehicleData = { model: string };
-export class SpawnVehicle extends Base<SpawnVehicleData> {
-    name = "spawnVehicle"
-}
-
 export type NotificationData = { message: string };
-export class Notification extends Base<NotificationData> {
+export class Notification extends AbstractMessage<NotificationData> {
     name = "notification"
 }
 
 export type setNuiVisibilityData = { nuiVisible: boolean };
-export class setNuiVisibility extends Base<setNuiVisibilityData> {
+export class setNuiVisibility extends AbstractMessage<setNuiVisibilityData> {
     name = "setNuiVisibility"
 }

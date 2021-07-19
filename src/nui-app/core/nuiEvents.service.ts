@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { fromEvent, Observable } from "rxjs";
 import { filter, map } from "rxjs/operators";
 
-import { Message } from "../../shared/nui-events";
+import { Callback, Message } from "../../shared/nui-events";
 
 @Injectable({providedIn: "root"})
 export class AppNuiEventsService {
@@ -11,11 +11,13 @@ export class AppNuiEventsService {
     // get parent resource name by call to GetParentResourceName()
     private parentResourceName = "testmenu";
 
-    public async emitNuiCallback<R, D, T extends Message.Base<D,R>>(
-        eventType: { new(data: D | null, response: R | null): T},
+    public async emitNuiCallback<R, D, T extends Callback.AbstractCallback<D,R>>(
+        eventType: { new(data: D | null, response: R, cb: (response: R) => void): T},
         data: D | null
-    ): Promise<R | null>{
-        const event = new eventType(data, null);
+    ): Promise<R>{
+        // create event with provided data; because of typing we need a cb - this is ugly but :shrug:
+        const mockCb = (r: R) => {};
+        const event = new eventType(data, null as any, mockCb);
         const result = await fetch(`https://${this.parentResourceName}/${event.name}`, {
             method: 'POST',
             headers: {
@@ -26,7 +28,8 @@ export class AppNuiEventsService {
         return result.json();
     }
 
-    public onNuiMessage<D, T extends Message.Base<D>>(eventType: { new(arg: D | null): T}): Observable<T> {
+    public onNuiMessage<D, T extends Message.AbstractMessage<D>>(eventType: { new(arg: D | null): T}): Observable<T> {
+       // event is only created to get the name of the event
         const event = new eventType(null);
         if (!this.cachedObservables.has(event.name)) {
             const observable = fromEvent(window, "message").pipe(
