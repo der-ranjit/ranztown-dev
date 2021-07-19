@@ -20,6 +20,7 @@ import { AppNuiEventsService } from './core/nuiEvents.service';
             flex: 1;
             max-height: 100%;
             overflow: hidden;
+            opacity: .9;
         }
         .menuInfo {
             position: absolute;
@@ -28,8 +29,8 @@ import { AppNuiEventsService } from './core/nuiEvents.service';
             opacity: 0.8;
         }
         nui-app-vehicle-menu {
-            max-height: 600px;
-            max-width: 500px;
+            max-height: 800px;
+            max-width: 300px;
         }
     `],
     animations: [

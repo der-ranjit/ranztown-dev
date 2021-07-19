@@ -7,14 +7,14 @@ author {{{AUTHOR}}}
 description {{{DESCRIPTION}}}
 ui_page 'index.html'
 
-files {
-{{{RESOURCE_FILES}}}
-}
-
 client_scripts {
 {{{CLIENT_SCRIPTS}}}
 }
 
 server_scripts {
 {{{SERVER_SCRIPTS}}}
+}
+
+files {
+{{{RESOURCE_FILES}}}
 }
