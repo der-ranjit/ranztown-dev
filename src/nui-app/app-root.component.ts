@@ -9,7 +9,7 @@ import { AppNuiEventsService } from './core/nuiEvents.service';
 @Component({
     selector: 'nui-app-root',
     template: `
-        <button mat-raised-button @fade *ngIf="!isActive" class="menuInfo" color="accent">Press 'M' to open menu</button>
+        <button mat-raised-button @fade *ngIf="!isActive" class="menuInfo" color="accent">Press menu-key (M) to open menu</button>
         <div class="mainWrapper">
             <nui-app-vehicle-menu @fade *ngIf="isActive"></nui-app-vehicle-menu>
         </div>
