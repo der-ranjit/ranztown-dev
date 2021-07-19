@@ -1,4 +1,3 @@
-import * as Cfx from "fivem-js";
 import { Observable, Observer } from "rxjs";
 import { map} from "rxjs/operators";
 
