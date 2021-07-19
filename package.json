@@ -7,7 +7,7 @@
     "build": "ng build",
     "nui:watch": "ng build --configuration development --watch --source-map=false",
     "fivem:watch-js": "webpack --config ./config/fivem-webpack.config.js --watch",
-    "fivem:watch-lua": "chokidar \"src/fivem-resource-scripts/*.lua\" -c \"npm run fivem:create\"",
+    "fivem:watch-lua": "chokidar \"src/fivem-scripts/*.lua\" -c \"npm run fivem:create\"",
     "all:watch": "npm run clean && concurrently --kill-others \"npm:nui:watch\" \"npm:fivem:watch-js\" \"npm:fivem:watch-lua\"",
     "fivem:create": "node build-scripts/create-fivem-resource.js",
     "test": "ng test",

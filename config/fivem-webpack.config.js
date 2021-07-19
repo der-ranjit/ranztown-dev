@@ -2,8 +2,8 @@ const ShellPlugin = require("webpack-shell-plugin-next");
 
 module.exports = {
     entry: {
-        client: './src/fivem-resource-scripts/main.client.ts',
-        server: './src/fivem-resource-scripts/main.server.ts',
+        client: './src/fivem-scripts/main.client.ts',
+        server: './src/fivem-scripts/main.server.ts',
     },
     mode: "development",
     module: {

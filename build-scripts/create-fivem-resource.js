@@ -12,7 +12,7 @@ if (!resourcePath) {
 }
 
 const DIST_PATH = path.resolve(__dirname + "/../dist");
-const RESOURCE_SCRIPTS_PATH = path.resolve(__dirname + "/../src/fivem-resource-scripts");
+const RESOURCE_SCRIPTS_PATH = path.resolve(__dirname + "/../src/fivem-scripts");
 const TARGET_PATH = path.resolve(resourcePath);
 
 createFXManifest();
