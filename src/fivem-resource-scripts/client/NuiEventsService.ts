@@ -54,6 +54,9 @@ export class NuiEventsService extends EventsService {
                 this.toggleNUI();
                 this.nuiActivating = true;
             }
+            if (this.nuiActive && Cfx.Game.isControlPressed(Cfx.InputMode.MouseAndKeyboard, Cfx.Control.FrontendCancel)) {
+                this.disableNUI();
+            }
             if (this.nuiActive) {
                 DisableControlAction(Cfx.InputMode.MouseAndKeyboard, Cfx.Control.LookLeftRight, this.nuiActive);
                 DisableControlAction(Cfx.InputMode.MouseAndKeyboard, Cfx.Control.LookUpDown, this.nuiActive);
@@ -79,6 +82,8 @@ export class NuiEventsService extends EventsService {
                 DisableControlAction(Cfx.InputMode.MouseAndKeyboard, Cfx.Control.SelectWeapon, this.nuiActive);
                 DisableControlAction(Cfx.InputMode.MouseAndKeyboard, Cfx.Control.CharacterWheel, this.nuiActive);
                 DisableControlAction(Cfx.InputMode.MouseAndKeyboard, Cfx.Control.Duck, this.nuiActive);
+                DisableControlAction(Cfx.InputMode.MouseAndKeyboard, Cfx.Control.FrontendPauseAlternate, this.nuiActive);
+                DisableControlAction(Cfx.InputMode.MouseAndKeyboard, Cfx.Control.FrontendPause, this.nuiActive);
             }
         })
     }
@@ -89,6 +94,17 @@ export class NuiEventsService extends EventsService {
         SetNuiFocusKeepInput(this.nuiActive);
         this.emit(Events.setNuiVisibility, {nuiVisible: this.nuiActive});
         setTimeout(() => this.nuiActivating = false, this.nuiDebounceMS)
+    }
+
+    public disableNUI(): void {
+        SetNuiFocus(false, false);
+        SetNuiFocusKeepInput(false);
+        this.emit(Events.setNuiVisibility, {nuiVisible: false});
+        // setTimeout to disable controls some longer; in case esc is pressed the pause menu would open
+        setTimeout(() => {
+            this.nuiActive = false;
+            this.nuiActivating = false;
+        }, 300)
     }
 
     private createObservableFromNuiCallback(eventName: string): Observable<NuiCallbackType> {
