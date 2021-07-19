@@ -2,28 +2,27 @@ import { Observable, Observer } from "rxjs";
 import { map} from "rxjs/operators";
 
 import { Events } from "../../shared/events";
-import { EventsService } from "../../shared/events/EventsService";
 
 type NuiCallbackType = { data: any, cb: Function };
 
-export class NuiEventsService extends EventsService {
-    private static instance: NuiEventsService | null = null;
-    public static getInstance(): NuiEventsService {
-        if (!NuiEventsService.instance) {
-            NuiEventsService.instance = new NuiEventsService();
+export class CfxNuiEventsService {
+    private static instance: CfxNuiEventsService | null = null;
+    public static getInstance(): CfxNuiEventsService {
+        if (!CfxNuiEventsService.instance) {
+            CfxNuiEventsService.instance = new CfxNuiEventsService();
         }
-        return NuiEventsService.instance;
+        return CfxNuiEventsService.instance;
     }
 
-    protected cachedObservables = new Map<string, Observable<any>>()
+    private cachedObservables = new Map<string, Observable<any>>()
 
-    public emit<D, T extends Events.Event<D>>(eventType: { new(arg:D | null): T }, data: D | null): Promise<D | null> {
+    public emitNuiMessage<D, T extends Events.Event<D>>(eventType: { new(arg:D | null): T }, data: D | null): Promise<D | null> {
         const event = new eventType(data);
         SendNuiMessage(JSON.stringify({ type: event.name, data: event.data }))
         return Promise.resolve(null);
     }
 
-    public on<R, D, T extends Events.Event<D, R>>(
+    public onNuiCallback<R, D, T extends Events.Event<D, R>>(
         eventType: { new(data: D | null, response: R | null): T}
     ): Observable<T & {cb: (response: R | null) => void}> {
         const event = new eventType(null, null);

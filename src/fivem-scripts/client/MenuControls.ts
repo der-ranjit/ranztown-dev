@@ -1,7 +1,7 @@
 import * as Cfx from "fivem-js";
 
 import { Events } from "../../shared/events";
-import { NuiEventsService } from "./NuiEventsService";
+import { CfxNuiEventsService } from "./NuiEventsService";
 
 export class MenuControls {
     private static instance: MenuControls | null = null;
@@ -12,7 +12,7 @@ export class MenuControls {
         return MenuControls.instance;
     }
 
-    private events = NuiEventsService.getInstance();
+    private events = CfxNuiEventsService.getInstance();
     private nuiActive = false;
     private nuiActivating = false;
     /* the game is too fast and registers the menu key multiple times, toggling it more than one time. debounce! */
@@ -74,14 +74,14 @@ export class MenuControls {
         this.nuiActive = !this.nuiActive;
         SetNuiFocus(this.nuiActive, this.nuiActive);
         SetNuiFocusKeepInput(this.nuiActive);
-        this.events.emit(Events.setNuiVisibility, { nuiVisible: this.nuiActive });
+        this.events.emitNuiMessage(Events.setNuiVisibility, { nuiVisible: this.nuiActive });
         setTimeout(() => this.nuiActivating = false, this.nuiDebounceMS)
     }
 
     private disableNUI(): void {
         SetNuiFocus(false, false);
         SetNuiFocusKeepInput(false);
-        this.events.emit(Events.setNuiVisibility, { nuiVisible: false });
+        this.events.emitNuiMessage(Events.setNuiVisibility, { nuiVisible: false });
         // setTimeout to disable controls some longer; in case esc is pressed the pause menu would open
         setTimeout(() => {
             this.nuiActive = false;

@@ -1,7 +1,9 @@
 import { animate, style, transition, trigger } from '@angular/animations';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { Events } from '../shared/events';
-import { CfxEventsService } from './core/cfxEvents.service';
+import { AppNuiEventsService } from './core/nuiEvents.service';
 
 @Component({
     selector: 'nui-app-root',
@@ -42,12 +44,25 @@ import { CfxEventsService } from './core/cfxEvents.service';
           ])
     ]
 })
-export class AppRootComponent implements OnInit {
+export class AppRootComponent implements OnInit, OnDestroy {
+    private onDestroy$ = new Subject();
+
     public isActive = false;
-    constructor(private events: CfxEventsService) {
+
+    constructor(private events: AppNuiEventsService) {
     }
 
     public ngOnInit(): void {
-        this.events.on(Events.setNuiVisibility).subscribe(event => this.isActive = event.data?.nuiVisible ?? false)
+        this.events.onNuiMessage(Events.setNuiVisibility)
+            .pipe(takeUntil(this.onDestroy$))
+            .subscribe(this.handleNuiVisibility.bind(this));
+    }
+
+    public ngOnDestroy(): void {
+        this.onDestroy$.next();
+    }
+
+    private handleNuiVisibility(event: Events.setNuiVisibility) {
+        this.isActive = event.data?.nuiVisible ?? false;
     }
 }

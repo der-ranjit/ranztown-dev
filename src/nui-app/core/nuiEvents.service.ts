@@ -3,14 +3,15 @@ import { fromEvent, Observable } from "rxjs";
 import { filter, map } from "rxjs/operators";
 
 import { Events } from "../../shared/events";
-import { EventsService } from "../../shared/events/EventsService";
 
 @Injectable({providedIn: "root"})
-export class CfxEventsService extends EventsService {
+export class AppNuiEventsService {
+    /* cache observables created for events */
+    protected cachedObservables = new Map<string, Observable<any>>();
     // get parent resource name by call to GetParentResourceName()
     private parentResourceName = "testmenu";
 
-    public async emit<R, D, T extends Events.Event<D,R>>(
+    public async emitNuiCallback<R, D, T extends Events.Event<D,R>>(
         eventType: { new(data: D | null, response: R | null): T},
         data: D | null
     ): Promise<R | null>{
@@ -25,7 +26,7 @@ export class CfxEventsService extends EventsService {
         return result.json();
     }
 
-    public on<D, T extends Events.Event<D>>(eventType: { new(arg: D | null): T}): Observable<T> {
+    public onNuiMessage<D, T extends Events.Event<D>>(eventType: { new(arg: D | null): T}): Observable<T> {
         const event = new eventType(null);
         if (!this.cachedObservables.has(event.name)) {
             const observable = fromEvent(window, "message").pipe(

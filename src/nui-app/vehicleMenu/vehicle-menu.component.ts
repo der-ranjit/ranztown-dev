@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 
 import { Events } from '../../shared/events';
 import { Vehicles } from '../../shared/Vehicles';
-import { CfxEventsService } from '../core/cfxEvents.service';
+import { AppNuiEventsService } from '../core/nuiEvents.service';
 
 @Component({
     selector: 'nui-app-vehicle-menu',
@@ -27,11 +27,11 @@ export class VehicleMenuComponent {
     // TODO large list loads too long
     public vehicles = [...Object.values(Vehicles)].slice(0,10);
 
-    constructor(private events: CfxEventsService) {
+    constructor(private events: AppNuiEventsService) {
     }
 
     public async handleSpawnCar(carModel: string): Promise<void> {
-        const result = await this.events.emit(Events.SpawnVehicle, { model: carModel });
+        const result = await this.events.emitNuiCallback(Events.SpawnVehicle, { model: carModel });
     }
 
 }
