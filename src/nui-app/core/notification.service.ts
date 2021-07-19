@@ -5,7 +5,7 @@ import { Events } from "../../shared/events";
 
 import { CfxEventsService } from "./cfxEvents.service";
 
-export const notificationTimeoutMS = 3000;
+export const notificationTimeoutMS = 6000;
 
 @Injectable({providedIn: "root"})
 export class NotificationService {
