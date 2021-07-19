@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { fromEvent, Observable } from "rxjs";
 import { filter, map } from "rxjs/operators";
 
-import { Events } from "../../shared/events";
+import { Message } from "../../shared/nui-events";
 
 @Injectable({providedIn: "root"})
 export class AppNuiEventsService {
@@ -11,7 +11,7 @@ export class AppNuiEventsService {
     // get parent resource name by call to GetParentResourceName()
     private parentResourceName = "testmenu";
 
-    public async emitNuiCallback<R, D, T extends Events.Event<D,R>>(
+    public async emitNuiCallback<R, D, T extends Message.Base<D,R>>(
         eventType: { new(data: D | null, response: R | null): T},
         data: D | null
     ): Promise<R | null>{
@@ -26,7 +26,7 @@ export class AppNuiEventsService {
         return result.json();
     }
 
-    public onNuiMessage<D, T extends Events.Event<D>>(eventType: { new(arg: D | null): T}): Observable<T> {
+    public onNuiMessage<D, T extends Message.Base<D>>(eventType: { new(arg: D | null): T}): Observable<T> {
         const event = new eventType(null);
         if (!this.cachedObservables.has(event.name)) {
             const observable = fromEvent(window, "message").pipe(

@@ -1,6 +1,6 @@
 /* Shared Data Types available for nui and fivem project. */
 
-export abstract class Event<D, R = any> {
+export abstract class Base<D, R = any> {
     abstract name: string;
     constructor(
         public data: D | null = null,
@@ -9,16 +9,16 @@ export abstract class Event<D, R = any> {
 }
 
 export type SpawnVehicleData = { model: string };
-export class SpawnVehicle extends Event<SpawnVehicleData> {
+export class SpawnVehicle extends Base<SpawnVehicleData> {
     name = "spawnVehicle"
 }
 
 export type NotificationData = { message: string };
-export class Notification extends Event<NotificationData> {
+export class Notification extends Base<NotificationData> {
     name = "notification"
 }
 
 export type setNuiVisibilityData = { nuiVisible: boolean };
-export class setNuiVisibility extends Event<setNuiVisibilityData> {
+export class setNuiVisibility extends Base<setNuiVisibilityData> {
     name = "setNuiVisibility"
 }

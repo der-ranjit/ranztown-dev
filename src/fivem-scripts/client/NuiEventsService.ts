@@ -1,7 +1,7 @@
 import { Observable, Observer } from "rxjs";
 import { map} from "rxjs/operators";
 
-import { Events } from "../../shared/events";
+import { Message } from "../../shared/nui-events";
 
 type NuiCallbackType = { data: any, cb: Function };
 
@@ -16,13 +16,13 @@ export class CfxNuiEventsService {
 
     private cachedObservables = new Map<string, Observable<any>>()
 
-    public emitNuiMessage<D, T extends Events.Event<D>>(eventType: { new(arg:D | null): T }, data: D | null): Promise<D | null> {
+    public emitNuiMessage<D, T extends Message.Base<D>>(eventType: { new(arg:D | null): T }, data: D | null): Promise<D | null> {
         const event = new eventType(data);
         SendNuiMessage(JSON.stringify({ type: event.name, data: event.data }))
         return Promise.resolve(null);
     }
 
-    public onNuiCallback<R, D, T extends Events.Event<D, R>>(
+    public onNuiCallback<R, D, T extends Message.Base<D, R>>(
         eventType: { new(data: D | null, response: R | null): T}
     ): Observable<T & {cb: (response: R | null) => void}> {
         const event = new eventType(null, null);

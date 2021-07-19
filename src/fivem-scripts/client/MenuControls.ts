@@ -1,6 +1,6 @@
 import * as Cfx from "fivem-js";
 
-import { Events } from "../../shared/events";
+import { Message } from "../../shared/nui-events";
 import { CfxNuiEventsService } from "./NuiEventsService";
 
 export class MenuControls {
@@ -74,14 +74,14 @@ export class MenuControls {
         this.nuiActive = !this.nuiActive;
         SetNuiFocus(this.nuiActive, this.nuiActive);
         SetNuiFocusKeepInput(this.nuiActive);
-        this.events.emitNuiMessage(Events.setNuiVisibility, { nuiVisible: this.nuiActive });
+        this.events.emitNuiMessage(Message.setNuiVisibility, { nuiVisible: this.nuiActive });
         setTimeout(() => this.nuiActivating = false, this.nuiDebounceMS)
     }
 
     private disableNUI(): void {
         SetNuiFocus(false, false);
         SetNuiFocusKeepInput(false);
-        this.events.emitNuiMessage(Events.setNuiVisibility, { nuiVisible: false });
+        this.events.emitNuiMessage(Message.setNuiVisibility, { nuiVisible: false });
         // setTimeout to disable controls some longer; in case esc is pressed the pause menu would open
         setTimeout(() => {
             this.nuiActive = false;

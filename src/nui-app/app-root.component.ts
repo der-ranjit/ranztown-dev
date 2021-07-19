@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { Events } from '../shared/events';
+import { Message } from '../shared/nui-events';
 import { fade } from './core/animations';
 import { AppNuiEventsService } from './core/nuiEvents.service';
 
@@ -45,7 +45,7 @@ export class AppRootComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit(): void {
-        this.events.onNuiMessage(Events.setNuiVisibility)
+        this.events.onNuiMessage(Message.setNuiVisibility)
             .pipe(takeUntil(this.onDestroy$))
             .subscribe(this.handleNuiVisibility.bind(this));
     }
@@ -54,7 +54,7 @@ export class AppRootComponent implements OnInit, OnDestroy {
         this.onDestroy$.next();
     }
 
-    private handleNuiVisibility(event: Events.setNuiVisibility) {
+    private handleNuiVisibility(event: Message.setNuiVisibility) {
         this.isActive = event.data?.nuiVisible ?? false;
     }
 }

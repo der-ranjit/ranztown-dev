@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { Events } from "../../shared/events";
+import { Message } from "../../shared/nui-events";
 
 import { AppNuiEventsService } from "./nuiEvents.service";
 
@@ -12,10 +12,10 @@ export class NotificationService {
         private snackBar: MatSnackBar,
         private events: AppNuiEventsService
     ) {
-        this.events.onNuiMessage(Events.Notification).subscribe(this.handleNotification.bind(this))
+        this.events.onNuiMessage(Message.Notification).subscribe(this.handleNotification.bind(this))
     }
 
-    private handleNotification(notification: Events.Notification): void {
+    private handleNotification(notification: Message.Notification): void {
         const snackbar = this.snackBar.open(notification.data?.message ?? "?? NO MESSAGE ??", 'Ok');
         setTimeout(() => snackbar.dismiss(), notificationTimeoutMS);
     }

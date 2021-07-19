@@ -1,7 +1,7 @@
 import * as Cfx from "fivem-js";
 
 import { CfxNuiEventsService } from "./NuiEventsService";
-import { Events } from "../../shared/events";
+import { Message } from "../../shared/nui-events";
 
 export class VehicleSpawner {
     private static instance: VehicleSpawner | null = null;
@@ -19,13 +19,13 @@ export class VehicleSpawner {
     }
 
     private initListeners(): void {
-        this.eventsService.onNuiCallback(Events.SpawnVehicle).subscribe(event => this.handleSpawnVehicleEvent(event.data, event.cb));
+        this.eventsService.onNuiCallback(Message.SpawnVehicle).subscribe(event => this.handleSpawnVehicleEvent(event.data, event.cb));
     }
 
-    private async handleSpawnVehicleEvent(data: Events.SpawnVehicleData | null,cb: Function): Promise<void> {
+    private async handleSpawnVehicleEvent(data: Message.SpawnVehicleData | null,cb: Function): Promise<void> {
         if (data != null) {
             await this.spawnVehicle(data.model);
-            this.eventsService.emitNuiMessage(Events.Notification, { message: `Spawned vehicle: "${data.model}"` })
+            this.eventsService.emitNuiMessage(Message.Notification, { message: `Spawned vehicle: "${data.model}"` })
             cb(null);
         }
     }
