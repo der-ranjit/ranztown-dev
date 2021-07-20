@@ -59,7 +59,7 @@ import { AppNuiEventsService } from '../core/nuiEvents.service';
             justify-content: center;
             color: black
         }
-`]
+    `]
 })
 export class VehicleMenuComponent {
     // TODO large list loads too long
