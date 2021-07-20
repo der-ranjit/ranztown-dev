@@ -20,7 +20,7 @@ import { AppNuiEventsService } from './core/nuiEvents.service';
             flex: 1;
             max-height: 100%;
             overflow: hidden;
-            opacity: .9;
+            opacity: .85;
         }
         .menuInfo {
             position: absolute;
