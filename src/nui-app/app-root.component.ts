@@ -6,9 +6,9 @@ import { NuiMessageEvents, NuiMessageListener } from './core/nui-events/decorato
 @Component({
     selector: 'nui-app-root',
     template: `
-        <button mat-raised-button @fade *ngIf="!isActive" class="menuInfo" color="accent">Press menu-key (M) to open menu</button>
+        <button mat-raised-button @fade *ngIf="!isActive" class="menuInfo" color="accent">Press F1 to open menu</button>
         <div class="mainWrapper">
-            <nui-app-vehicle-menu @fade *ngIf="isActive" cdkDrag></nui-app-vehicle-menu>
+            <nui-app-vehicle-menu *ngIf="isActive"></nui-app-vehicle-menu>
         </div>
     `,
     styles: [`
@@ -18,17 +18,13 @@ import { NuiMessageEvents, NuiMessageListener } from './core/nui-events/decorato
             height: 100%;
             max-height: 100%;
             overflow: hidden;
-            opacity: .85;
+            opacity: .9;
         }
         .menuInfo {
             position: absolute;
             left: 10px;
             top: 10px;
             opacity: 0.8;
-        }
-        nui-app-vehicle-menu {
-            max-height: 800px;
-            max-width: 300px;
         }
     `],
     animations: [

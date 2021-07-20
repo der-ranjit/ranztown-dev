@@ -1,4 +1,4 @@
-import { Directive, HostListener } from "@angular/core";
+import { Directive, ElementRef, HostListener } from "@angular/core";
 import { Callback } from "../../shared/nui-events";
 import { AppNuiEventsService } from "./nui-events/nuiEvents.service";
 
@@ -6,7 +6,9 @@ import { AppNuiEventsService } from "./nui-events/nuiEvents.service";
     selector:"[exclusiveInput]"
 })
 export class ExclusiveInputDirective {
-    constructor(private events: AppNuiEventsService) {
+    constructor(
+        private events: AppNuiEventsService,
+        private elementRef: ElementRef<HTMLElement>) {
     }
 
     @HostListener("blur")
@@ -17,5 +19,10 @@ export class ExclusiveInputDirective {
     @HostListener("focus")
     public disableAllControls(): void {
         this.events.emitNuiCallback(Callback.SetControlsDisabled, {disabled: true});
+    }
+
+    @HostListener("keyup.escape")
+    public blur() {
+        this.elementRef.nativeElement.blur();
     }
 }

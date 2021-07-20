@@ -5,39 +5,41 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatInputModule  } from '@angular/material/input';
-import { MatFormFieldModule, MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatAutocompleteModule} from '@angular/material/autocomplete';
 import { DragDropModule } from "@angular/cdk/drag-drop"
 import { MatExpansionModule} from "@angular/material/expansion";
-
-
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppRootComponent } from './app-root.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
 import { NotificationService } from './core/notification.service';
 import { VehicleMenuComponent } from './vehicleMenu/vehicle-menu.component';
 import { AppNuiEventsService } from './core/nui-events/nuiEvents.service';
+import { ExclusiveInputDirective } from './core/exclusiveInput.directive';
 
 @NgModule({
     declarations: [
         AppRootComponent,
-        VehicleMenuComponent
+        VehicleMenuComponent,
+        ExclusiveInputDirective
     ],
     imports: [
         BrowserModule,
         CommonModule,
         FormsModule,
+        ReactiveFormsModule,
         MatInputModule,
         MatButtonModule,
         MatSnackBarModule,
         MatFormFieldModule,
         DragDropModule,
         MatExpansionModule,
+        MatAutocompleteModule,
         AppRoutingModule,
         BrowserAnimationsModule
     ],
     providers: [
-        { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: {appearance: 'fill'} },
         { provide: AppNuiEventsService, useValue: AppNuiEventsService.getInstance() }
     ],
     bootstrap: [AppRootComponent]
