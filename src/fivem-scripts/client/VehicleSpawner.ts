@@ -19,8 +19,14 @@ export class VehicleSpawner {
     @NuiCallbackListener(Callback.SpawnVehicle)
     private async handleSpawnVehicleEvent(data: SpawnVehicleData): Promise<void> {
         if (data != null) {
-            await this.spawnVehicle(data.model);
-            this.eventsService.emitNuiMessage(Message.Notification, { message: `Spawned vehicle: "${data.model}"` });
+            let message = `Spawned vehicle: "${data.model}"`;
+            try {
+                await this.spawnVehicle(data.model);
+            } catch (error) {
+                message = `VehicleSpawner: tried to spawn unavailable vehicle "${data.model}"`
+                console.warn(message)
+            }
+            this.eventsService.emitNuiMessage(Message.Notification, { message });
         }
     }
 
