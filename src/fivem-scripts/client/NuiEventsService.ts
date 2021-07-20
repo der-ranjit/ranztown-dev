@@ -1,12 +1,7 @@
 import { Observable, Observer } from "rxjs";
-import { map} from "rxjs/operators";
 
 import { Callback, Message } from "../../shared/nui-events";
-import { CallbackConstructorType } from "../../shared/nui-events/callbacks";
-import { MessageConstructorType } from "../../shared/nui-events/messages";
-import { getEventName } from "../../shared/nui-events/utils";
-
-type NuiCallbackType = { data: any, cb: Function };
+import { getEventNameFromEventType } from "../../shared/nui-events/utils";
 
 export class CfxNuiEventsService {
     private static instance: CfxNuiEventsService | null = null;
@@ -17,36 +12,78 @@ export class CfxNuiEventsService {
         return CfxNuiEventsService.instance;
     }
 
-    private cachedObservables = new Map<string, Observable<any>>()
+    private cachedEventObservables = new Map<string, Observable<any>>();
 
     public emitNuiMessage<D, T extends Message.AbstractMessage<D>>(
-        eventType: MessageConstructorType<T,D>,
+        eventType: Message.MessageConstructor<T,D>,
         data: D | null
     ): Promise<D | null> {
-        SendNuiMessage(JSON.stringify({ type: getEventName(eventType), data }))
+        SendNuiMessage(JSON.stringify({ type: getEventNameFromEventType(eventType), data }))
         return Promise.resolve(null);
     }
 
-    public onNuiCallback<R, D, T extends Callback.AbstractCallback<D, R>>(
-        eventType: CallbackConstructorType<T,D,R>
-    ): Observable<T> {
-        const eventName = getEventName(eventType);
-        if (!this.cachedObservables.has(eventName)) {
+    /* If possible, use the @NuiCallbackListener Decorator instead */
+    public getObservableForNuiCallback<T,D,R>(nuiCallback: Callback.CallbackConstructor<T,D,R>): Observable<T> {
+        const eventName = getEventNameFromEventType(nuiCallback);
+        if (!this.cachedEventObservables.has(eventName)) {
             RegisterNuiCallbackType(eventName);
-            const nuiObservable = this.createObservableFromNuiCallback(eventName).pipe(
-                // create object of type Callback
-                map(_event => ({name: eventName, data: _event.data, cb: _event.cb}))
-            );
-            this.cachedObservables.set(eventName, nuiObservable)
+            const nuiObservable = this.createObservableFromNuiCallback(nuiCallback);
+            this.cachedEventObservables.set(eventName, nuiObservable)
         }
-        return this.cachedObservables.get(eventName)!;
-    };
+        return this.cachedEventObservables.get(eventName)!;
+    }
 
-    private createObservableFromNuiCallback(eventName: string): Observable<NuiCallbackType> {
-        return new Observable((observer: Observer<NuiCallbackType>) => {
-            on(`__cfx_nui:${eventName}`, (data: any, cb: Function) => {
-                observer.next({data, cb})
+    private createObservableFromNuiCallback<T,D,R>(nuiCallback: Callback.CallbackConstructor<T,D,R>): Observable<T> {
+        const eventName = getEventNameFromEventType(nuiCallback);
+        return new Observable((observer: Observer<any>) => {
+            on(`__cfx_nui:${eventName}`, (data: D, cb: Function) => {
+                observer.next({
+                    name: eventName,
+                    data: data,
+                    cb: cb
+                })
             });
         });
+    }
+}
+
+/* Unique symbol to prevent naming collisions. Used to store functions marked by @NuiCallbackListener in target class */
+const NuiCallbackFunctions = Symbol("NuiCallbackFunctions");
+/* generic constructor type for decorator */
+type constructor = { new(...args: any[]): any };
+const eventService = CfxNuiEventsService.getInstance();
+
+/**
+ *  Decorates a class so that the NuiCallbackListener decorator can be used on methods.
+ */
+export function NuiCallbackEvents<T extends constructor>(base: T) {
+    return class NuiCallbackEventsEnabled extends base {
+        constructor(...args: any[]) {
+            super(args);
+
+            const nuiCallbackFunctions = base.prototype[NuiCallbackFunctions] ?? [];
+            nuiCallbackFunctions.forEach((eventType: any, functionName: string) => {
+                const observable = eventService.getObservableForNuiCallback(eventType);
+                observable.subscribe(async (event: any) => {
+                    const result = await this[functionName](event.data) ?? "no-value";
+                    // make sure we always resolve the nui callback with some value
+                    event.cb(result);
+                })
+            });
+        }
+    }
+}
+
+/**
+ * A decorated method will automatically execute when the specified EventType event emits.
+ * When an EventType is provided, the decorated method must adhere strictly to the typings of that EventType;
+ * typescripts IntelliSense will help with that.
+ * internal: stores the names of decorated functions and their respective EventTypes in a map in the target,
+ * so those functions can be executed when the provided EventType emits.
+ */
+ export function NuiCallbackListener<T,D,R>(eventType: Callback.CallbackConstructor<T,D,R>) {
+    return function(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<(data: D) => Promise<R>>) {
+        target[NuiCallbackFunctions] = target[NuiCallbackFunctions] || new Map();
+        target[NuiCallbackFunctions].set(propertyKey, eventType);
     }
 }

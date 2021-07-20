@@ -1,22 +1,24 @@
 import { Injectable } from "@angular/core";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { Message } from "../../shared/nui-events";
 
-import { AppNuiEventsService } from "./nuiEvents.service";
+import { Message } from "../../shared/nui-events";
+import { BaseNuiService } from "./nui-events/base.service";
+import { NuiMessageEvents, NuiMessageListener } from "./nui-events/decorators";
 
 export const notificationTimeoutMS = 6000;
 
 @Injectable({providedIn: "root"})
-export class NotificationService {
+@NuiMessageEvents
+export class NotificationService extends BaseNuiService {
     public constructor(
         private snackBar: MatSnackBar,
-        private events: AppNuiEventsService
     ) {
-        this.events.onNuiMessage(Message.Notification).subscribe(this.handleNotification.bind(this))
+        super();
     }
 
-    private handleNotification(notification: Message.Notification): void {
-        const snackbar = this.snackBar.open(notification.data?.message ?? "?? NO MESSAGE ??", 'Ok');
+    @NuiMessageListener(Message.Notification)
+    private handleNotification(data: Message.NotificationData): void {
+        const snackbar = this.snackBar.open(data?.message ?? "?? NO MESSAGE ??", 'Ok');
         setTimeout(() => snackbar.dismiss(), notificationTimeoutMS);
     }
 }

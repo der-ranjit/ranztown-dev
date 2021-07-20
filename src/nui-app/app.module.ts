@@ -16,6 +16,7 @@ import { AppRootComponent } from './app-root.component';
 import { FormsModule } from '@angular/forms';
 import { NotificationService } from './core/notification.service';
 import { VehicleMenuComponent } from './vehicleMenu/vehicle-menu.component';
+import { AppNuiEventsService } from './core/nui-events/nuiEvents.service';
 
 @NgModule({
     declarations: [
@@ -36,7 +37,8 @@ import { VehicleMenuComponent } from './vehicleMenu/vehicle-menu.component';
         BrowserAnimationsModule
     ],
     providers: [
-        {provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: {appearance: 'fill'}}
+        { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: {appearance: 'fill'} },
+        { provide: AppNuiEventsService, useValue: AppNuiEventsService.getInstance() }
     ],
     bootstrap: [AppRootComponent]
 })

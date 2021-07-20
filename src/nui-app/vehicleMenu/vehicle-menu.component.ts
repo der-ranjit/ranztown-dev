@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 
 import { Callback } from '../../shared/nui-events';
 import { Vehicles } from '../../shared/Vehicles';
-import { AppNuiEventsService } from '../core/nuiEvents.service';
+import { AppNuiEventsService } from '../core/nui-events/nuiEvents.service';
 
 @Component({
     selector: 'nui-app-vehicle-menu',
@@ -85,5 +85,4 @@ export class VehicleMenuComponent {
     public async handleSpawnCar(carModel: string): Promise<void> {
         const result = await this.events.emitNuiCallback(Callback.SpawnVehicle, { model: carModel });
     }
-
 }

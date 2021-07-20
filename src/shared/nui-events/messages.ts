@@ -1,4 +1,4 @@
-export abstract class AbstractMessage<Data> {
+export abstract class AbstractMessage<D = void> {
     /* The name of the event. It is used to filter the specific event out of the NUI message bus */
     static eventName: string;
 
@@ -6,10 +6,10 @@ export abstract class AbstractMessage<Data> {
      * @param data - Optional data that can be sent with the message.
      */
     constructor(
-        public data: Data | null = null
+        public data: D
     ){}
 }
-export type MessageConstructorType<T, D> = { new (data: D | null): T}
+export type MessageConstructor<T, D> = { new (data: D): T}
 
 export type NotificationData = { message: string };
 export class Notification extends AbstractMessage<NotificationData> {

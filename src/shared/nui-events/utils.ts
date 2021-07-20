@@ -1,8 +1,8 @@
-import { CallbackConstructorType } from "./callbacks";
-import { MessageConstructorType } from "./messages";
+import { CallbackConstructor } from "./callbacks";
+import { MessageConstructor } from "./messages";
 
-export function getEventName<T,D,R>(
-    eventType: MessageConstructorType<T,D> | CallbackConstructorType<T,D,R>
+export function getEventNameFromEventType<T,D,R>(
+    eventType: MessageConstructor<T,D> | CallbackConstructor<T,D,R>
 ) {
     return (eventType as any).eventName;
 }
