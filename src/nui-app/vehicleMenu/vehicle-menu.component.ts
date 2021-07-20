@@ -7,19 +7,31 @@ import { AppNuiEventsService } from '../core/nuiEvents.service';
 @Component({
     selector: 'nui-app-vehicle-menu',
     template: `
-        <mat-form-field appearance="fill" class="vehicleNameField">
-            <mat-label>Vehicle name</mat-label>
-            <input type="text" #vehicleName matInput>
-            <mat-hint>enter a vehicle name</mat-hint>
-        </mat-form-field>
-        <button mat-raised-button (click)="handleSpawnCar(vehicleName.value)">Spawn car</button>
-        <div class="vehicleList">
-            <div *ngFor="let vehicle of vehicles" class="vehicleItem"
-                [style.backgroundImage]="'url(assets/vehicle_thumbs/' + vehicle.name +'.png)'"
-                (click)="handleSpawnCar(vehicle.name)">
-                <div class="vehicleName">{{vehicle.name}}</div>
-            </div>
-        </div>
+        <mat-accordion [style.maxHeight]="'100%'">
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        <mat-form-field appearance="fill" class="vehicleNameField">
+                            <mat-label>Vehicle name</mat-label>
+                            <input type="text" #vehicleName matInput>
+                            <mat-hint>enter a vehicle name</mat-hint>
+                        </mat-form-field>
+                        <button mat-raised-button (click)="handleSpawnCar(vehicleName.value)">Spawn car</button>
+                    </mat-panel-title>
+                    <mat-panel-description>
+                        This is a summary of the content
+                    </mat-panel-description>
+                </mat-expansion-panel-header>
+                <div class="vehicleList">
+                    <div *ngFor="let vehicle of vehicles" class="vehicleItem"
+                        [style.backgroundImage]="'url(assets/vehicle_thumbs/' + vehicle.name +'.png)'"
+                        (click)="handleSpawnCar(vehicle.name)">
+                        <div class="vehicleName">{{vehicle.name}}</div>
+                    </div>
+                </div>
+            </mat-expansion-panel>
+        </mat-accordion>
+
 `,
     styles: [`
         :host {
@@ -27,7 +39,6 @@ import { AppNuiEventsService } from '../core/nuiEvents.service';
             flex: 1;
             flex-direction: column;
             overflow: hidden;
-            border: solid 2px #dedede;
         }
         .vehicleNameField {
             background-color: white;
@@ -58,6 +69,9 @@ import { AppNuiEventsService } from '../core/nuiEvents.service';
             display: flex;
             justify-content: center;
             color: black
+        }
+        :host ::ng-deep .mat-expansion-panel-body {
+            padding: 0;
         }
     `]
 })

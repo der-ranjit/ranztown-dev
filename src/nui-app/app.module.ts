@@ -7,6 +7,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatInputModule  } from '@angular/material/input';
 import { MatFormFieldModule, MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { DragDropModule } from "@angular/cdk/drag-drop"
+import { MatExpansionModule} from "@angular/material/expansion";
+
 
 
 import { AppRoutingModule } from './app-routing.module';
@@ -29,6 +31,7 @@ import { VehicleMenuComponent } from './vehicleMenu/vehicle-menu.component';
         MatSnackBarModule,
         MatFormFieldModule,
         DragDropModule,
+        MatExpansionModule,
         AppRoutingModule,
         BrowserAnimationsModule
     ],
