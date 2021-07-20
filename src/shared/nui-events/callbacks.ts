@@ -19,3 +19,8 @@ export type SpawnVehicleData = { model: string };
 export class SpawnVehicle extends AbstractCallback<SpawnVehicleData> {
     static eventName = "spawnVehicle"
 }
+
+export type SetControlsDisabledData = { disabled: boolean };
+export class SetControlsDisabled extends AbstractCallback<SetControlsDisabledData> {
+    static eventName = "setControlsDisabled"
+}

@@ -30,7 +30,6 @@ export function NuiMessageEvents(target: any) {
         target.prototype.___uiOnDestroy$.next();
         originalDestroy?.apply(this);
     };
-    console.log("iswork")
 }
 
 /**
