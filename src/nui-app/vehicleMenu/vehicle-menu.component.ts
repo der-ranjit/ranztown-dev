@@ -1,3 +1,4 @@
+import { CdkDragEnd, CdkDragStart } from '@angular/cdk/drag-drop/drag-events';
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
@@ -7,6 +8,9 @@ import { Callback } from '../../shared/nui-events';
 import { Vehicles } from '../../shared/Vehicles';
 import { AppNuiEventsService } from '../core/nui-events/nuiEvents.service';
 
+// TODO this only works for one component and needs to be refactored
+let dragPosition = {x: 0, y: 0};
+
 @Component({
     selector: 'nui-app-vehicle-menu',
     template: `
@@ -15,7 +19,10 @@ import { AppNuiEventsService } from '../core/nui-events/nuiEvents.service';
                 {{name}}
             </mat-option>
         </mat-autocomplete>
-        <mat-accordion cdkDrag [style.maxWidth]="'300px'">
+        <mat-accordion cdkDrag
+            [cdkDragFreeDragPosition]="dragPosition"
+            (cdkDragEnded)="onDragEnd($event)"
+            [style.maxWidth]="'300px'">
             <mat-expansion-panel (opened)="setAutoCompleteEnabled(false)" (closed)="setAutoCompleteEnabled(true)">
                 <mat-expansion-panel-header [collapsedHeight]="'48px'" [expandedHeight]="'48px'" cdkDragHandle>
                     <mat-panel-title (click)="$event.stopPropagation();" (keydown)="$event.keyCode == 27 ? null : $event.stopPropagation();">
@@ -99,6 +106,8 @@ export class VehicleMenuComponent implements OnInit {
 
     public autoCompleteEnabled = true;
 
+    public dragPosition = dragPosition;
+
     constructor(private events: AppNuiEventsService) {
     }
 
@@ -107,6 +116,7 @@ export class VehicleMenuComponent implements OnInit {
             startWith(''),
             map(value => this.filter(value))
         );
+        this.dragPosition = dragPosition
     }
 
     public setAutoCompleteEnabled(enabled: boolean): void {
@@ -116,6 +126,11 @@ export class VehicleMenuComponent implements OnInit {
     public async handleSpawn(carModel: string): Promise<void> {
         const result = await this.events.emitNuiCallback(Callback.SpawnVehicle, { model: carModel });
     }
+
+    public onDragEnd(event: CdkDragEnd) {
+        const { x, y } = event.source.element.nativeElement.getBoundingClientRect();
+        dragPosition = {x, y};
+      }
 
     private filter(value: string): any[] {
         const filterValue = this.normalizeValue(value);
