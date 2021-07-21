@@ -20,7 +20,7 @@ export function NuiMessageEvents(target: any) {
         nuiMessageFunctions.forEach((eventType: any, functionName: string) => {
             const observable = eventService.getObservableForNuiMessage(eventType);
             observable.pipe(takeUntil(target.prototype.___uiOnDestroy$)).subscribe(async (event: any) => {
-                this[functionName](event.data);
+                this[functionName](event);
             })
         });
         originalInit?.apply(this);
@@ -40,7 +40,7 @@ export function NuiMessageEvents(target: any) {
  * so those functions can be executed when the provided EventType emits.
  */
  export function NuiMessageListener<T, D>(eventType: Message.MessageConstructor<T, D>) {
-    return function(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<(data: D) => void>) {
+    return function(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<(event: T) => void>) {
         target[NuiMessageFunctions] = target[NuiMessageFunctions] || new Map();
         target[NuiMessageFunctions].set(propertyKey, eventType);
     }

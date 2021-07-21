@@ -2,7 +2,6 @@ import * as Cfx from "fivem-js";
 
 import { CfxNuiEventsService, NuiCallbackListener, NuiCallbackEvents } from "./NuiEventsService";
 import { Callback, Message } from "../../shared/nui-events";
-import { SpawnVehicleData } from "../../shared/nui-events/callbacks";
 
 @NuiCallbackEvents
 export class VehicleSpawner {
@@ -17,7 +16,8 @@ export class VehicleSpawner {
     private eventsService = CfxNuiEventsService.getInstance();
 
     @NuiCallbackListener(Callback.SpawnVehicle)
-    private async handleSpawnVehicleEvent(data: SpawnVehicleData): Promise<void> {
+    private async handleSpawnVehicleEvent(event: Callback.SpawnVehicle): Promise<void> {
+        const data = event.data;
         if (data != null) {
             let message = `Spawned vehicle: "${data.model}"`;
             try {

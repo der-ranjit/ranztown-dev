@@ -64,7 +64,7 @@ export function NuiCallbackEvents<T extends constructor>(base: T) {
             nuiCallbackFunctions.forEach((eventType: any, functionName: string) => {
                 const observable = eventService.getObservableForNuiCallback(eventType);
                 observable.subscribe(async (event: any) => {
-                    const result = await this[functionName](event.data) ?? "no-value";
+                    const result = await this[functionName](event) ?? "no-value";
                     // make sure we always resolve the nui callback with some value
                     event.cb(result);
                 })
@@ -81,7 +81,7 @@ export function NuiCallbackEvents<T extends constructor>(base: T) {
  * so those functions can be executed when the provided EventType emits.
  */
  export function NuiCallbackListener<T,D,R>(eventType: Callback.CallbackConstructor<T,D,R>) {
-    return function(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<(data: D) => Promise<R>>) {
+    return function(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<(event: T) => Promise<R>>) {
         target[NuiCallbackFunctions] = target[NuiCallbackFunctions] || new Map();
         target[NuiCallbackFunctions].set(propertyKey, eventType);
     }

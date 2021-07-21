@@ -35,8 +35,8 @@ import { NuiMessageEvents, NuiMessageListener } from './core/nui-events/decorato
 export class AppRootComponent {
     public isActive = false;
 
-    @NuiMessageListener(Message.setNuiVisibility)
-    private handleNuiVisibility(data: Message.setNuiVisibilityData) {
-        this.isActive = data?.nuiVisible ?? false;
+    @NuiMessageListener(Message.SetNuiVisibility)
+    private handleNuiVisibility(event: Message.SetNuiVisibility) {
+        this.isActive = event?.data?.nuiVisible ?? false;
     }
 }

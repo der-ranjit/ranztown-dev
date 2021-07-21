@@ -1,7 +1,6 @@
 import * as Cfx from "fivem-js";
 
 import { Callback, Message } from "../../shared/nui-events";
-import { SetControlsDisabledData } from "../../shared/nui-events/callbacks";
 import { CfxNuiEventsService, NuiCallbackEvents, NuiCallbackListener } from "./NuiEventsService";
 
 @NuiCallbackEvents
@@ -28,8 +27,8 @@ export class MenuControls {
     }
 
     @NuiCallbackListener(Callback.SetControlsDisabled)
-    public async setControlsDisabled(data: SetControlsDisabledData): Promise<void> {
-        this.controlsDisabled = data.disabled;
+    public async setControlsDisabled(event: Callback.SetControlsDisabled): Promise<void> {
+        this.controlsDisabled = event.data.disabled;
     }
 
     private initControls(): void {
@@ -66,14 +65,14 @@ export class MenuControls {
         this.nuiActive = !this.nuiActive;
         SetNuiFocus(this.nuiActive, this.nuiActive);
         SetNuiFocusKeepInput(this.nuiActive);
-        this.events.emitNuiMessage(Message.setNuiVisibility, { nuiVisible: this.nuiActive });
+        this.events.emitNuiMessage(Message.SetNuiVisibility, { nuiVisible: this.nuiActive });
         setTimeout(() => this.nuiActivating = false, this.nuiDebounceMS)
     }
 
     private disableNUI(): void {
         SetNuiFocus(false, false);
         SetNuiFocusKeepInput(false);
-        this.events.emitNuiMessage(Message.setNuiVisibility, { nuiVisible: false });
+        this.events.emitNuiMessage(Message.SetNuiVisibility, { nuiVisible: false });
         // setTimeout to disable controls some longer; in case esc is pressed the pause menu would open
         setTimeout(() => {
             this.nuiActive = false;

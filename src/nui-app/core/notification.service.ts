@@ -19,8 +19,8 @@ export class NotificationService extends BaseNuiService {
     }
 
     @NuiMessageListener(Message.Notification)
-    private handleNotification(data: Message.NotificationData): void {
-        const snackbar = this.snackBar.open(data?.message ?? "?? NO MESSAGE ??", 'Ok');
+    private handleNotification(event: Message.Notification): void {
+        const snackbar = this.snackBar.open(event?.data?.message ?? "?? NO MESSAGE ??", 'Ok');
         setTimeout(() => snackbar.dismiss(), notificationTimeoutMS);
     }
 }

@@ -8,8 +8,5 @@ export abstract class AbstractMessage<D = void> {
 }
 export type MessageConstructor<T, D> = { new (data: D): T}
 
-export type NotificationData = { message: string };
-export class Notification extends AbstractMessage<NotificationData> {}
-
-export type setNuiVisibilityData = { nuiVisible: boolean };
-export class setNuiVisibility extends AbstractMessage<setNuiVisibilityData> {}
+export class Notification extends AbstractMessage<{ message: string }> {}
+export class SetNuiVisibility extends AbstractMessage<{ nuiVisible: boolean }> {}
