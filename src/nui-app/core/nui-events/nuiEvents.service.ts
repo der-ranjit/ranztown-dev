@@ -2,7 +2,6 @@ import { fromEvent, Observable } from "rxjs";
 import { filter, map } from "rxjs/operators";
 
 import { Callback, Message } from "../../../shared/nui-events";
-import { getEventNameFromEventType } from "../../../shared/nui-events/utils";
 
 export class AppNuiEventsService {
     private static INSTANCE: AppNuiEventsService | null = null;
@@ -22,7 +21,7 @@ export class AppNuiEventsService {
         eventType: Callback.CallbackConstructor<T, D, R>,
         data: D | null
     ): Promise<R>{
-        const result = await fetch(`https://${this.parentResourceName}/${getEventNameFromEventType(eventType)}`, {
+        const result = await fetch(`https://${this.parentResourceName}/${eventType.name}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json; charset=UTF-8',
@@ -33,7 +32,7 @@ export class AppNuiEventsService {
     }
 
     public getObservableForNuiMessage<D, T extends Message.AbstractMessage<D>>(eventType: Message.MessageConstructor<T, D>): Observable<T> {
-        const eventName = getEventNameFromEventType(eventType);
+        const eventName = eventType.name;
         if (!this.cachedObservables.has(eventName)) {
             const observable = fromEvent(window, "message").pipe(
                 filter((messageEvent: any) => messageEvent.data.type === eventName),

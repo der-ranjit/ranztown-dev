@@ -14,6 +14,8 @@ export class NotificationService extends BaseNuiService {
         private snackBar: MatSnackBar,
     ) {
         super();
+        const snackbar = this.snackBar.open("Resource restarted", 'Ok');
+        setTimeout(() => snackbar.dismiss(), 10000);
     }
 
     @NuiMessageListener(Message.Notification)

@@ -1,7 +1,6 @@
 import { Observable, Observer } from "rxjs";
 
 import { Callback, Message } from "../../shared/nui-events";
-import { getEventNameFromEventType } from "../../shared/nui-events/utils";
 
 export class CfxNuiEventsService {
     private static instance: CfxNuiEventsService | null = null;
@@ -18,13 +17,13 @@ export class CfxNuiEventsService {
         eventType: Message.MessageConstructor<T,D>,
         data: D | null
     ): Promise<D | null> {
-        SendNuiMessage(JSON.stringify({ type: getEventNameFromEventType(eventType), data }))
+        SendNuiMessage(JSON.stringify({ type: eventType.name, data }))
         return Promise.resolve(null);
     }
 
     /* If possible, use the @NuiCallbackListener Decorator instead */
     public getObservableForNuiCallback<T,D,R>(nuiCallback: Callback.CallbackConstructor<T,D,R>): Observable<T> {
-        const eventName = getEventNameFromEventType(nuiCallback);
+        const eventName = nuiCallback.name;
         if (!this.cachedEventObservables.has(eventName)) {
             RegisterNuiCallbackType(eventName);
             const nuiObservable = this.createObservableFromNuiCallback(nuiCallback);
@@ -34,7 +33,7 @@ export class CfxNuiEventsService {
     }
 
     private createObservableFromNuiCallback<T,D,R>(nuiCallback: Callback.CallbackConstructor<T,D,R>): Observable<T> {
-        const eventName = getEventNameFromEventType(nuiCallback);
+        const eventName = nuiCallback.name;
         return new Observable((observer: Observer<any>) => {
             on(`__cfx_nui:${eventName}`, (data: D, cb: Function) => {
                 observer.next({
