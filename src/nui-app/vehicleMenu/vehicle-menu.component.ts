@@ -68,7 +68,7 @@ let dragPosition = {x: 0, y: 0};
             width: 120px;
             height: 100px;
             margin-top: 4px;
-            border: solid 1px black;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
             border-radius: 5px;
             background-size: contain;
             background-repeat: no-repeat;
