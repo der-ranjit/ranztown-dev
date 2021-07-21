@@ -36,7 +36,7 @@ export class MenuControls {
         setTick(() => {
             // open on F1
             if (Cfx.Game.isControlPressed(Cfx.InputMode.MouseAndKeyboard, Cfx.Control.ReplayStartStopRecording) && !this.nuiActivating) {
-                this.enableNUI();
+                this.toggle();
                 this.nuiActivating = true;
             }
             // close on ESC
@@ -62,11 +62,11 @@ export class MenuControls {
         })
     }
 
-    private enableNUI(): void {
-        this.nuiActive = true;
-        SetNuiFocus(true, true);
-        SetNuiFocusKeepInput(true);
-        this.events.emitNuiMessage(Message.setNuiVisibility, { nuiVisible: true });
+    private toggle(): void {
+        this.nuiActive = !this.nuiActive;
+        SetNuiFocus(this.nuiActive, this.nuiActive);
+        SetNuiFocusKeepInput(this.nuiActive);
+        this.events.emitNuiMessage(Message.setNuiVisibility, { nuiVisible: this.nuiActive });
         setTimeout(() => this.nuiActivating = false, this.nuiDebounceMS)
     }
 
