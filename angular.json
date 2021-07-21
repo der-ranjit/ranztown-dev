@@ -23,12 +23,13 @@
             "customWebpackConfig": {
                 "path": "config/nui-webpack.config.js"
              },
-            "outputPath": "dist",
+            "outputPath": "dist/nui-app",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "config/tsconfig.nui.json",
             "inlineStyleLanguage": "scss",
+            "baseHref": "/nui-app/",
             "assets": [
               "src/assets"
             ],

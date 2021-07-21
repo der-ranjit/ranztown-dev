@@ -7,10 +7,11 @@
     "test": "ng test",
     "nui:build": "ng build --configuration production --source-map=false",
     "nui:watch": "ng build --configuration development --watch --source-map=false",
+    "nui:copy-assets": "node building/copy-assets.js",
     "fivem:watch-js": "webpack --config ./config/fivem-webpack.config.js --watch",
     "fivem:build-js": "webpack --config ./config/fivem-webpack.config.js",
     "fivem:watch-lua": "chokidar \"src/fivem-scripts/*.lua\" -c \"npm run fivem:create\"",
-    "fivem:create": "node build-scripts/create-fivem-resource.js",
+    "fivem:create": "node building/create-fivem-resource.js",
     "all:build": "npm run clean && npm run nui:build && npm run fivem:build-js && npm run fivem:watch-lua && npm run fivem:create",
     "all:watch": "npm run clean && concurrently --kill-others \"npm:nui:watch\" \"npm:fivem:watch-js\" \"npm:fivem:watch-lua\"",
     "clean": "rimraf dist/**/*"

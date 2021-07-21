@@ -5,7 +5,8 @@ games { 'gta5' }
 version {{{VERSION}}}
 author {{{AUTHOR}}}
 description {{{DESCRIPTION}}}
-ui_page 'index.html'
+
+ui_page {{{INDEX_HTML}}}
 
 client_scripts {
 {{{CLIENT_SCRIPTS}}}
