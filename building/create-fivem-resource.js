@@ -1,8 +1,9 @@
 const path = require("path");
 const fs = require("fs");
-const fse = require('fs-extra');
-const Glob = require("glob");
-const Handlebars = require('handlebars');
+const fse = require("fs-extra");
+const glob = require("glob");
+const handlebars = require("handlebars");
+const { execFile } = require("child_process")
 
 const resourceConfig = require("../config/fivem-resource.json");
 const resourcePath = resourceConfig.resourcePath;
@@ -18,8 +19,9 @@ const TARGET_PATH = path.resolve(resourcePath);
 
 createFXManifest();
 copyFilesToResourceTarget();
+reloadServerResource();
 console.info("---------------------------------------------------------------");
-console.info("---- FIVEM RESOURCE CREATED AND COPIED TO TARGET DIRECTORY ----");
+console.info("---- FIVEM RESOURCE CREATED, COPIED AND RESTARTED -------------");
 console.info("---------------------------------------------------------------");
 
 function createFXManifest() {
@@ -32,7 +34,7 @@ function createFXManifest() {
     const description = resourceConfig.description ?? "Angular-NUI";
 
     // *.ts/*.js files are automatically moved to dist path by tsc, but *.lua files have to be handled manually
-    let resourceFilesNames = Glob.sync(`${DIST_PATH}/**/*.*`).concat(Glob.sync(`${RESOURCE_SCRIPTS_PATH}/*.lua`))
+    let resourceFilesNames = glob.sync(`${DIST_PATH}/**/*.*`).concat(glob.sync(`${RESOURCE_SCRIPTS_PATH}/*.lua`))
         // filter out possibly existing fxmanifest.lua; it should not appear in the files list
         // filter out assets
         .filter(file => file.indexOf(MANIFEST_FILE_NAME) === -1 && file.indexOf("assets") === -1)
@@ -51,7 +53,7 @@ function createFXManifest() {
     const indexHtml = resourceFilesNames.find(file => file.indexOf("index.html") !== -1);
 
     const templateSource = fs.readFileSync(MANIFEST_TEMPLATE_PATH).toString();
-    const template = Handlebars.compile(templateSource);
+    const template = handlebars.compile(templateSource);
     const contents = template({
         AUTHOR: `"${author}"`,
         VERSION: `"${version}"`,
@@ -66,12 +68,12 @@ function createFXManifest() {
 
 function copyFilesToResourceTarget() {
     // *.ts/*.js files are automatically moved to dist path by tsc, but *.lua files have to be copied manually
-    const luaResourceFiles = Glob.sync(`${RESOURCE_SCRIPTS_PATH}/*.lua`)
-    .forEach(file => fs.copyFileSync(file, `${DIST_PATH}/${path.basename(file)}`))
+    glob.sync(`${RESOURCE_SCRIPTS_PATH}/*.lua`)
+        .forEach(file => fs.copyFileSync(file, `${DIST_PATH}/${path.basename(file)}`))
 
     // exclude assets
     // const exclude = Glob.sync('node_modules/ionic-angular/fonts/*.scss')
-    const distFiles = Glob.sync(`${DIST_PATH}/**/*.*`).filter(file => file.indexOf("assets") === -1)
+    const distFiles = glob.sync(`${DIST_PATH}/**/*.*`).filter(file => file.indexOf("assets") === -1)
     // make sure subfolder for nui-app exists so fse shuts up; this needs to be refactored so hard
     fse.ensureDir(`${TARGET_PATH}/nui-app`)
     distFiles.forEach(file => {
@@ -92,4 +94,11 @@ function formatArrayForManifest(stringArray) {
         result += `  "${stringArray[i]}"` + (i < stringArray.length - 1 ? ",\n" : "");
     }
     return result;
+}
+
+function reloadServerResource() {
+    const pw = resourceConfig.rconPassword;
+    const ip = resourceConfig.ip;
+    const port = resourceConfig.port;
+    execFile("building/icecon",["-c ensure testmenu", `${ip}:${port}`,`${pw}`]);
 }
