@@ -4,17 +4,17 @@ const fse = require("fs-extra");
 const glob = require("glob");
 const handlebars = require("handlebars");
 const { execFile } = require("child_process")
+const { FiveMResourceConfig } = require("../config/fivem-resource-config");
 
-const resourceConfig = require("../config/fivem-resource.json");
-const resourcePath = resourceConfig.resourcePath;
+const resourcePath = FiveMResourceConfig.resourcePath;
 if (!resourcePath) {
-    console.error("NO TARGET RESOURCE PATH SPECIFIED. PLEASE CHECK 'config/fivem-resource.json'");
+    console.error("NO TARGET RESOURCE PATH SPECIFIED. PLEASE CHECK 'config/fivem-resource-config.js'");
     return;
 }
 
 const DIST_PATH = path.resolve(__dirname + "/../dist");
 const RESOURCE_SCRIPTS_PATH = path.resolve(__dirname + "/../src/fivem-scripts");
-const TARGET_PATH = path.resolve(resourcePath);
+const TARGET_PATH = path.resolve(`${resourcePath}/${FiveMResourceConfig.resourceName}`);
 
 
 createFXManifest();
@@ -29,9 +29,9 @@ function createFXManifest() {
     const MANIFEST_TEMPLATE_PATH = path.resolve(`${__dirname}/../building/${MANIFEST_FILE_NAME}`);
     const MANIFEST_TARGET_PATH = path.resolve(`${__dirname}/../dist/${MANIFEST_FILE_NAME}`);
 
-    const author = resourceConfig.author ?? "Author";
-    const version = resourceConfig.version ?? "0.0.0";
-    const description = resourceConfig.description ?? "Angular-NUI";
+    const author = FiveMResourceConfig.author ?? "Author";
+    const version = FiveMResourceConfig.version ?? "0.0.0";
+    const description = FiveMResourceConfig.description ?? "Angular-NUI";
 
     // *.ts/*.js files are automatically moved to dist path by tsc, but *.lua files have to be handled manually
     let resourceFilesNames = glob.sync(`${DIST_PATH}/**/*.*`).concat(glob.sync(`${RESOURCE_SCRIPTS_PATH}/*.lua`))
@@ -72,10 +72,10 @@ function copyFilesToResourceTarget() {
         .forEach(file => fs.copyFileSync(file, `${DIST_PATH}/${path.basename(file)}`))
 
     // exclude assets
-    // const exclude = Glob.sync('node_modules/ionic-angular/fonts/*.scss')
     const distFiles = glob.sync(`${DIST_PATH}/**/*.*`).filter(file => file.indexOf("assets") === -1)
     // make sure subfolder for nui-app exists so fse shuts up; this needs to be refactored so hard
-    fse.ensureDir(`${TARGET_PATH}/nui-app`)
+    fse.ensureDir(`${TARGET_PATH}`);
+    fse.ensureDir(`${TARGET_PATH}/nui-app`);
     distFiles.forEach(file => {
         fse.copyFileSync(file, getAssetCopyPath(file, TARGET_PATH), )
     })
@@ -97,8 +97,8 @@ function formatArrayForManifest(stringArray) {
 }
 
 function reloadServerResource() {
-    const pw = resourceConfig.rconPassword;
-    const ip = resourceConfig.ip;
-    const port = resourceConfig.port;
+    const pw = FiveMResourceConfig.rconPassword;
+    const ip = FiveMResourceConfig.ip;
+    const port = FiveMResourceConfig.port;
     execFile("building/icecon",["-c ensure testmenu", `${ip}:${port}`,`${pw}`]);
 }

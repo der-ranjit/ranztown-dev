@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "set NUI_MODE=dev-server&& ng serve",
     "test": "ng test",
     "nui:build": "ng build --configuration production --source-map=false",
     "nui:watch": "ng build --configuration development --watch --source-map=false",

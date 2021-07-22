@@ -1,7 +1,7 @@
 fx_version 'adamant'
 games { 'gta5' }
 
--- Do not modify the folling lines; they are used to auto-create a fxmanifest based on this project's config in config/fivem-resource.json
+-- Do not modify the folling lines; they are used to auto-create a fxmanifest based on this project's config in config/fivem-resource-config.js
 version {{{VERSION}}}
 author {{{AUTHOR}}}
 description {{{DESCRIPTION}}}

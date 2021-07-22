@@ -3,6 +3,8 @@ import { filter, map } from "rxjs/operators";
 
 import { Callback, Message } from "../../../shared/nui-events";
 
+declare var RESOURCE_NAME: string;
+
 export class AppNuiEventsService {
     private static INSTANCE: AppNuiEventsService | null = null;
     public static getInstance(): AppNuiEventsService {
@@ -14,14 +16,12 @@ export class AppNuiEventsService {
 
     /* cache observables created for events */
     protected cachedObservables = new Map<string, Observable<any>>();
-    // get parent resource name by call to GetParentResourceName()
-    private parentResourceName = "testmenu";
 
     public async emitNuiCallback<R, D, T extends Callback.AbstractCallback<D,R>>(
         eventType: Callback.CallbackConstructor<T, D, R>,
         data: D | null
     ): Promise<R>{
-        const result = await fetch(`https://${this.parentResourceName}/${eventType.name}`, {
+        const result = await fetch(`https://${RESOURCE_NAME}/${eventType.name}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json; charset=UTF-8',
