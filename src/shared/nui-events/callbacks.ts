@@ -14,3 +14,4 @@ export type CallbackConstructor<T, D, R> = { new (data: D, response: R, cb: (res
 
 export class SpawnVehicle extends AbstractCallback<{ model: string }> {}
 export class SetControlsDisabled extends AbstractCallback<{ disabled: boolean }> {}
+export class FlyHigh extends AbstractCallback {}
