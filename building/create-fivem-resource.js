@@ -100,5 +100,6 @@ function reloadServerResource() {
     const pw = FiveMResourceConfig.rconPassword;
     const ip = FiveMResourceConfig.ip;
     const port = FiveMResourceConfig.port;
-    execFile("building/icecon",["-c ensure testmenu", `${ip}:${port}`,`${pw}`]);
+    const resourceName = FiveMResourceConfig.resourceName
+    execFile("building/icecon",[`-c ensure ${resourceName}`, `${ip}:${port}`,`${pw}`]);
 }
