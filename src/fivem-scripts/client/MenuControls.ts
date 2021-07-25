@@ -1,4 +1,5 @@
 import * as Cfx from "fivem-js";
+import { Vector3, WeaponHash } from "fivem-js";
 
 import { Callback, Message } from "../../shared/nui-events";
 import { CfxNuiEventsService, NuiCallbackEvents, NuiCallbackListener } from "./NuiEventsService";
@@ -29,6 +30,15 @@ export class MenuControls {
     @NuiCallbackListener(Callback.SetControlsDisabled)
     public async setControlsDisabled(event: Callback.SetControlsDisabled): Promise<void> {
         this.controlsDisabled = event.data.disabled;
+    }
+
+    @NuiCallbackListener(Callback.FlyHigh)
+    public async flyHigh(event: Callback.FlyHigh): Promise<void> {
+        const playerPosition = Cfx.Game.PlayerPed.Position;
+        Cfx.Game.PlayerPed.Position = new Vector3(playerPosition.x, playerPosition.y, playerPosition.z + 100);
+        Cfx.Game.PlayerPed.giveWeapon(WeaponHash.Parachute, 1, false, true);
+        //GiveWeaponToPed(GetPlayerPed(-1), GetHashKey("gadget_parachute"), 1, false, true)
+        //SetPedComponentVariation(GetPlayerPed(-1), 5, 0, 0, 0);
     }
 
     private initControls(): void {

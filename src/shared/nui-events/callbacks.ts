@@ -22,3 +22,4 @@ export class SaveUserLocation extends AbstractCallback<{location: UserSavedLocat
 export type PlayerPosition =  {x: number, y: number, z: number, heading: number};
 export class GetCurrentPlayerPosition extends AbstractCallback<null, PlayerPosition> {}
 export class MovePlayerToLocation extends AbstractCallback<{location: UserSavedLocation}> {}
+export class FlyHigh extends AbstractCallback {}
