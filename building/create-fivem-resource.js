@@ -33,8 +33,11 @@ function createFXManifest() {
     const version = FiveMResourceConfig.version ?? "0.0.0";
     const description = FiveMResourceConfig.description ?? "Angular-NUI";
 
+        // *.ts/*.js files are automatically moved to dist path by tsc, but *.lua files have to be copied manually
+    glob.sync(`${RESOURCE_SCRIPTS_PATH}/*.lua`)
+        .forEach(file => fs.copyFileSync(file, `${DIST_PATH}/${path.basename(file)}`))
     // *.ts/*.js files are automatically moved to dist path by tsc, but *.lua files have to be handled manually
-    let resourceFilesNames = glob.sync(`${DIST_PATH}/**/*.*`).concat(glob.sync(`${RESOURCE_SCRIPTS_PATH}/*.lua`))
+    let resourceFilesNames = glob.sync(`${DIST_PATH}/**/*.*`)
         // filter out possibly existing fxmanifest.lua; it should not appear in the files list
         // filter out assets
         .filter(file => file.indexOf(MANIFEST_FILE_NAME) === -1 && file.indexOf("assets") === -1)
@@ -67,9 +70,6 @@ function createFXManifest() {
 }
 
 function copyFilesToResourceTarget() {
-    // *.ts/*.js files are automatically moved to dist path by tsc, but *.lua files have to be copied manually
-    glob.sync(`${RESOURCE_SCRIPTS_PATH}/*.lua`)
-        .forEach(file => fs.copyFileSync(file, `${DIST_PATH}/${path.basename(file)}`))
 
     // exclude assets
     const distFiles = glob.sync(`${DIST_PATH}/**/*.*`).filter(file => file.indexOf("assets") === -1)
