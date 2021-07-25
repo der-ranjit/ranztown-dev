@@ -37,7 +37,6 @@ import { AppNuiEventsService } from "../core/nui-events/nuiEvents.service";
         }
         .locations {
             background-color: #616161;
-            flex-direction: column;
             display: flex;
             flex: 1;
             flex-wrap: wrap;
