@@ -36,7 +36,8 @@ export class UserLocationsDatabase extends LowDatabase<UserSavedLocation>{
     private async saveUserLocation(source: number, location: UserSavedLocation) {
         const id = ServerUtils.getFivemId(source);
         const previewPath = await this.getClientScreenshot(id, location);
-        const relativePreviewPath = relative(resourcePath, previewPath);
+        // fix windows paths with replace
+        const relativePreviewPath = relative(resourcePath, previewPath).replace(/\\/g, '/');;
         await this.read();
         this.entries.push({...location, userId: id, previewFilePath: relativePreviewPath});
         await this.write();

@@ -9,9 +9,16 @@ import { AppNuiEventsService } from "../core/nui-events/nuiEvents.service";
     selector: "nui-app-locations-menu",
     template: `
         <div class="locationsMenu">
-            <button mat-raised-button color="accent" (click)="saveCurrentUserLocation()">Save current</button>
+            <input type="text" #locationName [(ngModel)]="locationNameInput"
+                exclusiveInput>
+            <button mat-raised-button color="accent"
+                [disabled]="!isLocationInputNameValid()"
+                (click)="saveCurrentUserLocation()">Save current</button>
             <div class="locations">
-                <div *ngFor="let location of locations" (click)="onLocationClick(location)">{{location | json }}
+                <div *ngFor="let location of locations" class="location"
+                    [style.backgroundImage]="getLocationBackgroundUrl(location)"
+                    (click)="onLocationClick(location)">
+                {{location.locationName}}
             </div>
         </div>
     `,
@@ -45,11 +52,26 @@ import { AppNuiEventsService } from "../core/nui-events/nuiEvents.service";
             margin: 0 8px;
             padding: 8px;
             border-radius: 4px;
-        }`]
+        }
+        .location {
+            position: relative;
+            width: 120px;
+            height: 100px;
+            margin-top: 4px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+            border-radius: 5px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-color: white;
+            background-position: center;
+        }
+    `]
 })
 @NuiMessageEvents
 export class LocationsMenuComponent implements OnInit {
     public locations: UserSavedLocation[] = [];
+
+    public locationNameInput = "";
 
     constructor(private events: AppNuiEventsService) {}
 
@@ -59,7 +81,8 @@ export class LocationsMenuComponent implements OnInit {
 
     @NuiMessageListener(UserLocationsUpdate)
     private onUserLocationsUpdate(event: UserLocationsUpdate) {
-        this.locations = event.data.locations;
+        this.locations = []
+        setTimeout(() => this.locations = event.data.locations, 0)
     }
 
 
@@ -71,12 +94,23 @@ export class LocationsMenuComponent implements OnInit {
         this.events.emitNuiCallback(MovePlayerToLocation, { location });
     }
 
+    public isLocationInputNameValid(): boolean {
+        return this.locationNameInput !== ""
+            && this.locations.findIndex(location => location.locationName == this.locationNameInput) === -1;
+    }
+
+    public getLocationBackgroundUrl(location: UserSavedLocation): string {
+        const fileServerUrl = "http://127.0.0.1:30120/screenshot-basic";
+        const fileUrl = `${fileServerUrl}/${location.previewFilePath}`;
+        return `url(${fileUrl})`;
+    }
+
     public async saveCurrentUserLocation() {
         const playerPosition = await this.events.emitNuiCallback(GetCurrentPlayerPosition, null);
         const location = {
             userId: "-1",
             description: "cool location",
-            locationName: "new",
+            locationName: this.locationNameInput,
             previewFilePath: "none",
             ...playerPosition
         }
