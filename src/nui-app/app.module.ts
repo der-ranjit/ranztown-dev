@@ -12,9 +12,11 @@ import { MatExpansionModule} from "@angular/material/expansion";
 import { AppRoutingModule } from './app-routing.module';
 import { AppRootComponent } from './app-root.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatToolbarModule } from '@angular/material/toolbar';
 
 import { NotificationService } from './core/notification.service';
 import { VehicleMenuComponent } from './vehicleMenu/vehicle-menu.component';
+import { FlyHighComponent } from './flyHigh/flyHigh.component';
 import { AppNuiEventsService } from './core/nui-events/nuiEvents.service';
 import { ExclusiveInputDirective } from './core/exclusiveInput.directive';
 import { LocationsMenuComponent } from './locationsMenu/locationsMenu';
@@ -23,6 +25,7 @@ import { LocationsMenuComponent } from './locationsMenu/locationsMenu';
     declarations: [
         AppRootComponent,
         VehicleMenuComponent,
+        FlyHighComponent,
         ExclusiveInputDirective,
         LocationsMenuComponent
     ],
@@ -35,6 +38,7 @@ import { LocationsMenuComponent } from './locationsMenu/locationsMenu';
         MatButtonModule,
         MatSnackBarModule,
         MatFormFieldModule,
+        MatToolbarModule,
         DragDropModule,
         MatExpansionModule,
         MatAutocompleteModule,

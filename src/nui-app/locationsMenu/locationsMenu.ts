@@ -8,20 +8,45 @@ import { AppNuiEventsService } from "../core/nui-events/nuiEvents.service";
 @Component({
     selector: "nui-app-locations-menu",
     template: `
-        <button mat-raised-button color="warn" (click)="saveCurrentUserLocation()">Save current</button>
-        <div class="locations">
-            <div *ngFor="let location of locations" (click)="onLocationClick(location)">{{location | json }}>
+        <div class="locationsMenu">
+            <button mat-raised-button color="accent" (click)="saveCurrentUserLocation()">Save current</button>
+            <div class="locations">
+                <div *ngFor="let location of locations" (click)="onLocationClick(location)">{{location | json }}
+            </div>
         </div>
     `,
     styles: [`
-    .locations {
-        display: flex;
-        width: 500px;
-        height: 500px;
-        background-color: white;
-        flex-direction: column;
-        overflow: auto;
-    }`]
+        :host {
+            display: flex;
+            flex: 1;
+            flex-direction: column;
+            max-width: 300px;
+            overflow: hidden;
+        }
+        .locationsMenu {
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            max-width: 300px;
+            background-color: #424242;
+            padding-bottom: 8px;
+
+            button {
+                margin: 8px;
+            }
+        }
+        .locations {
+            background-color: #616161;
+            flex-direction: column;
+            display: flex;
+            flex: 1;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            overflow-y: auto;
+            margin: 0 8px;
+            padding: 8px;
+            border-radius: 4px;
+        }`]
 })
 @NuiMessageEvents
 export class LocationsMenuComponent implements OnInit {
@@ -39,8 +64,8 @@ export class LocationsMenuComponent implements OnInit {
     }
 
 
-    private async requestUpdateUserLocations() {
-        const userLocations = await this.events.emitNuiCallback(GetUserLocations, null);
+    private requestUpdateUserLocations() {
+        this.events.emitNuiCallback(GetUserLocations, null);
     }
 
     public onLocationClick(location: UserSavedLocation) {
