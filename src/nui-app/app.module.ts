@@ -17,12 +17,14 @@ import { NotificationService } from './core/notification.service';
 import { VehicleMenuComponent } from './vehicleMenu/vehicle-menu.component';
 import { AppNuiEventsService } from './core/nui-events/nuiEvents.service';
 import { ExclusiveInputDirective } from './core/exclusiveInput.directive';
+import { LocationsMenuComponent } from './locationsMenu/locationsMenu';
 
 @NgModule({
     declarations: [
         AppRootComponent,
         VehicleMenuComponent,
-        ExclusiveInputDirective
+        ExclusiveInputDirective,
+        LocationsMenuComponent
     ],
     imports: [
         BrowserModule,

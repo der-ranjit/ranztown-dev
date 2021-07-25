@@ -24,7 +24,7 @@ module.exports = {
         minimize: false,
     },
     resolve: {
-        extensions: ['.tsx', '.ts', '.js'],
+        extensions: ['.tsx', '.ts', '.js']
     },
     output: {
         filename: '[name].js',
@@ -36,5 +36,6 @@ module.exports = {
                 scripts: [ "npm run fivem:create" ]
             }
         })
-    ]
+    ],
+    target: "node"
 };

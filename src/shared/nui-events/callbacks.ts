@@ -1,3 +1,5 @@
+import { UserSavedLocation } from "../storage/UserSavedLocation";
+
 export abstract class AbstractCallback<D = void, R = void> {
     /**
      * @param data - Optional data that is sent with the callback message.
@@ -14,3 +16,9 @@ export type CallbackConstructor<T, D, R> = { new (data: D, response: R, cb: (res
 
 export class SpawnVehicle extends AbstractCallback<{ model: string }> {}
 export class SetControlsDisabled extends AbstractCallback<{ disabled: boolean }> {}
+
+export class GetUserLocations extends AbstractCallback {}
+export class SaveUserLocation extends AbstractCallback<{location: UserSavedLocation}> {}
+export type PlayerPosition =  {x: number, y: number, z: number, heading: number};
+export class GetCurrentPlayerPosition extends AbstractCallback<null, PlayerPosition> {}
+export class MovePlayerToLocation extends AbstractCallback<{location: UserSavedLocation}> {}
