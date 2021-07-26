@@ -76,7 +76,7 @@ export class LocationsMenuComponent implements OnInit {
 
     constructor(
         private events: AppNuiEventsService,
-        private fileUrlResolve: FileUrlResolver
+        private fileUrlResolver: FileUrlResolver
     ) {}
 
     public ngOnInit() {
@@ -104,7 +104,7 @@ export class LocationsMenuComponent implements OnInit {
     }
 
     public getLocationBackgroundUrl(location: UserSavedLocation): string {
-        const fileUrl = this.fileUrlResolve.resolve(location.previewFilePath);
+        const fileUrl = this.fileUrlResolver.resolve(location.previewFilePath);
         return `url(${fileUrl})`;
     }
 
