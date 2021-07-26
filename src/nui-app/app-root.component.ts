@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Message } from '../shared/nui-events';
-import { fade } from './core/animations';
+import { fade, slideIn } from './core/animations';
 import { NuiMessageEvents, NuiMessageListener } from './core/nui-events/decorators';
 
 // init screen-shot basic script
@@ -12,15 +12,15 @@ type MenuType = 'vehicleMenu' | 'locationMenu' | 'flyHighSpecial' | null;
     selector: 'nui-app-root',
     template: `
         <button mat-raised-button @fade *ngIf="!isActive" class="menuInfo" color="accent">Press F1 to open menu</button>
-        <mat-toolbar *ngIf="isActive" @fade>
+        <mat-toolbar *ngIf="isActive" [@slideIn]="'top'">
             <button mat-raised-button [color]="(isMenuActive('vehicleMenu') ? 'primary' : null)" (click)="setMenuActive('vehicleMenu')">Vehicle Menu</button>
             <button mat-raised-button [color]="(isMenuActive('locationMenu')? 'primary' : null)" (click)="setMenuActive('locationMenu')">Locations Menu</button>
             <button mat-raised-button [color]="(isMenuActive('flyHighSpecial')? 'primary' : null)" (click)="setMenuActive('flyHighSpecial')">Fligh High Special</button>
         </mat-toolbar>
         <div class="mainWrapper">
-            <nui-app-vehicle-menu *ngIf="isMenuActive('vehicleMenu')"></nui-app-vehicle-menu>
-            <nui-app-locations-menu *ngIf="isMenuActive('locationMenu')"></nui-app-locations-menu>
-            <nui-app-fly-high *ngIf="isMenuActive('flyHighSpecial')"></nui-app-fly-high>
+            <nui-app-vehicle-menu [active]="isActive" (afterClose)="setMenuActive(null)" *ngIf="isMenuActive('vehicleMenu')"></nui-app-vehicle-menu>
+            <nui-app-locations-menu *ngIf="isActive && isMenuActive('locationMenu')"></nui-app-locations-menu>
+            <nui-app-fly-high *ngIf="isActive && isMenuActive('flyHighSpecial')"></nui-app-fly-high>
         </div>
     `,
     styles: [`
@@ -30,13 +30,13 @@ type MenuType = 'vehicleMenu' | 'locationMenu' | 'flyHighSpecial' | null;
             flex: 1;
             height: 100%;
             max-height: 100%;
-            opacity: .9;
         }
         .mainWrapper {
             display: flex;
             flex-direction: column;
             flex: 1;
             overflow: hidden;
+            opacity: .85;
         }
         .menuInfo {
             position: absolute;
@@ -44,13 +44,16 @@ type MenuType = 'vehicleMenu' | 'locationMenu' | 'flyHighSpecial' | null;
             top: 10px;
             opacity: 0.8;
         }
-
+        mat-toolbar {
+            opacity: .7;
+        }
         mat-toolbar button {
             margin: 0 4px;
         }
     `],
     animations: [
-        fade
+        fade,
+        slideIn
     ]
 })
 @NuiMessageEvents
@@ -65,7 +68,7 @@ export class AppRootComponent {
     }
 
     public isMenuActive(menu: MenuType) {
-        return this.isActive && this.activeMenu === menu;
+        return this.activeMenu === menu;
     }
 
     public setMenuActive(menu: MenuType) {

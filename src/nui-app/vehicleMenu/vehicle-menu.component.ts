@@ -1,16 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { AnimationEvent } from '@angular/animations';
+import { Component, Input, OnInit, Output } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 
 import { Callback } from '../../shared/nui-events';
 import { Vehicles } from '../../shared/Vehicles';
+import { slideIn } from '../core/animations';
 import { AppNuiEventsService } from '../core/nui-events/nuiEvents.service';
 
 @Component({
     selector: 'nui-app-vehicle-menu',
     template: `
-        <div class="vehicleListContainer">
+        <div class="vehicleListContainer" *ngIf="active" [@slideIn]="'left'" (@slideIn.done)="onCloseAnimationDone($event)">
             <div class="vehicleInputField">
                 <input type="text"
                     exclusiveInput
@@ -83,9 +85,18 @@ import { AppNuiEventsService } from '../core/nui-events/nuiEvents.service';
             color: black
         }
 
-    `]
+    `],
+    animations: [
+        slideIn
+    ]
 })
 export class VehicleMenuComponent implements OnInit {
+    @Input()
+    public active = false;
+
+    @Output()
+    public afterClose = new Subject();
+
     // TODO large list loads too long
     public vehiclesNames = [...Object.values(Vehicles)].map(vehicle => vehicle.name).sort();
     public filteredVehicleNames$!: Observable<string[]>;
@@ -107,6 +118,12 @@ export class VehicleMenuComponent implements OnInit {
 
     public handleSpawn(carModel: string): void {
         this.events.emitNuiCallback(Callback.SpawnVehicle, { model: carModel });
+    }
+
+    public onCloseAnimationDone(event: AnimationEvent) {
+        if (event.toState === 'void') {
+            this.afterClose.next();
+        }
     }
 
     private filter(value: string): any[] {
