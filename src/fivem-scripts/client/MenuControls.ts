@@ -18,7 +18,7 @@ export class MenuControls {
     private nuiActive = false;
     private nuiActivating = false;
     /* the game is too fast and registers the menu key multiple times, toggling it more than one time. debounce! */
-    private nuiDebounceMS = 500;
+    private nuiDebounceMS = 350;
 
     private controlsDisabled = false;
 
