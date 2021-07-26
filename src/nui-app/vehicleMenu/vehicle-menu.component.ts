@@ -20,13 +20,13 @@ import { AppNuiEventsService } from '../core/nui-events/nuiEvents.service';
                     (keydown.enter)="handleSpawn(vehicleNameInput.value)">
                 <button mat-flat-button color="accent" (click)="handleSpawn(vehicleNameInput.value)">spawn</button>
             </div>
-            <div class="vehicleList">
-                <div *ngFor="let name of filteredVehicleNames$ | async" class="vehicleItem"
+            <virtual-scroller [style.height.px]="virtualScrollerHeight" #scroll [items]="(filteredVehicleNames$ | async)!">
+                <div *ngFor="let name of scroll.viewPortItems" class="vehicleItem"
                     [style.backgroundImage]="'url(assets/vehicle_thumbs/' + name +'.png)'"
                     (click)="handleSpawn(name)">
                     <div class="vehicleName">{{name}}</div>
                 </div>
-            </div>
+            </virtual-scroller>
         </div>
 
 `,
@@ -55,13 +55,11 @@ import { AppNuiEventsService } from '../core/nui-events/nuiEvents.service';
         	    border-radius: 4px;
             }
         }
-        .vehicleList {
+        :host ::ng-deep .scrollable-content {
             display: flex;
             flex: 1;
             flex-wrap: wrap;
             justify-content: space-around;
-            overflow-y: auto;
-            padding-bottom: 8px;
         }
         .vehicleItem {
             position: relative;
@@ -93,6 +91,8 @@ export class VehicleMenuComponent implements OnInit {
     public filteredVehicleNames$!: Observable<string[]>;
     public vehicleNameFormControl = new FormControl();
 
+    public virtualScrollerHeight: number | null = null;
+
     constructor(private events: AppNuiEventsService) {
     }
 
@@ -101,6 +101,8 @@ export class VehicleMenuComponent implements OnInit {
             startWith(''),
             map(value => this.filter(value))
         );
+        // set virtualScroller height when items change; use css values and paddings/margins
+        this.filteredVehicleNames$.subscribe(items => this.virtualScrollerHeight = (Math.ceil(items.length / 2) * (100 + 4)) + 8);
     }
 
     public handleSpawn(carModel: string): void {

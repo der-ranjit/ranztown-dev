@@ -9,10 +9,11 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatAutocompleteModule} from '@angular/material/autocomplete';
 import { DragDropModule } from "@angular/cdk/drag-drop"
 import { MatExpansionModule} from "@angular/material/expansion";
-import { AppRoutingModule } from './app-routing.module';
-import { AppRootComponent } from './app-root.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { VirtualScrollerModule } from 'ngx-virtual-scroller';
+import { AppRoutingModule } from './app-routing.module';
+import { AppRootComponent } from './app-root.component';
 
 import { NotificationService } from './core/notification.service';
 import { VehicleMenuComponent } from './vehicleMenu/vehicle-menu.component';
@@ -43,7 +44,8 @@ import { LocationsMenuComponent } from './locationsMenu/locationsMenu';
         MatExpansionModule,
         MatAutocompleteModule,
         AppRoutingModule,
-        BrowserAnimationsModule
+        BrowserAnimationsModule,
+        VirtualScrollerModule
     ],
     providers: [
         { provide: AppNuiEventsService, useValue: AppNuiEventsService.getInstance() }
