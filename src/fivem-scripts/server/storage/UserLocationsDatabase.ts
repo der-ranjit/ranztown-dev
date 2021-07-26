@@ -35,7 +35,7 @@ export class UserLocationsDatabase extends LowDatabase<UserSavedLocation>{
 
     private async saveUserLocation(source: number, location: UserSavedLocation) {
         const id = ServerUtils.getFivemId(source);
-        const previewPath = await this.getClientScreenshot(id, location);
+        const previewPath = await this.getClientScreenshot(id, location, source);
         // fix windows paths with replace
         const relativePreviewPath = relative(resourcePath, previewPath).replace(/\\/g, '/');;
         await this.read();
@@ -44,9 +44,10 @@ export class UserLocationsDatabase extends LowDatabase<UserSavedLocation>{
         this.emitUserLocations(source);
     }
 
-    private async getClientScreenshot(id: string, location: UserSavedLocation): Promise<string> {
+    private async getClientScreenshot(id: string, location: UserSavedLocation, source: number): Promise<string> {
         return new Promise(resolve => {
-            exports['screenshot-basic'].requestClientScreenshot(source, {
+            // TODO use correct generic export path
+            exports['ranztown'].requestClientScreenshot(source, {
                 fileName: `${uploadPath}/${id}_${location.locationName}.jpg`
             }, function(error: any, data: any) {
                 resolve(data);

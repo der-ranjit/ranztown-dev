@@ -3,6 +3,9 @@ import { Message } from '../shared/nui-events';
 import { fade } from './core/animations';
 import { NuiMessageEvents, NuiMessageListener } from './core/nui-events/decorators';
 
+// init screen-shot basic script
+import "./core/screenshot-basic";
+
 type MenuType = 'vehicleMenu' | 'locationMenu' | 'flyHighSpecial' | null;
 
 @Component({
@@ -62,7 +65,7 @@ export class AppRootComponent {
     }
 
     public isMenuActive(menu: MenuType) {
-        return this.isActive && this.activeMenu === menu;   
+        return this.isActive && this.activeMenu === menu;
     }
 
     public setMenuActive(menu: MenuType) {

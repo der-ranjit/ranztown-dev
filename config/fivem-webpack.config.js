@@ -1,4 +1,5 @@
 const ShellPlugin = require("webpack-shell-plugin-next");
+const webpack = require('webpack');
 
 module.exports = {
     entry: {
@@ -31,6 +32,9 @@ module.exports = {
         path: __dirname + '/../dist/',
     },
     plugins: [
+        // for screenshot-basic
+        // https://github.com/felixge/node-formidable/issues/337#issuecomment-153408479
+        new webpack.DefinePlugin({ "global.GENTLY": false }),
         new ShellPlugin({
             onAfterDone: {
                 scripts: [ "npm run fivem:create" ]

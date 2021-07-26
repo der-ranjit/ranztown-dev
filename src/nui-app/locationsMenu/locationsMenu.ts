@@ -100,7 +100,9 @@ export class LocationsMenuComponent implements OnInit {
     }
 
     public getLocationBackgroundUrl(location: UserSavedLocation): string {
-        const fileServerUrl = "http://127.0.0.1:30120/screenshot-basic";
+        // TODO get correct resource endpoint/name
+        const fileServerUrl = "http://127.0.0.1:30120/ranztown";
+        // TODO spaces are not ok in filenames; do sth about it
         const fileUrl = `${fileServerUrl}/${location.previewFilePath}`;
         return `url(${fileUrl})`;
     }

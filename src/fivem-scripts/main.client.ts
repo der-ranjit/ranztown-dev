@@ -1,5 +1,8 @@
 /* imported to tell the IDE about types */
 import "@citizenfx/client";
+// init screen-shot basic script
+import "./screenshot-basic/client";
+
 import { MenuControls } from "./client/MenuControls";
 import { CfxNuiEventsService } from "./client/NuiEventsService";
 import { VehicleSpawner } from "./client/VehicleSpawner";
