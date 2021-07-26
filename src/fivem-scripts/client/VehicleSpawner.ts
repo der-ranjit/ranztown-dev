@@ -30,10 +30,17 @@ export class VehicleSpawner {
         }
     }
 
-    public async spawnVehicle(model: string): Promise<void> {
-        const playerCoords = Cfx.Game.PlayerPed.Position;
+    public async spawnVehicle(model: string, replace = true): Promise<void> {
+        const player = Cfx.Game.PlayerPed;
+        const playerCoords = player.Position;
+        // TODO proper error handling
         const vehicle = await Cfx.World.createVehicle(new Cfx.Model(model), playerCoords, Cfx.Game.PlayerPed.Heading);
-        Cfx.Game.PlayerPed.setIntoVehicle(vehicle, Cfx.VehicleSeat.Driver);
+        if (vehicle) {
+            if (replace && player.isInAnyVehicle()) {
+                player.CurrentVehicle.delete();
+            }
+            Cfx.Game.PlayerPed.setIntoVehicle(vehicle, Cfx.VehicleSeat.Driver);
+        }
         vehicle.RadioStation = Cfx.RadioStation.RadioOff;
     }
 
