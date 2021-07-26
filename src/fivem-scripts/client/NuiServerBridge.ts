@@ -1,4 +1,4 @@
-import { GetCurrentPlayerPosition, GetUserLocations, MovePlayerToLocation, SaveUserLocation } from "../../shared/nui-events/callbacks";
+import { GetCurrentPlayerPosition, GetFileServerBaseUrl, GetUserLocations, MovePlayerToLocation, SaveUserLocation } from "../../shared/nui-events/callbacks";
 import { UserLocationsUpdate } from "../../shared/nui-events/messages";
 import { UserSavedLocation } from "../../shared/storage/UserSavedLocation";
 import { Locations } from "./Locations";
@@ -42,5 +42,10 @@ export class NuiServerBridge {
     @NuiCallbackListener(GetCurrentPlayerPosition)
     private async getCurrentPlayerPosition(event: GetCurrentPlayerPosition) {
         return this.locations.getCurrentPlayerPosition();
+    }
+
+    @NuiCallbackListener(GetFileServerBaseUrl)
+    private async getFileServerBaseUrl(event: GetFileServerBaseUrl) {
+        return { baseUrl: `http://${GetCurrentServerEndpoint()}/${GetCurrentResourceName()}` };
     }
 }

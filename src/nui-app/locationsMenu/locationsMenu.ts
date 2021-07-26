@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { GetCurrentPlayerPosition, GetUserLocations, MovePlayerToLocation, SaveUserLocation } from "../../shared/nui-events/callbacks";
 import { UserLocationsUpdate } from "../../shared/nui-events/messages";
 import { UserSavedLocation } from "../../shared/storage/UserSavedLocation";
+import { FileUrlResolver } from "../core/fileUrlResolver";
 import { NuiMessageEvents, NuiMessageListener } from "../core/nui-events/decorators";
 import { AppNuiEventsService } from "../core/nui-events/nuiEvents.service";
 
@@ -73,7 +74,10 @@ export class LocationsMenuComponent implements OnInit {
 
     public locationNameInput = "";
 
-    constructor(private events: AppNuiEventsService) {}
+    constructor(
+        private events: AppNuiEventsService,
+        private fileUrlResolve: FileUrlResolver
+    ) {}
 
     public ngOnInit() {
         this.requestUpdateUserLocations();
@@ -100,10 +104,7 @@ export class LocationsMenuComponent implements OnInit {
     }
 
     public getLocationBackgroundUrl(location: UserSavedLocation): string {
-        // TODO get correct resource endpoint/name
-        const fileServerUrl = "http://127.0.0.1:30120/ranztown";
-        // TODO spaces are not ok in filenames; do sth about it
-        const fileUrl = `${fileServerUrl}/${location.previewFilePath}`;
+        const fileUrl = this.fileUrlResolve.resolve(location.previewFilePath);
         return `url(${fileUrl})`;
     }
 

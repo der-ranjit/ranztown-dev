@@ -1,6 +1,7 @@
 import { ensureDirSync } from "fs-extra";
 import { relative, resolve } from "path";
 import { UserSavedLocation } from "../../../shared/storage/UserSavedLocation";
+import { requestClientScreenshot } from "../../screenshot-basic/server";
 import { ServerUtils } from "../utils";
 import { LowDatabase } from "./LowDatabase.abstract";
 
@@ -47,7 +48,7 @@ export class UserLocationsDatabase extends LowDatabase<UserSavedLocation>{
     private async getClientScreenshot(id: string, location: UserSavedLocation, source: number): Promise<string> {
         return new Promise(resolve => {
             // TODO use correct generic export path
-            exports['ranztown'].requestClientScreenshot(source, {
+            requestClientScreenshot(source, {
                 fileName: `${uploadPath}/${id}_${location.locationName}.jpg`
             }, function(error: any, data: any) {
                 resolve(data);

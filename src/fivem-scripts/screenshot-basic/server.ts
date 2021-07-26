@@ -75,12 +75,7 @@ router.post('/upload/:token', async (ctx) => {
 });
 
 const staticDirPath = path.resolve(GetResourcePath(GetCurrentResourceName()), "storage", "upload");
-console.log(staticDirPath);
 
-async function hello(ctx: any, next: any){
-    await next();
-    ctx.body = 'Hello';
-  }
 app.use(koaBody({
         patchKoa: true,
         multipart: true,
@@ -93,11 +88,7 @@ app.use(koaBody({
 
 setHttpCallback(app.callback());
 
-// Cfx stuff
-const exp = (<any>global).exports;
-
-exp('requestClientScreenshot', (player: string | number, options: any, cb: (err: string | boolean, data: string) => void) => {
-    console.log("hi!", player)
+export const requestClientScreenshot = (player: string | number, options: any, cb: (err: string | boolean, data: string) => void) => {
     const tkn = v4();
 
     const fileName = options.fileName;
@@ -109,4 +100,4 @@ exp('requestClientScreenshot', (player: string | number, options: any, cb: (err:
     };
 
     emitNet('screenshot_basic:requestScreenshot', player, options, `/${GetCurrentResourceName()}/upload/${tkn}`);
-});
+};

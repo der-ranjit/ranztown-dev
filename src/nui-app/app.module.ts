@@ -21,6 +21,8 @@ import { FlyHighComponent } from './flyHigh/flyHigh.component';
 import { AppNuiEventsService } from './core/nui-events/nuiEvents.service';
 import { ExclusiveInputDirective } from './core/exclusiveInput.directive';
 import { LocationsMenuComponent } from './locationsMenu/locationsMenu';
+import { FileUrlResolver } from './core/fileUrlResolver';
+import { ResolveFileUrlPipe } from './core/resolveFileUrl.pipe';
 
 @NgModule({
     declarations: [
@@ -28,7 +30,8 @@ import { LocationsMenuComponent } from './locationsMenu/locationsMenu';
         VehicleMenuComponent,
         FlyHighComponent,
         ExclusiveInputDirective,
-        LocationsMenuComponent
+        LocationsMenuComponent,
+        ResolveFileUrlPipe
     ],
     imports: [
         BrowserModule,
@@ -53,5 +56,10 @@ import { LocationsMenuComponent } from './locationsMenu/locationsMenu';
     bootstrap: [AppRootComponent]
 })
 export class AppModule {
-    constructor(notificationService: NotificationService) {}
+    // construct some services as early as possible so that they can get some data from the client before
+    // components need to initialize
+    constructor(
+        notificationService: NotificationService,
+        fileUrlResolver: FileUrlResolver
+    ) {}
 }
