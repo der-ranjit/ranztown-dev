@@ -14,19 +14,19 @@ export class Locations {
 
     public movePlayerToLocation(location: UserSavedLocation): void {
         const player = Cfx.Game.Player.Character;
-        player.Position = new Vector3(location.x, location.y, location.z);
-        player.Heading = location.heading;
+        const target = player.isInAnyVehicle() ? player.CurrentVehicle: player;
+        target.Position = new Vector3(location.x, location.y, location.z);
+        target.Heading = location.heading;
+        // set camera to look in direction of heading
         Cfx.GameplayCamera.RelativeHeading = 0;
     }
 
     public getCurrentPlayerPosition(): PlayerPosition {
         const player = Cfx.Game.Player.Character;
-        const position = player.Position;
-        return {
-            x: position.x,
-            y: position.y,
-            z: position.z,
-            heading: player.Heading
-        }
+        const target = player.isInAnyVehicle() ? player.CurrentVehicle: player;
+
+        const {x, y, z} = target.Position;
+        const heading = target.Heading;
+        return {x, y, z, heading};
     }
 }
