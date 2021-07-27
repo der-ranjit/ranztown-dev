@@ -11,6 +11,9 @@ import { DragDropModule } from "@angular/cdk/drag-drop"
 import { MatExpansionModule} from "@angular/material/expansion";
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatMenuModule} from '@angular/material/menu';
+import { MatIconModule} from '@angular/material/icon';
+
 import { VirtualScrollerModule } from 'ngx-virtual-scroller';
 import { AppRoutingModule } from './app-routing.module';
 import { AppRootComponent } from './app-root.component';
@@ -23,6 +26,7 @@ import { ExclusiveInputDirective } from './core/exclusiveInput.directive';
 import { LocationsMenuComponent } from './locationsMenu/locationsMenu';
 import { FileUrlResolver } from './core/fileUrlResolver';
 import { ResolveFileUrlPipe } from './core/resolveFileUrl.pipe';
+import { ThemeChooserButtonComponent } from './core/themeChooserButton';
 
 @NgModule({
     declarations: [
@@ -31,7 +35,8 @@ import { ResolveFileUrlPipe } from './core/resolveFileUrl.pipe';
         FlyHighComponent,
         ExclusiveInputDirective,
         LocationsMenuComponent,
-        ResolveFileUrlPipe
+        ResolveFileUrlPipe,
+        ThemeChooserButtonComponent
     ],
     imports: [
         BrowserModule,
@@ -48,7 +53,9 @@ import { ResolveFileUrlPipe } from './core/resolveFileUrl.pipe';
         MatAutocompleteModule,
         AppRoutingModule,
         BrowserAnimationsModule,
-        VirtualScrollerModule
+        VirtualScrollerModule,
+        MatMenuModule,
+        MatIconModule
     ],
     providers: [
         { provide: AppNuiEventsService, useValue: AppNuiEventsService.getInstance() }

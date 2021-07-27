@@ -16,6 +16,8 @@ type MenuType = 'vehicleMenu' | 'locationMenu' | 'flyHighSpecial' | null;
             <button mat-raised-button [color]="(isMenuActive('vehicleMenu') ? 'primary' : null)" (click)="setMenuActive('vehicleMenu')">Vehicle Menu</button>
             <button mat-raised-button [color]="(isMenuActive('locationMenu')? 'primary' : null)" (click)="setMenuActive('locationMenu')">Locations Menu</button>
             <button mat-raised-button [color]="(isMenuActive('flyHighSpecial')? 'primary' : null)" (click)="setMenuActive('flyHighSpecial')">Fligh High Special</button>
+            <span class="toolbar-spacer"></span>
+            <app-theme-chooser-button></app-theme-chooser-button>
         </mat-toolbar>
         <div class="mainWrapper">
             <nui-app-vehicle-menu [active]="isActive" (afterClose)="setMenuActive(null)" *ngIf="isMenuActive('vehicleMenu')"></nui-app-vehicle-menu>
@@ -49,6 +51,10 @@ type MenuType = 'vehicleMenu' | 'locationMenu' | 'flyHighSpecial' | null;
         }
         mat-toolbar button {
             margin: 0 4px;
+        }
+
+        .toolbar-spacer {
+            flex: 1 1 auto;
         }
     `],
     animations: [
