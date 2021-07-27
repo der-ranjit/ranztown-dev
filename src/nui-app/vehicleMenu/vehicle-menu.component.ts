@@ -33,6 +33,7 @@ import { AppNuiEventsService } from '../core/nui-events/nuiEvents.service';
 
 `,
     styles: [`
+        @import "~src/themeVariables.scss";
         :host {
             display: flex;
             flex: 1;
@@ -44,7 +45,7 @@ import { AppNuiEventsService } from '../core/nui-events/nuiEvents.service';
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            background-color: #424242;
+            background-color: $backgroundColor;
         }
         .vehicleInputField {
             height: 48px;

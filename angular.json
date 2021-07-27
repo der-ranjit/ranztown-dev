@@ -34,8 +34,8 @@
               "src/assets"
             ],
             "styles": [
-              "./node_modules/@angular/material/prebuilt-themes/pink-bluegrey.css",
-              "src/styles.scss"
+              "src/styles.scss",
+              "src/themeVariables.scss"
             ],
             "scripts": [],
             "deleteOutputPath": false
@@ -107,8 +107,8 @@
               "src/assets"
             ],
             "styles": [
-              "./node_modules/@angular/material/prebuilt-themes/pink-bluegrey.css",
-              "src/styles.scss"
+              "src/styles.scss",
+              "src/themeVariables.scss"
             ],
             "scripts": []
           }
