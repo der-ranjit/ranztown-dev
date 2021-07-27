@@ -24,3 +24,4 @@ export class GetCurrentPlayerPosition extends AbstractCallback<null, PlayerPosit
 export class MovePlayerToLocation extends AbstractCallback<{location: UserSavedLocation}> {}
 export class FlyHigh extends AbstractCallback {}
 export class GetFileServerBaseUrl extends AbstractCallback<null, {baseUrl: string}> {}
+export class ChangeVehicleColor extends AbstractCallback<{primaryColor: string, secondaryColor: string}> {}

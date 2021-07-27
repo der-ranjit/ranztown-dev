@@ -3,6 +3,7 @@ import { Component, Input, Output } from '@angular/core';
 import { Subject } from 'rxjs';
 
 import { Callback } from '../../shared/nui-events';
+import { ChangeVehicleColor } from '../../shared/nui-events/callbacks';
 import { Vehicles } from '../../shared/Vehicles';
 import { slideIn } from '../core/animations';
 import { AppNuiEventsService } from '../core/nui-events/nuiEvents.service';
@@ -11,6 +12,8 @@ import { AppNuiEventsService } from '../core/nui-events/nuiEvents.service';
     selector: 'nui-app-vehicle-menu',
     template: `
         <div class="vehicleListContainer" *ngIf="active" [@slideIn]="'left'" (@slideIn.done)="onCloseAnimationDone($event)">
+            <input matInput type="color" [style.height.px]="30" [(ngModel)]="primaryColor" (change)="onColor($event)">
+            <input matInput type="color" [style.height.px]="30" [(ngModel)]="secondaryColor" (change)="onColor($event)">
             <app-virtual-filter-list #scroll
                 [items]="vehiclesNames"
                 [filterLabel]="'vehicle name'"
@@ -60,10 +63,20 @@ export class VehicleMenuComponent {
     @Output()
     public afterClose = new Subject();
 
+    public primaryColor = "#ffffff";
+    public secondaryColor = "#ffffff";
+
     // TODO large list loads too long
     public vehiclesNames = [...Object.values(Vehicles)].map(vehicle => vehicle.name).sort();
 
     constructor(private events: AppNuiEventsService) {
+    }
+
+    public onColor(event: Event) {
+        this.events.emitNuiCallback(ChangeVehicleColor, {
+            primaryColor: this.primaryColor,
+            secondaryColor: this.secondaryColor
+        });
     }
 
     public handleSpawn(carModel: string): void {
