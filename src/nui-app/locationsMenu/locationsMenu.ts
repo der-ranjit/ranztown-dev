@@ -5,6 +5,7 @@ import { GetCurrentPlayerPosition, GetUserLocations, MovePlayerToLocation, SaveU
 import { UserLocationsUpdate } from "../../shared/nui-events/messages";
 import { UserSavedLocation } from "../../shared/storage/UserSavedLocation";
 import { VirtualFilterListComponent } from "../common/virtualFilterList";
+import { slideIn } from "../core/animations";
 import { FileUrlResolver } from "../core/fileUrlResolver";
 import { NuiMessageEvents, NuiMessageListener } from "../core/nui-events/decorators";
 import { AppNuiEventsService } from "../core/nui-events/nuiEvents.service";
@@ -12,7 +13,7 @@ import { AppNuiEventsService } from "../core/nui-events/nuiEvents.service";
 @Component({
     selector: "nui-app-locations-menu",
     template: `
-        <div class="locationsMenu">
+        <div class="locationsMenu" [@slideIn]="'left'">
             <button mat-raised-button
                 [disabled]="!isLocationNameValid(scroll.currentFilterValue)"
                 (click)="saveCurrentUserLocation()">Save current</button>
@@ -41,7 +42,10 @@ import { AppNuiEventsService } from "../core/nui-events/nuiEvents.service";
                 margin: 8px;
             }
         }
-    `]
+    `],
+    animations: [
+        slideIn
+    ]
 })
 @NuiMessageEvents
 export class LocationsMenuComponent implements OnInit {
