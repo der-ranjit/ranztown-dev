@@ -34,8 +34,7 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.scss",
-              "src/themeVariables.scss"
+              "src/styles.scss"
             ],
             "scripts": [],
             "deleteOutputPath": false
@@ -107,8 +106,7 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.scss",
-              "src/themeVariables.scss"
+              "src/styles.scss"
             ],
             "scripts": []
           }

@@ -1,0 +1,13 @@
+@import '~@angular/material/theming';
+@include mat-core();
+
+// Set variables to whatever colors you want for your app
+$light-theme-primary: mat-palette($mat-yellow);
+$light-theme-accent: mat-palette($mat-light-blue);
+$light-theme-warn: mat-palette($mat-red);
+
+$light-theme: mat-light-theme(
+    $light-theme-primary,
+    $light-theme-accent,
+    $light-theme-warn
+);
