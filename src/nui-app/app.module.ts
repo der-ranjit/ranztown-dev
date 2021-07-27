@@ -27,6 +27,7 @@ import { LocationsMenuComponent } from './locationsMenu/locationsMenu';
 import { FileUrlResolver } from './core/fileUrlResolver';
 import { ResolveFileUrlPipe } from './core/resolveFileUrl.pipe';
 import { ThemeChooserButtonComponent } from './core/themeChooserButton';
+import { VirtualFilterListComponent } from './common/virtualFilterList';
 
 @NgModule({
     declarations: [
@@ -36,7 +37,8 @@ import { ThemeChooserButtonComponent } from './core/themeChooserButton';
         ExclusiveInputDirective,
         LocationsMenuComponent,
         ResolveFileUrlPipe,
-        ThemeChooserButtonComponent
+        ThemeChooserButtonComponent,
+        VirtualFilterListComponent
     ],
     imports: [
         BrowserModule,
