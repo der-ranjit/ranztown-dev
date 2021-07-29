@@ -46,3 +46,51 @@ export class AppNuiEventsService {
         return this.cachedObservables.get(eventName)!;
     }
 }
+
+// class Nui {
+//     onClientNuiEvent(data: any) {}
+//     emitNuiEvent(data: any, responseCallback: Function) {}
+
+//     test() {
+//         this.emitNuiEvent({name: "setWeather"}, () => {});
+//         this.onClientNuiEvent("weather changed" /* update ui */);
+//     }
+// }
+
+// class Client {
+//     /* listens to same client; wird nich gebraucht, client spricht direkt mit sich selbst */
+//     // onClientEvent(data: any) {}
+//     /* emit to same client; wird nich gebraucht, client spricht direkt mit sich selbst */
+//     // emitClientEvent(data: any) {}
+
+//     onNuiEvent(data: any, responceCallback: Function) {}
+//     emitClientNuiEvent(data: any) {}
+//     /* listens to same client and server */
+//     onNetEvent(data: any) {}
+//     /* emits to server */
+//     emitNetEvent(source: any, data: any) {}
+
+//     test() {
+//         this.onNuiEvent({name: "setWeather"}, () => {
+//             this.emitNetEvent("", "setWeather")
+//         })
+//         this.onNetEvent("weather changed");
+//             this.emitClientNuiEvent("weather changed");
+//     }
+// }
+
+// class Server {
+//     /* emit to same server; wird nich gebraucht, server spricht direkt mit sich selbst */
+//     // emitEvent(data: any) {}
+//     /* listens to same server; wird nich gebraucht, server spricht direkt mit sich selbst */
+//     // onEvent(data: any) {}
+//     // emits to server and target (-1 all clients, or specific client)
+//     emitNet(target: any, data: any) {}
+//     // listens to all clients and server events
+//     onNet(source: any, data: any) {}
+
+//     test() {
+//         this.onNet("setWeather", "settin weather");
+//         this.emitNet("weather changed", "");
+//     }
+// }
