@@ -1,7 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, HostListener, ViewChild } from '@angular/core';
+import { MatMenuTrigger } from '@angular/material/menu';
 import { Message } from '../shared/nui-events';
+import { GetEntityAtCursor, GetEntityAtCursorResponseData } from '../shared/nui-events/callbacks';
 import { fade, slideIn } from './core/animations';
 import { NuiMessageEvents, NuiMessageListener } from './core/nui-events/decorators';
+import { AppNuiEventsService } from './core/nui-events/nuiEvents.service';
 
 // init screen-shot basic script
 import "./core/screenshot-basic";
@@ -24,6 +27,14 @@ type MenuType = 'vehicleMenu' | 'locationMenu' | 'flyHighSpecial' | null;
             <nui-app-locations-menu *ngIf="isActive && isMenuActive('locationMenu')"></nui-app-locations-menu>
             <nui-app-fly-high *ngIf="isActive && isMenuActive('flyHighSpecial')"></nui-app-fly-high>
         </div>
+        <div style="visibility: hidden; position: fixed"
+            [style.left]="contextMenuPosition.x"
+            [style.top]="contextMenuPosition.y"
+            [matMenuTriggerFor]="contextMenu">
+        </div>
+        <mat-menu #contextMenu="matMenu">
+            <pre>{{entityData | json}}</pre>
+        </mat-menu>
     `,
     styles: [`
         :host {
@@ -64,9 +75,17 @@ type MenuType = 'vehicleMenu' | 'locationMenu' | 'flyHighSpecial' | null;
 })
 @NuiMessageEvents
 export class AppRootComponent {
+    @ViewChild(MatMenuTrigger)
+    private contextMenuTrigger!: MatMenuTrigger;
+
     public isActive = false;
 
+    public entityData: GetEntityAtCursorResponseData | null = null;
+    public contextMenuPosition = {x: "0px", y: "0px"};
+
     public activeMenu: MenuType = null;
+
+    constructor(private events: AppNuiEventsService) {}
 
     @NuiMessageListener(Message.SetNuiVisibility)
     private handleNuiVisibility(event: Message.SetNuiVisibility) {
@@ -79,5 +98,21 @@ export class AppRootComponent {
 
     public setMenuActive(menu: MenuType) {
         this.activeMenu = menu;
+    }
+
+    @HostListener("window:contextmenu", ["$event"])
+    public async onContextMenu(event: MouseEvent) {
+        event.preventDefault();
+        if(this.contextMenuTrigger.menuOpen) {
+            this.contextMenuTrigger.closeMenu();
+        }
+        const result = await this.events.emitNuiCallback(GetEntityAtCursor, null);
+        this.contextMenuPosition.x = event.clientX + 'px';
+        this.contextMenuPosition.y = event.clientY + 'px';
+        this.contextMenuTrigger;
+        if (result != null) {
+            this.entityData = result;
+            this.contextMenuTrigger.openMenu();
+        }
     }
 }
