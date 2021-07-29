@@ -9,7 +9,7 @@ import { AppNuiEventsService } from './core/nui-events/nuiEvents.service';
 // init screen-shot basic script
 import "./core/screenshot-basic";
 
-type MenuType = 'vehicleMenu' | 'locationMenu' | 'flyHighSpecial' | null;
+type MenuType = 'vehicleMenu' | 'pedMenu' |'locationMenu' | 'flyHighSpecial' | null;
 
 @Component({
     selector: 'nui-app-root',
@@ -17,6 +17,7 @@ type MenuType = 'vehicleMenu' | 'locationMenu' | 'flyHighSpecial' | null;
         <button mat-raised-button @fade *ngIf="!isActive" class="menuInfo" color="accent">Press F1 to open menu</button>
         <mat-toolbar *ngIf="isActive" [@slideIn]="'top'">
             <button mat-raised-button [color]="(isMenuActive('vehicleMenu') ? 'primary' : null)" (click)="setMenuActive('vehicleMenu')">Vehicle Menu</button>
+            <button mat-raised-button [color]="(isMenuActive('pedMenu') ? 'primary' : null)" (click)="setMenuActive('pedMenu')">Ped Menu</button>
             <button mat-raised-button [color]="(isMenuActive('locationMenu')? 'primary' : null)" (click)="setMenuActive('locationMenu')">Locations Menu</button>
             <button mat-raised-button [color]="(isMenuActive('flyHighSpecial')? 'primary' : null)" (click)="setMenuActive('flyHighSpecial')">Fligh High Special</button>
             <span class="toolbar-spacer"></span>
@@ -24,6 +25,7 @@ type MenuType = 'vehicleMenu' | 'locationMenu' | 'flyHighSpecial' | null;
         </mat-toolbar>
         <div class="mainWrapper">
             <nui-app-vehicle-menu [active]="isActive" (afterClose)="setMenuActive(null)" *ngIf="isMenuActive('vehicleMenu')"></nui-app-vehicle-menu>
+            <nui-app-ped-menu [active]="isActive" (afterClose)="setMenuActive(null)" *ngIf="isMenuActive('pedMenu')"></nui-app-ped-menu>
             <nui-app-locations-menu *ngIf="isActive && isMenuActive('locationMenu')"></nui-app-locations-menu>
             <nui-app-fly-high *ngIf="isActive && isMenuActive('flyHighSpecial')"></nui-app-fly-high>
         </div>

@@ -20,6 +20,7 @@ import { AppRootComponent } from './app-root.component';
 
 import { NotificationService } from './core/notification.service';
 import { VehicleMenuComponent } from './vehicleMenu/vehicle-menu.component';
+import { PedMenuComponent } from './pedMenu/ped-menu.component';
 import { FlyHighComponent } from './flyHigh/flyHigh.component';
 import { AppNuiEventsService } from './core/nui-events/nuiEvents.service';
 import { ExclusiveInputDirective } from './core/exclusiveInput.directive';
@@ -33,6 +34,7 @@ import { VirtualFilterListComponent } from './common/virtualFilterList';
     declarations: [
         AppRootComponent,
         VehicleMenuComponent,
+        PedMenuComponent,
         FlyHighComponent,
         ExclusiveInputDirective,
         LocationsMenuComponent,
