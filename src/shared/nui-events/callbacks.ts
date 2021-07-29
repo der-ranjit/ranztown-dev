@@ -1,4 +1,5 @@
 import { UserSavedLocation } from "../storage/UserSavedLocation";
+import { Vec3 } from "fivem-js/lib/utils/Vector3";
 
 export abstract class AbstractCallback<D = void, R = void> {
     /**
@@ -25,3 +26,12 @@ export class MovePlayerToLocation extends AbstractCallback<{location: UserSavedL
 export class FlyHigh extends AbstractCallback {}
 export class GetFileServerBaseUrl extends AbstractCallback<null, {baseUrl: string}> {}
 export class ChangeVehicleColor extends AbstractCallback<{primaryColor: string, secondaryColor: string}> {}
+export interface EntityInformation {
+    health: number,
+    model: number,
+    networkId: number,
+    position: Vec3,
+    velocity: Vec3
+}
+export type GetEntityAtCursorResponseData = EntityInformation | null;
+export class GetEntityAtCursor extends AbstractCallback<null, GetEntityAtCursorResponseData> {}
