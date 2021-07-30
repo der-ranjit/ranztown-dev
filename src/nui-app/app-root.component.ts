@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { Message } from '../shared/nui-events';
 import { fade, slideIn } from './core/animations';
 import { NuiMessageEvents, NuiMessageListener } from './core/nui-events/decorators';
 
 // init screen-shot basic script
 import "./core/screenshot-basic";
+import { EntityContextMenuComponent } from './entityContextMenu';
 
 type MenuType = 'vehicleMenu' | 'pedMenu' |'locationMenu' | 'flyHighSpecial' | null;
 
@@ -68,13 +69,24 @@ type MenuType = 'vehicleMenu' | 'pedMenu' |'locationMenu' | 'flyHighSpecial' | n
 })
 @NuiMessageEvents
 export class AppRootComponent {
+    @ViewChild(EntityContextMenuComponent)
+    public entityContextMenu!: EntityContextMenuComponent;
+
     public isActive = false;
     public activeMenu: MenuType = null;
 
     @NuiMessageListener(Message.SetNuiVisibility)
     private handleNuiVisibility(event: Message.SetNuiVisibility) {
-        this.isActive = event?.data?.nuiVisible ?? false;
+        this.setNuiVisibility(event?.data?.nuiVisible ?? false);
     }
+
+    private setNuiVisibility(visible: boolean): void {
+        this.isActive = visible;
+        if (!visible) {
+            this.entityContextMenu.close();
+        }
+    }
+
 
     public isMenuActive(menu: MenuType) {
         return this.activeMenu === menu;
