@@ -28,11 +28,15 @@ export class FlyHigh extends AbstractCallback {}
 export class GetFileServerBaseUrl extends AbstractCallback<null, {baseUrl: string}> {}
 export class ChangeVehicleColor extends AbstractCallback<{primaryColor: string, secondaryColor: string}> {}
 export interface EntityInformation {
-    health: number,
-    model: number,
-    networkId: number,
-    position: Vec3,
-    velocity: Vec3
+    handle: number;
+    health: number;
+    model: number;
+    networkId: number;
+    position: Vec3;
+    velocity: Vec3;
+    type: EntityType;
 }
+export type EntityType = "no entity" | "ped" | "vehicle" | "object";
 export type GetEntityAtCursorResponseData = EntityInformation | null;
 export class GetEntityAtCursor extends AbstractCallback<null, GetEntityAtCursorResponseData> {}
+export class DeleteEntity extends AbstractCallback<{handle: number}> {}

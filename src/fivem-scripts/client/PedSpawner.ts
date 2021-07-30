@@ -1,6 +1,6 @@
 import { CfxNuiEventsService, NuiCallbackListener, NuiCallbackEvents } from "./NuiEventsService";
 import { Callback, Message } from "../../shared/nui-events";
-import { sleep } from "src/shared/utils";
+import { sleep } from "../../shared/utils";
 
 @NuiCallbackEvents
 export class PedSpawner {

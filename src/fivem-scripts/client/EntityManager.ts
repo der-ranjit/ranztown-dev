@@ -1,7 +1,7 @@
 import { Vector3 } from "fivem-js";
 import * as Cfx from "fivem-js";
 import { NuiCallbackEvents, NuiCallbackListener } from "./NuiEventsService";
-import { GetEntityAtCursor } from "../../shared/nui-events/callbacks";
+import { DeleteEntity, EntityType, GetEntityAtCursor } from "../../shared/nui-events/callbacks";
 import { Vec3 } from "fivem-js/lib/utils/Vector3";
 
 interface Vector2 {
@@ -15,33 +15,50 @@ function fromVector3(vector: Vector3): Vec3 {
 }
 
 @NuiCallbackEvents
-export class EntityLocator {
-    private static instance: EntityLocator | null = null;
-    public static getInstance(): EntityLocator {
-        if (!EntityLocator.instance) {
-            EntityLocator.instance = new EntityLocator();
+export class EntityManager {
+    private static instance: EntityManager | null = null;
+    public static getInstance(): EntityManager {
+        if (!EntityManager.instance) {
+            EntityManager.instance = new EntityManager();
         }
-        return EntityLocator.instance;
+        return EntityManager.instance;
+    }
+    @NuiCallbackListener(DeleteEntity)
+    public async deleteEntity(event: DeleteEntity) {
+        Cfx.Entity.fromHandle(event.data.handle)?.delete();
     }
 
     @NuiCallbackListener(GetEntityAtCursor)
     public async getEntityAtCursor(event: GetEntityAtCursor) {
         const raycastResult = this.raycastFromScreenPointerToWorld();
-        if (raycastResult.DidHitEntity) {
+        if (raycastResult.DidHit) {
             const entity = raycastResult.HitEntity;
+            const eType = GetEntityType(entity.Handle);
+            let type: EntityType = "no entity";
+            if (eType === 0) {
+                type = "no entity";
+            } else if(eType === 1) {
+                type = "ped";
+            } else if (eType === 2) {
+                type = "vehicle";
+            } else if (eType === 3) {
+                type = "object";
+            }
             const result = {
                 health: entity.Health,
                 model: entity.Model.Hash,
                 networkId: entity.NetworkId,
                 position: fromVector3(entity.Position),
-                velocity: fromVector3(entity.Velocity)
+                velocity: fromVector3(entity.Velocity),
+                handle: entity.Handle,
+                type
             };
             return result;
         }
         return null;
     }
 
-    private raycastFromScreenPointerToWorld(intersectionFlags = 30, ignoredEntity = 0, raycastLength = 500.0) {
+    private raycastFromScreenPointerToWorld(intersectionFlags = 30, ignoredEntity = 0, raycastLength = 50.0) {
         const cameraRotation = Cfx.GameplayCamera.Rotation;
         const cameraPosition = Cfx.GameplayCamera.Position;
         const cursorPosition = this.getRelativeCursorPosition();

@@ -1,7 +1,8 @@
 import { Component, HostListener, ViewChild } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { Message } from '../shared/nui-events';
-import { GetEntityAtCursor, GetEntityAtCursorResponseData } from '../shared/nui-events/callbacks';
+import { DeleteEntity, EntityInformation, GetEntityAtCursor } from '../shared/nui-events/callbacks';
+import { sleep } from '../shared/utils';
 import { fade, slideIn } from './core/animations';
 import { NuiMessageEvents, NuiMessageListener } from './core/nui-events/decorators';
 import { AppNuiEventsService } from './core/nui-events/nuiEvents.service';
@@ -28,6 +29,7 @@ type MenuType = 'vehicleMenu' | 'pedMenu' |'locationMenu' | 'flyHighSpecial' | n
             <nui-app-ped-menu [active]="isActive" (afterClose)="setMenuActive(null)" *ngIf="isMenuActive('pedMenu')"></nui-app-ped-menu>
             <nui-app-locations-menu *ngIf="isActive && isMenuActive('locationMenu')"></nui-app-locations-menu>
             <nui-app-fly-high *ngIf="isActive && isMenuActive('flyHighSpecial')"></nui-app-fly-high>
+
         </div>
         <div style="visibility: hidden; position: fixed"
             [style.left]="contextMenuPosition.x"
@@ -36,6 +38,7 @@ type MenuType = 'vehicleMenu' | 'pedMenu' |'locationMenu' | 'flyHighSpecial' | n
         </div>
         <mat-menu #contextMenu="matMenu">
             <pre>{{entityData | json}}</pre>
+            <button mat-menu-item (click)="deleteEntity(entityData?.handle)"> delete </button>
         </mat-menu>
     `,
     styles: [`
@@ -82,7 +85,7 @@ export class AppRootComponent {
 
     public isActive = false;
 
-    public entityData: GetEntityAtCursorResponseData | null = null;
+    public entityData: EntityInformation | null = null;
     public contextMenuPosition = {x: "0px", y: "0px"};
 
     public activeMenu: MenuType = null;
@@ -105,16 +108,23 @@ export class AppRootComponent {
     @HostListener("window:contextmenu", ["$event"])
     public async onContextMenu(event: MouseEvent) {
         event.preventDefault();
+        const result = await this.events.emitNuiCallback(GetEntityAtCursor, null);
         if(this.contextMenuTrigger.menuOpen) {
             this.contextMenuTrigger.closeMenu();
+            await sleep(150);
         }
-        const result = await this.events.emitNuiCallback(GetEntityAtCursor, null);
         this.contextMenuPosition.x = event.clientX + 'px';
         this.contextMenuPosition.y = event.clientY + 'px';
         this.contextMenuTrigger;
-        if (result != null) {
+        if (typeof result === "object") {
             this.entityData = result;
             this.contextMenuTrigger.openMenu();
+        }
+    }
+
+    public deleteEntity(handle?: number) {
+        if (handle) {
+            this.events.emitNuiCallback(DeleteEntity, {handle});
         }
     }
 }
