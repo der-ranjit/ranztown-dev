@@ -29,6 +29,7 @@ import { FileUrlResolver } from './core/fileUrlResolver';
 import { ResolveFileUrlPipe } from './core/resolveFileUrl.pipe';
 import { ThemeChooserButtonComponent } from './core/themeChooserButton';
 import { VirtualFilterListComponent } from './common/virtualFilterList';
+import { EntityContextMenuComponent } from './entityContextMenu';
 
 @NgModule({
     declarations: [
@@ -40,7 +41,8 @@ import { VirtualFilterListComponent } from './common/virtualFilterList';
         LocationsMenuComponent,
         ResolveFileUrlPipe,
         ThemeChooserButtonComponent,
-        VirtualFilterListComponent
+        VirtualFilterListComponent,
+        EntityContextMenuComponent
     ],
     imports: [
         BrowserModule,
