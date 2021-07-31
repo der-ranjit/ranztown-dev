@@ -96,7 +96,7 @@ export class AppRootComponent {
 
     private setNuiMode(nuiMode: NuiMode): void {
         this.nuiMode = nuiMode;
-        if (nuiMode === "inactive") {
+        if (nuiMode === "inactive" && this.entityContextMenu) {
             this.entityContextMenu.close();
         }
     }
