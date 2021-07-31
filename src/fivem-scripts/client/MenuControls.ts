@@ -1,6 +1,7 @@
 import * as Cfx from "fivem-js";
 
 import { Callback, Message } from "../../shared/nui-events";
+import { NuiMode } from "../../shared/nui-events/messages";
 import { CfxNuiEventsService, NuiCallbackEvents, NuiCallbackListener } from "./NuiEventsService";
 
 @NuiCallbackEvents
@@ -15,8 +16,13 @@ export class MenuControls {
 
     private events = CfxNuiEventsService.getInstance();
     private nuiActive = false;
+    private nuiMode: NuiMode = "inactive";
+    private readonly preventPauseMenuTimer = 300;
+    private readonly inspectorModeHoldTime = 500;
 
     private controlsDisabled = false;
+
+    private inspectorModeTimeout: number | null = null;
 
     constructor() {
         this.initControls();
@@ -31,10 +37,24 @@ export class MenuControls {
         setTick(() => {
             // open on X
             if (Cfx.Game.isControlJustPressed(Cfx.InputMode.MouseAndKeyboard, Cfx.Control.VehicleDuck)) {
-                this.toggle();
+                if (this.nuiMode !== "inactive") {
+                    this.disableNUI();
+                } else {
+                    this.inspectorModeTimeout = setTimeout(()=>{
+                        this.setNuiMode("inspector");
+                        this.inspectorModeTimeout = null;
+                    }, this.inspectorModeHoldTime) as any
+                }
+            }
+            if (Cfx.Game.isControlJustReleased(Cfx.InputMode.MouseAndKeyboard, Cfx.Control.VehicleDuck)) {
+                if (this.inspectorModeTimeout) {
+                    clearTimeout(this.inspectorModeTimeout);
+                    this.inspectorModeTimeout = null;
+                    this.setNuiMode("menu");
+                }
             }
             // close on ESC
-            if (this.nuiActive && Cfx.Game.isControlPressed(Cfx.InputMode.MouseAndKeyboard, Cfx.Control.ReplayToggleTimeline)) {
+            if (this.nuiActive && Cfx.Game.isControlJustPressed(Cfx.InputMode.MouseAndKeyboard, Cfx.Control.ReplayToggleTimeline)) {
                 this.disableNUI();
             }
             if (this.nuiActive) {
@@ -56,21 +76,23 @@ export class MenuControls {
         })
     }
 
-    private toggle(): void {
-        this.nuiActive = !this.nuiActive;
+    private setNuiMode(nuiMode: NuiMode): void {
+        this.nuiMode = nuiMode;
+        this.nuiActive = nuiMode !== "inactive";
         SetNuiFocus(this.nuiActive, this.nuiActive);
         SetNuiFocusKeepInput(this.nuiActive);
-        this.events.emitNuiMessage(Message.SetNuiVisibility, { nuiVisible: this.nuiActive });
+        this.events.emitNuiMessage(Message.SetNuiMode, { nuiMode });
     }
 
     private disableNUI(): void {
+        this.nuiMode = "inactive";
         SetNuiFocus(false, false);
         SetNuiFocusKeepInput(false);
-        this.events.emitNuiMessage(Message.SetNuiVisibility, { nuiVisible: false });
+        this.events.emitNuiMessage(Message.SetNuiMode, { nuiMode: "inactive" });
         // setTimeout to disable controls some longer; in case esc is pressed the pause menu would open
         setTimeout(() => {
             this.nuiActive = false;
-        }, 300)
+        }, this.preventPauseMenuTimer)
     }
 
     private disableControlsForMenu(): void {

@@ -11,5 +11,6 @@ export abstract class AbstractMessage<D = void> {
 export type MessageConstructor<T, D> = { new (data: D): T}
 
 export class Notification extends AbstractMessage<{ message: string }> {}
-export class SetNuiVisibility extends AbstractMessage<{ nuiVisible: boolean }> {}
+export type NuiMode = "menu" | "inspector" | "inactive";
+export class SetNuiMode extends AbstractMessage<{ nuiMode: NuiMode }> {}
 export class UserLocationsUpdate extends AbstractMessage<{ locations: UserSavedLocation[] }> {}

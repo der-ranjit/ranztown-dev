@@ -1,5 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { Message } from '../shared/nui-events';
+import { NuiMode } from '../shared/nui-events/messages';
 import { fade, slideIn } from './core/animations';
 import { NuiMessageEvents, NuiMessageListener } from './core/nui-events/decorators';
 
@@ -12,22 +13,23 @@ type MenuType = 'vehicleMenu' | 'pedMenu' |'locationMenu' | 'flyHighSpecial' | n
 @Component({
     selector: 'nui-app-root',
     template: `
-        <button mat-raised-button @fade *ngIf="!isActive" class="menuInfo" color="accent">Press X to open menu</button>
-        <mat-toolbar *ngIf="isActive" [@slideIn]="'top'">
-            <button mat-raised-button [color]="(isMenuActive('vehicleMenu') ? 'primary' : null)" (click)="setMenuActive('vehicleMenu')">Vehicle Menu</button>
-            <button mat-raised-button [color]="(isMenuActive('pedMenu') ? 'primary' : null)" (click)="setMenuActive('pedMenu')">Ped Menu</button>
-            <button mat-raised-button [color]="(isMenuActive('locationMenu')? 'primary' : null)" (click)="setMenuActive('locationMenu')">Locations Menu</button>
-            <button mat-raised-button [color]="(isMenuActive('flyHighSpecial')? 'primary' : null)" (click)="setMenuActive('flyHighSpecial')">Fligh High Special</button>
+        <button mat-raised-button @fade *ngIf="!isNuiActive" class="menuInfo" color="accent">Tap X to open menu - hold for inspect-mode</button>
+        <button mat-raised-button @fade *ngIf="isInspectorActive" class="menuInfo" color="primary">inspect-mode right click an entity to inspect it</button>
+        <mat-toolbar *ngIf="isMenuActive" [@slideIn]="'top'">
+            <button mat-raised-button [color]="(isSubMenuActive('vehicleMenu') ? 'primary' : null)" (click)="setMenuActive('vehicleMenu')">Vehicle Menu</button>
+            <button mat-raised-button [color]="(isSubMenuActive('pedMenu') ? 'primary' : null)" (click)="setMenuActive('pedMenu')">Ped Menu</button>
+            <button mat-raised-button [color]="(isSubMenuActive('locationMenu')? 'primary' : null)" (click)="setMenuActive('locationMenu')">Locations Menu</button>
+            <button mat-raised-button [color]="(isSubMenuActive('flyHighSpecial')? 'primary' : null)" (click)="setMenuActive('flyHighSpecial')">Fligh High Special</button>
             <span class="toolbar-spacer"></span>
             <app-theme-chooser-button></app-theme-chooser-button>
         </mat-toolbar>
         <div class="mainWrapper">
-            <nui-app-vehicle-menu [active]="isActive" (afterClose)="setMenuActive(null)" *ngIf="isMenuActive('vehicleMenu')"></nui-app-vehicle-menu>
-            <nui-app-ped-menu [active]="isActive" (afterClose)="setMenuActive(null)" *ngIf="isMenuActive('pedMenu')"></nui-app-ped-menu>
-            <nui-app-locations-menu *ngIf="isActive && isMenuActive('locationMenu')"></nui-app-locations-menu>
-            <nui-app-fly-high *ngIf="isActive && isMenuActive('flyHighSpecial')"></nui-app-fly-high>
+            <nui-app-vehicle-menu [active]="isMenuActive" (afterClose)="setMenuActive(null)" *ngIf="isSubMenuActive('vehicleMenu')"></nui-app-vehicle-menu>
+            <nui-app-ped-menu [active]="isMenuActive" (afterClose)="setMenuActive(null)" *ngIf="isSubMenuActive('pedMenu')"></nui-app-ped-menu>
+            <nui-app-locations-menu *ngIf="isMenuActive && isSubMenuActive('locationMenu')"></nui-app-locations-menu>
+            <nui-app-fly-high *ngIf="isMenuActive && isSubMenuActive('flyHighSpecial')"></nui-app-fly-high>
         </div>
-        <app-entity-context-menu></app-entity-context-menu>
+        <app-entity-context-menu *ngIf="isInspectorActive"></app-entity-context-menu>
 
     `,
     styles: [`
@@ -72,23 +74,34 @@ export class AppRootComponent {
     @ViewChild(EntityContextMenuComponent)
     public entityContextMenu!: EntityContextMenuComponent;
 
-    public isActive = false;
+    public nuiMode: NuiMode = "inactive";
     public activeMenu: MenuType = null;
 
-    @NuiMessageListener(Message.SetNuiVisibility)
-    private handleNuiVisibility(event: Message.SetNuiVisibility) {
-        this.setNuiVisibility(event?.data?.nuiVisible ?? false);
+    @NuiMessageListener(Message.SetNuiMode)
+    private handleSetNuiMode(event: Message.SetNuiMode) {
+        this.setNuiMode(event.data.nuiMode);
     }
 
-    private setNuiVisibility(visible: boolean): void {
-        this.isActive = visible;
-        if (!visible) {
+    public get isNuiActive(): boolean {
+        return this.nuiMode !== "inactive";
+    }
+
+    public get isInspectorActive(): boolean {
+        return this.nuiMode === "inspector";
+    }
+
+    public get isMenuActive(): boolean {
+        return this.nuiMode === "menu";
+    }
+
+    private setNuiMode(nuiMode: NuiMode): void {
+        this.nuiMode = nuiMode;
+        if (nuiMode === "inactive") {
             this.entityContextMenu.close();
         }
     }
 
-
-    public isMenuActive(menu: MenuType) {
+    public isSubMenuActive(menu: MenuType) {
         return this.activeMenu === menu;
     }
 
