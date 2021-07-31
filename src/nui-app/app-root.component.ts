@@ -12,7 +12,7 @@ type MenuType = 'vehicleMenu' | 'pedMenu' |'locationMenu' | 'flyHighSpecial' | n
 @Component({
     selector: 'nui-app-root',
     template: `
-        <button mat-raised-button @fade *ngIf="!isActive" class="menuInfo" color="accent">Press F1 to open menu</button>
+        <button mat-raised-button @fade *ngIf="!isActive" class="menuInfo" color="accent">Press X to open menu</button>
         <mat-toolbar *ngIf="isActive" [@slideIn]="'top'">
             <button mat-raised-button [color]="(isMenuActive('vehicleMenu') ? 'primary' : null)" (click)="setMenuActive('vehicleMenu')">Vehicle Menu</button>
             <button mat-raised-button [color]="(isMenuActive('pedMenu') ? 'primary' : null)" (click)="setMenuActive('pedMenu')">Ped Menu</button>
