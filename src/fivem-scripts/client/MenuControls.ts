@@ -1,8 +1,10 @@
 import * as Cfx from "fivem-js";
+import { Entity } from "fivem-js";
 
 import { Callback, Message } from "../../shared/nui-events";
 import { NuiMode } from "../../shared/nui-events/messages";
 import { CfxNuiEventsService, NuiCallbackEvents, NuiCallbackListener } from "./NuiEventsService";
+import { raycastFromScreenPointerToWorld } from "./NuiRaycast";
 
 @NuiCallbackEvents
 export class MenuControls {
@@ -23,6 +25,7 @@ export class MenuControls {
     private controlsDisabled = false;
 
     private inspectorModeTimeout: number | null = null;
+    lastInspectedEntityHandle: number | null = null;
 
     constructor() {
         this.initControls();
@@ -64,6 +67,16 @@ export class MenuControls {
                     EnableAllControlActions(0);
                     this.disableControlsForMenu()
                 }
+                if(this.nuiMode === "inspector") {
+                    const raycastResult = raycastFromScreenPointerToWorld();
+                    if (raycastResult.DidHit && raycastResult.DidHitEntity) {
+                        this.resetLastInspectedOpacity();
+                        this.setInspectedEntity(raycastResult.HitEntity);
+
+                    } else {
+                        this.resetLastInspectedOpacity();
+                    }
+                }
 
             }
             // allow looking around when right mouse is pressed in vehicle
@@ -74,6 +87,19 @@ export class MenuControls {
                 EnableControlAction(Cfx.InputMode.MouseAndKeyboard, Cfx.Control.LookUpDown, true);
             }
         })
+    }
+
+    private setInspectedEntity(entity: Entity) {
+        this.lastInspectedEntityHandle = entity.Handle;
+        entity.Opacity = 0.8;
+    }
+
+    private resetLastInspectedOpacity() {
+        if (this.lastInspectedEntityHandle != null) {
+            const entity = Entity.fromHandle(this.lastInspectedEntityHandle);
+            entity.resetOpacity();
+            this.lastInspectedEntityHandle = null;
+        }
     }
 
     private setNuiMode(nuiMode: NuiMode): void {
@@ -88,6 +114,7 @@ export class MenuControls {
         this.nuiMode = "inactive";
         SetNuiFocus(false, false);
         SetNuiFocusKeepInput(false);
+        this.resetLastInspectedOpacity();
         this.events.emitNuiMessage(Message.SetNuiMode, { nuiMode: "inactive" });
         // setTimeout to disable controls some longer; in case esc is pressed the pause menu would open
         setTimeout(() => {
