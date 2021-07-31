@@ -15,6 +15,8 @@ export abstract class AbstractCallback<D = void, R = void> {
 }
 export type CallbackConstructor<T, D, R> = { new (data: D, response: R, cb: (response: R) => void): T}
 
+export const DefaultCallbackResponse = "no-value"
+
 export class SpawnVehicle extends AbstractCallback<{ model: string }> {}
 export class ChangePed extends AbstractCallback<{ ped: string }> {}
 export class SetControlsDisabled extends AbstractCallback<{ disabled: boolean }> {}

@@ -1,6 +1,7 @@
 import { Observable, Observer } from "rxjs";
 
 import { Callback, Message } from "../../shared/nui-events";
+import { DefaultCallbackResponse } from "../../shared/nui-events/callbacks";
 
 export class CfxNuiEventsService {
     private static instance: CfxNuiEventsService | null = null;
@@ -64,7 +65,7 @@ export function NuiCallbackEvents<T extends constructor>(base: T) {
             nuiCallbackFunctions.forEach((eventType: any, functionName: string) => {
                 const observable = eventService.getObservableForNuiCallback(eventType);
                 observable.subscribe(async (event: any) => {
-                    const result = await this[functionName](event) ?? "no-value";
+                    const result = await this[functionName](event) ?? DefaultCallbackResponse;
                     // make sure we always resolve the nui callback with some value
                     event.cb(result);
                 })
