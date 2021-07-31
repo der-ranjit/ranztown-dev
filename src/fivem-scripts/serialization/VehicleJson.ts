@@ -1,4 +1,4 @@
-import { Entity, Vehicle } from "fivem-js";
+import { Entity, Vehicle, VehicleModCollection } from "fivem-js";
 import { FivemJSON, OmitClass, toJsonProperty } from "./FivemJson";
 
 // create type without super class Entity
@@ -101,32 +101,33 @@ export function VehicleToJson(vehicle: Vehicle): VehicleJSON {
     return result;
 }
 
-// export function ModsToJSON(mods: VehicleModCollection): Partial<VehicleModCollection> {
-//     const result:any = {};
 
-//     result.ColorCombination = mods.ColorCombination;
-//     result.ColorCombinationCount = mods.ColorCombinationCount;
-//     result.CustomPrimaryColor = mods.CustomPrimaryColor;
-//     result.CustomSecondaryColor = mods.CustomSecondaryColor;
-//     result.DashboardColor = mods.DashboardColor;
-//     result.HasAllNeonLights = mods.HasAllNeonLights;
-//     result.IsPrimaryColorCustom = mods.IsPrimaryColorCustom;
-//     result.IsSecondaryColorCustom = mods.IsSecondaryColorCustom;
-//     result.LicensePlate = mods.LicensePlate;
-//     result.LicensePlateStyle = mods.LicensePlateStyle;
-//     result.LicensePlateType = mods.LicensePlateType;
-//     result.Livery = mods.Livery;
-//     result.LiveryCount = mods.LiveryCount;
-//     result.NeonLightsColor = mods.NeonLightsColor;
-//     result.PearlescentColor = mods.PearlescentColor;
-//     result.PrimaryColor = mods.PrimaryColor;
-//     result.RimColor = mods.RimColor;
-//     result.SecondaryColor = mods.SecondaryColor;
-//     result.TireSmokeColor = mods.TireSmokeColor;
-//     result.TrimColor = mods.TrimColor;
-//     result.WheelType = mods.WheelType;
-//     result.WheelType = mods.WheelType;
-//     result.WindowTint = mods.WindowTint;
+export type ModsJSON = FivemJSON<VehicleModCollection>
+export function ModsToJSON(mods: VehicleModCollection): ModsJSON {
+    const result: ModsJSON = {};
 
-//     return result;
-// }
+    result.ColorCombination = toJsonProperty(mods.ColorCombination);
+    result.ColorCombinationCount = toJsonProperty(mods.ColorCombinationCount);
+    result.CustomPrimaryColor = toJsonProperty(mods.CustomPrimaryColor);
+    result.CustomSecondaryColor = toJsonProperty(mods.CustomSecondaryColor);
+    result.DashboardColor = toJsonProperty(mods.DashboardColor);
+    result.HasAllNeonLights = toJsonProperty(mods.HasAllNeonLights);
+    result.IsPrimaryColorCustom = toJsonProperty(mods.IsPrimaryColorCustom);
+    result.IsSecondaryColorCustom = toJsonProperty(mods.IsSecondaryColorCustom);
+    result.LicensePlate = toJsonProperty(mods.LicensePlate);
+    result.LicensePlateStyle = toJsonProperty(mods.LicensePlateStyle);
+    result.LicensePlateType = toJsonProperty(mods.LicensePlateType);
+    result.Livery = toJsonProperty(mods.Livery);
+    result.LiveryCount = toJsonProperty(mods.LiveryCount);
+    result.NeonLightsColor = toJsonProperty(mods.NeonLightsColor);
+    result.PearlescentColor = toJsonProperty(mods.PearlescentColor);
+    result.PrimaryColor = toJsonProperty(mods.PrimaryColor);
+    result.RimColor = toJsonProperty(mods.RimColor);
+    result.SecondaryColor = toJsonProperty(mods.SecondaryColor);
+    result.TireSmokeColor = toJsonProperty(mods.TireSmokeColor);
+    result.TrimColor = toJsonProperty(mods.TrimColor);
+    result.WheelType = toJsonProperty(mods.WheelType);
+    result.WindowTint = toJsonProperty(mods.WindowTint);
+
+    return result;
+}
