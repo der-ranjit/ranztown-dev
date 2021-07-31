@@ -15,12 +15,8 @@ export class MenuControls {
 
     private events = CfxNuiEventsService.getInstance();
     private nuiActive = false;
-    private nuiActivating = false;
-    /* the game is too fast and registers the menu key multiple times, toggling it more than one time. debounce! */
-    private nuiDebounceMS = 350;
 
     private controlsDisabled = false;
-
 
     constructor() {
         this.initControls();
@@ -34,9 +30,8 @@ export class MenuControls {
     private initControls(): void {
         setTick(() => {
             // open on X
-            if (Cfx.Game.isControlPressed(Cfx.InputMode.MouseAndKeyboard, Cfx.Control.VehicleDuck) && !this.nuiActivating) {
+            if (Cfx.Game.isControlJustPressed(Cfx.InputMode.MouseAndKeyboard, Cfx.Control.VehicleDuck)) {
                 this.toggle();
-                this.nuiActivating = true;
             }
             // close on ESC
             if (this.nuiActive && Cfx.Game.isControlPressed(Cfx.InputMode.MouseAndKeyboard, Cfx.Control.ReplayToggleTimeline)) {
@@ -66,7 +61,6 @@ export class MenuControls {
         SetNuiFocus(this.nuiActive, this.nuiActive);
         SetNuiFocusKeepInput(this.nuiActive);
         this.events.emitNuiMessage(Message.SetNuiVisibility, { nuiVisible: this.nuiActive });
-        setTimeout(() => this.nuiActivating = false, this.nuiDebounceMS)
     }
 
     private disableNUI(): void {
@@ -76,7 +70,6 @@ export class MenuControls {
         // setTimeout to disable controls some longer; in case esc is pressed the pause menu would open
         setTimeout(() => {
             this.nuiActive = false;
-            this.nuiActivating = false;
         }, 300)
     }
 
