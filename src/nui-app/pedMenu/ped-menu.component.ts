@@ -1,8 +1,8 @@
 import { AnimationEvent } from '@angular/animations';
 import { Component, Input, Output } from '@angular/core';
 import { Subject } from 'rxjs';
-import { Peds } from 'src/shared/Peds';
 
+import { Peds } from '../../shared/Peds';
 import { Callback } from '../../shared/nui-events';
 import { slideIn } from '../core/animations';
 import { AppNuiEventsService } from '../core/nui-events/nuiEvents.service';
@@ -13,13 +13,14 @@ import { AppNuiEventsService } from '../core/nui-events/nuiEvents.service';
         <div class="pedListContainer" *ngIf="active" [@slideIn]="'left'" (@slideIn.done)="onCloseAnimationDone($event)">
             <app-virtual-filter-list #scroll
                 [items]="pedsNames"
+                [filterKey]="'name'"
                 [filterLabel]="'ped name'"
                 [filterDescription]="'press enter or click to spawn'"
                 (onEnter)="handleSpawn(scroll.currentFilterValue)">
-                <div *ngFor="let name of scroll.filteredViewportItems" class="virtualFilterItem"
-                    [style.backgroundColor]="'blue'"
-                    (click)="handleSpawn(name)">
-                    <div class="pedName">{{name}}</div>
+                <div *ngFor="let ped of scroll.filteredViewportItems" class="virtualFilterItem"
+                [style.backgroundImage]="'url(assets/ped_thumbs/' + ped.previewFileName +')'"
+                    (click)="handleSpawn(ped.name)">
+                    <div class="pedName">{{ped.name}}</div>
                 </div>
             </app-virtual-filter-list>
         </div>
@@ -61,7 +62,15 @@ export class PedMenuComponent {
     public afterClose = new Subject();
 
     // TODO large list loads too long
-    public pedsNames = [...Object.values(Peds)].map(ped => ped.name).sort();
+    public pedsNames = Peds.sort((firstPed, seccondPed)=> {
+        if (firstPed.name < seccondPed.name) {
+            return -1;
+        }
+        if (firstPed.name > seccondPed.name) {
+            return 1;
+        }
+        return 0;
+    });
 
     constructor(private events: AppNuiEventsService) {
     }
