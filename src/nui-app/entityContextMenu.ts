@@ -1,5 +1,6 @@
 import { Component, HostListener, ViewChild } from "@angular/core";
 import { MatMenuTrigger } from "@angular/material/menu";
+
 import { DeleteEntity, EntityInformation, GetEntityAtCursor } from "../shared/nui-events/callbacks";
 import { sleep } from "../shared/utils";
 import { AppNuiEventsService } from "./core/nui-events/nuiEvents.service";
@@ -28,6 +29,10 @@ export class EntityContextMenuComponent {
     public contextMenuPosition = {x: "0px", y: "0px"};
 
     constructor(private events: AppNuiEventsService) {}
+
+    public close() {
+        this.contextMenuTrigger.closeMenu();
+    }
 
     @HostListener("window:contextmenu", ["$event"])
     public async onContextMenu(event: MouseEvent) {
