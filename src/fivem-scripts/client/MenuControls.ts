@@ -33,7 +33,7 @@ export class MenuControls {
 
     private initControls(): void {
         setTick(() => {
-            // open on F1
+            // open on X
             if (Cfx.Game.isControlPressed(Cfx.InputMode.MouseAndKeyboard, Cfx.Control.VehicleDuck) && !this.nuiActivating) {
                 this.toggle();
                 this.nuiActivating = true;
