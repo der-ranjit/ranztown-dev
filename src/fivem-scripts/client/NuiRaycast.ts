@@ -1,6 +1,6 @@
 import * as Cfx from "fivem-js";
 import { Vector3 } from "fivem-js";
-import { Vector2 } from "../../shared/Vector2";
+import { Vector2, Vector3Ext } from "../../shared/Vector";
 
 export function raycastFromScreenPointerToWorld(intersectionFlags = 30, ignoredEntity = 0, raycastLength = 50.0) {
     const cameraRotation = Cfx.GameplayCamera.Rotation;
@@ -39,13 +39,13 @@ function getScreenPositionRelativeToWorld(
     const cameraRightRoll = Vector3.subtract(Vector3.multiply(cameraRight, Math.cos(rollRad)), Vector3.multiply(cameraUp, Math.sin(rollRad)));
     const cameraUpRoll = Vector3.add(Vector3.multiply(cameraRight, Math.sin(rollRad)), Vector3.multiply(cameraUp, Math.cos(rollRad)));
     const point3DZero = Vector3.add(cameraPosition, Vector3.multiply(cameraForward, 1.0));
-    const point3D = Vector3.add(Vector3.add(point3DZero, cameraRightRoll), cameraUpRoll);
+    const point3D = Vector3Ext.addMultiple(point3DZero, cameraRightRoll, cameraUpRoll);
     const point2D = world3DToScreen2D(point3D)
     const point2DZero = world3DToScreen2D(point3DZero)
     const scaleX = (cursorPosition.x - point2DZero.x) / (point2D.x - point2DZero.x)
     const scaleY = (cursorPosition.y - point2DZero.y) / (point2D.y - point2DZero.y)
-    const relative3DPosition = Vector3.add(Vector3.add(point3DZero,Vector3.multiply(cameraRightRoll, scaleX)), Vector3.multiply(cameraUpRoll, scaleY));
-    const forwardDirection = Vector3.add(Vector3.add(cameraForward, Vector3.multiply(cameraRightRoll, scaleX)), Vector3.multiply(cameraUpRoll, scaleY));
+    const relative3DPosition = Vector3Ext.addMultiple(point3DZero, Vector3.multiply(cameraRightRoll, scaleX), Vector3.multiply(cameraUpRoll, scaleY));
+    const forwardDirection = Vector3Ext.addMultiple(cameraForward, Vector3.multiply(cameraRightRoll, scaleX), Vector3.multiply(cameraUpRoll, scaleY));
     return { relative3DPosition, forwardDirection }
 }
 
