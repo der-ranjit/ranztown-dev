@@ -40,5 +40,5 @@ export function toJsonProperty<T>(value: T, readonly = false): FivemJSONProperty
 }
 
 export function isJsonProperty(property: any): property is FivemJSONProperty<any> {
-    return property !== undefined && property.value !== undefined && property.readonly !== undefined;
+    return property?.value !== undefined && property?.readonly !== undefined;
 }

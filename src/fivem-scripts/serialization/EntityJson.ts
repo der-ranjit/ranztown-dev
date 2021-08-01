@@ -43,3 +43,7 @@ export function EntityToJson(entity: Entity): FivemJSON<Entity> {
 
     return result;
 }
+
+export function isEntityJSON(object: any): object is EntityJSON {
+    return typeof object?.Handle?.value === "number";
+}

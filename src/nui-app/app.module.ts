@@ -30,6 +30,7 @@ import { ResolveFileUrlPipe } from './core/resolveFileUrl.pipe';
 import { ThemeChooserButtonComponent } from './core/themeChooserButton';
 import { VirtualFilterListComponent } from './common/virtualFilterList';
 import { EntityContextMenuComponent } from './entityContextMenu/entityContextMenu';
+import { EntityDebuggerComponent } from './core/entityDebugger/entityDebugger';
 
 @NgModule({
     declarations: [
@@ -42,7 +43,8 @@ import { EntityContextMenuComponent } from './entityContextMenu/entityContextMen
         ResolveFileUrlPipe,
         ThemeChooserButtonComponent,
         VirtualFilterListComponent,
-        EntityContextMenuComponent
+        EntityContextMenuComponent,
+        EntityDebuggerComponent
     ],
     imports: [
         BrowserModule,
