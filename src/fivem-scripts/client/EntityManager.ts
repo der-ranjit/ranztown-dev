@@ -1,11 +1,11 @@
-import { Vector3, Entity } from "fivem-js";
+import { Vector3, Entity, Vehicle } from "fivem-js";
 
 import { NuiCallbackEvents, NuiCallbackListener } from "./NuiEventsService";
-import { DefaultCallbackResponse, DeleteEntity, EntityType, GetEntityAtCursor, GetEntityData, UpdateEntity } from "../../shared/nui-events/callbacks";
+import { DefaultCallbackResponse, DeleteEntity, GetEntityDataAtNuiCursor, GetEntityData, UpdateEntity, EntityType } from "../../shared/nui-events/callbacks";
 import { raycastFromScreenPointerToWorld } from "./NuiRaycast";
-import { EntityToJson } from "../serialization/EntityJson";
 import { isVec3 } from "../../shared/Vector";
-
+import { EntityJSON, EntityToJson } from "../serialization/EntityJson";
+import { VehicleJSON, VehicleToJson } from "../serialization/VehicleJson";
 
 @NuiCallbackEvents
 export class EntityManager {
@@ -21,32 +21,15 @@ export class EntityManager {
         Entity.fromHandle(event.data.handle)?.delete();
     }
 
-    @NuiCallbackListener(GetEntityAtCursor)
-    public async getEntityAtCursor(event: GetEntityAtCursor) {
+    @NuiCallbackListener(GetEntityDataAtNuiCursor)
+    public async getEntityDataAtNuiCursor(event: GetEntityDataAtNuiCursor) {
         const raycastResult = raycastFromScreenPointerToWorld();
         if (raycastResult.DidHit && raycastResult.HitEntity) {
             const entity = raycastResult.HitEntity;
-            const eType = GetEntityType(entity.Handle);
-            let type: EntityType = "no entity";
-            if (eType === 0) {
-                type = "no entity";
-            } else if(eType === 1) {
-                type = "ped";
-            } else if (eType === 2) {
-                type = "vehicle";
-            } else if (eType === 3) {
-                type = "object";
-            }
-            // const result = {
-            //     health: entity.Health,
-            //     model: entity.Model.Hash,
-            //     networkId: entity.NetworkId,
-            //     position: fromVector3(entity.Position),
-            //     velocity: fromVector3(entity.Velocity),
-            //     handle: entity.Handle,
-            //     type
-            // };
-            return EntityToJson(entity);
+           const json = this.createJSONForEntity(entity);
+           if (json != null) {
+               return json;
+           }
         }
         return DefaultCallbackResponse;
     }
@@ -56,7 +39,10 @@ export class EntityManager {
         const data = event.data;
         if (data?.handle) {
             const entity = Entity.fromHandle(data.handle);
-            return EntityToJson(entity);
+            const json = this.createJSONForEntity(entity);
+            if (json != null) {
+                return json;
+            }
         }
         return DefaultCallbackResponse;
     }
@@ -74,6 +60,23 @@ export class EntityManager {
             setPropertyByPaths(entity, data.propertyPaths, value);
         }
     }
+
+    private createJSONForEntity(entity: Entity): EntityJSON | VehicleJSON | null {
+        const eType = GetEntityType(entity.Handle);
+        let type: EntityType = "no entity";
+        if(eType === 1) {
+            type = "ped";
+            return EntityToJson(entity);
+        } else if (eType === 2) {
+            type = "vehicle";
+            return VehicleToJson(entity as Vehicle);
+        } else if (eType === 3) {
+            type = "object";
+            return EntityToJson(entity);
+        }
+        return null;
+    }
+
 }
 
 function setPropertyByPaths(object: any, propertyPaths: string[], value: any) {

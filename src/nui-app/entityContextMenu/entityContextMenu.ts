@@ -3,6 +3,7 @@ import { MatMenuTrigger } from "@angular/material/menu";
 import { Vec3 } from "fivem-js/lib/utils/Vector3";
 
 import type { EntityJSON } from "../../fivem-scripts/serialization/EntityJson";
+import type { VehicleJSON } from "../../fivem-scripts/serialization/VehicleJson";
 import { DefaultCallbackResponse, DeleteEntity, GetEntityDataAtNuiCursor, GetEntityData, UpdateEntity } from "../../shared/nui-events/callbacks";
 import { sleep } from "../../shared/utils";
 import { isVec3 } from "../../shared/Vector";
@@ -36,7 +37,7 @@ export class EntityContextMenuComponent implements OnInit, OnDestroy {
     @ViewChild(MatMenuTrigger)
     private contextMenuTrigger!: MatMenuTrigger;
 
-    public entityJSON: EntityJSON | null = null;
+    public entityJSON: EntityJSON | VehicleJSON | null = null;
     public contextMenuPosition = { x: "0px", y: "0px" };
 
     private entityUpdateIntervalMS = 100;

@@ -1,22 +1,25 @@
-import { Entity, Vehicle, VehicleModCollection } from "fivem-js";
-import { FivemJSON, OmitClass, toJsonProperty } from "./FivemJson";
+import { Vehicle, VehicleModCollection } from "fivem-js";
+import { EntityToJson } from "./EntityJson";
+import { FivemJSON, isJsonProperty, toJsonProperty } from "../../shared/serialization/FivemJson";
 
-// create type without super class Entity
-type ExclusiveVehicleProperties = OmitClass<Vehicle, Entity>;
+
 // mix in other custom json types
-type VehicleOverwrites = ""
-type CustomVehicleJSON = Omit<ExclusiveVehicleProperties, VehicleOverwrites>;
+type VehicleOverwrittenTypes = "Mods";
+type VehicleWithCustomTypes = {
+    Mods: ModsJSON
+}
+type CustomVehicleJSON = Omit<Vehicle, VehicleOverwrittenTypes> & VehicleWithCustomTypes;
 
 export type VehicleJSON = FivemJSON<CustomVehicleJSON>
 
 export function VehicleToJson(vehicle: Vehicle): VehicleJSON {
-    let result: VehicleJSON = {};
+    const entityJSON = EntityToJson(vehicle);
+    let result: VehicleJSON = {...entityJSON};
     // result.ClassType = vehicle.ClassType;
     // result.Doors = vehicle.Doors;
     // result.Driver = vehicle.Driver;
     // result.LandingGearState = vehicle.LandingGearState;
     // result.LockStatus = vehicle.LockStatus;
-    // result.Mods = vehicle.Mods;
     // result.Occupants = vehicle.Occupants;
     // result.Passengers = vehicle.Passengers;
     // result.RadioStation = vehicle.RadioStation;
@@ -82,6 +85,7 @@ export function VehicleToJson(vehicle: Vehicle): VehicleJSON {
     result.LightsMultiplier = toJsonProperty(vehicle.LightsMultiplier);
     result.MaxBraking = toJsonProperty(vehicle.MaxBraking);
     result.MaxTraction = toJsonProperty(vehicle.MaxTraction);
+    result.Mods = toJsonProperty(ModsToJSON(vehicle.Mods), true);
     result.NeedsToBeHotwired = toJsonProperty(vehicle.NeedsToBeHotwired);
     result.NumberPlate = toJsonProperty(vehicle.NumberPlate);
     result.OilLevel = toJsonProperty(vehicle.OilLevel);
@@ -99,6 +103,10 @@ export function VehicleToJson(vehicle: Vehicle): VehicleJSON {
     result.WheelSpeed = toJsonProperty(vehicle.WheelSpeed);
 
     return result;
+}
+
+export function isVehicleJson(object: any): object is VehicleJSON {
+    return isModJSON(object.Mods);
 }
 
 
@@ -130,4 +138,8 @@ export function ModsToJSON(mods: VehicleModCollection): ModsJSON {
     result.WindowTint = toJsonProperty(mods.WindowTint);
 
     return result;
+}
+
+export function isModJSON(object: any): object is ModsJSON {
+    return isJsonProperty(object?.RimColor);
 }
