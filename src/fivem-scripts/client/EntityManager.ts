@@ -2,8 +2,9 @@ import { Vector3, Entity } from "fivem-js";
 import { Vec3 } from "fivem-js/lib/utils/Vector3";
 
 import { NuiCallbackEvents, NuiCallbackListener } from "./NuiEventsService";
-import { DeleteEntity, EntityType, GetEntityAtCursor } from "../../shared/nui-events/callbacks";
+import { DefaultCallbackResponse, DeleteEntity, EntityType, GetEntityAtCursor } from "../../shared/nui-events/callbacks";
 import { raycastFromScreenPointerToWorld } from "./NuiRaycast";
+import { EntityToJson } from "../serialization/EntityJson";
 
 
 function fromVector3(vector: Vector3): Vec3 {
@@ -28,7 +29,7 @@ export class EntityManager {
     @NuiCallbackListener(GetEntityAtCursor)
     public async getEntityAtCursor(event: GetEntityAtCursor) {
         const raycastResult = raycastFromScreenPointerToWorld();
-        if (raycastResult.DidHit) {
+        if (raycastResult.DidHit && raycastResult.HitEntity) {
             const entity = raycastResult.HitEntity;
             const eType = GetEntityType(entity.Handle);
             let type: EntityType = "no entity";
@@ -41,17 +42,17 @@ export class EntityManager {
             } else if (eType === 3) {
                 type = "object";
             }
-            const result = {
-                health: entity.Health,
-                model: entity.Model.Hash,
-                networkId: entity.NetworkId,
-                position: fromVector3(entity.Position),
-                velocity: fromVector3(entity.Velocity),
-                handle: entity.Handle,
-                type
-            };
-            return result;
+            // const result = {
+            //     health: entity.Health,
+            //     model: entity.Model.Hash,
+            //     networkId: entity.NetworkId,
+            //     position: fromVector3(entity.Position),
+            //     velocity: fromVector3(entity.Velocity),
+            //     handle: entity.Handle,
+            //     type
+            // };
+            return EntityToJson(entity);
         }
-        return null;
+        return DefaultCallbackResponse;
     }
 }
