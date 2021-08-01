@@ -1,5 +1,5 @@
 import { Entity } from "fivem-js";
-import { FivemJSON, toJsonProperty } from "./FivemJson";
+import { FivemJSON, toJsonProperty } from "../../shared/serialization/FivemJson";
 
 export type EntityJSON = FivemJSON<Entity>;
 
