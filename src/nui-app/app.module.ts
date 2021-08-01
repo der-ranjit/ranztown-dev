@@ -29,7 +29,8 @@ import { FileUrlResolver } from './core/fileUrlResolver';
 import { ResolveFileUrlPipe } from './core/resolveFileUrl.pipe';
 import { ThemeChooserButtonComponent } from './core/themeChooserButton';
 import { VirtualFilterListComponent } from './common/virtualFilterList';
-import { EntityContextMenuComponent } from './entityContextMenu';
+import { EntityContextMenuComponent } from './entityContextMenu/entityContextMenu';
+import { EditableJsonProperty } from './entityContextMenu/editableJsonProperty';
 
 @NgModule({
     declarations: [
@@ -42,7 +43,8 @@ import { EntityContextMenuComponent } from './entityContextMenu';
         ResolveFileUrlPipe,
         ThemeChooserButtonComponent,
         VirtualFilterListComponent,
-        EntityContextMenuComponent
+        EntityContextMenuComponent,
+        EditableJsonProperty
     ],
     imports: [
         BrowserModule,

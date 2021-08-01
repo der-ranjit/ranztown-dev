@@ -22,10 +22,11 @@ type NonFunctionProperties<T> = Pick<T, NonFunctionPropertyNames<T>>;
 /* we have to remove all readonly modifiers, since otherwise we could not write the date into the JSON */
 type Writable<T> = { -readonly [k in keyof T]: T[k] };
 
-type JSONCompatible<T> = Partial<Writable<NonFunctionProperties<T>>>;
+type JSONCompatible<T> = Writable<NonFunctionProperties<T>>;
+type PartialJSONCompatible<T> = Partial<JSONCompatible<T>>;
 type FivemJSONProperty<T> = {value: T, readonly: boolean};
 
-export type FivemJSON<T> = {[k in keyof JSONCompatible<T>]: FivemJSONProperty<JSONCompatible<T>[k]>}
+export type FivemJSON<T> = {[k in keyof PartialJSONCompatible<T>]: FivemJSONProperty<JSONCompatible<T>[k]>}
 
 /* to create toJSON functions for derived classes, it is helpful to exclude all types of the extended class */
 export type OmitClass<T, O> = Omit<T, keyof O>;
