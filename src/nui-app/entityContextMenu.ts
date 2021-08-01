@@ -36,6 +36,7 @@ export class EntityContextMenuComponent {
 
     @HostListener("window:contextmenu", ["$event"])
     public async onContextMenu(event: MouseEvent) {
+        event.preventDefault();
         const result = await this.events.emitNuiCallback(GetEntityAtCursor, null);
         if(this.contextMenuTrigger.menuOpen) {
             this.contextMenuTrigger.closeMenu();

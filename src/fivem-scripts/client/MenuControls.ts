@@ -97,7 +97,7 @@ export class MenuControls {
     private resetLastInspectedOpacity() {
         if (this.lastInspectedEntityHandle != null) {
             const entity = Entity.fromHandle(this.lastInspectedEntityHandle);
-            entity.resetOpacity();
+            entity?.resetOpacity();
             this.lastInspectedEntityHandle = null;
         }
     }

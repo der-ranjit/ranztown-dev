@@ -37,6 +37,5 @@ export class PedSpawner {
             await sleep();
         }
         SetPlayerModel(PlayerId(), model)
-        SetPedComponentVariation(GetPlayerPed(-1), 0, 0, 0, 2)
     }
 }
