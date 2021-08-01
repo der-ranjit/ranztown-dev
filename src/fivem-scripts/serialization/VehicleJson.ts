@@ -105,8 +105,8 @@ export function VehicleToJson(vehicle: Vehicle): VehicleJSON {
     return result;
 }
 
-export function isVehicleJson(object: any): object is VehicleJSON {
-    return isModJSON(object.Mods);
+export function isVehicleJSON(object: any): object is VehicleJSON {
+    return object?.Mods?.value !== undefined && isModJSON(object.Mods.value);
 }
 
 
@@ -141,5 +141,5 @@ export function ModsToJSON(mods: VehicleModCollection): ModsJSON {
 }
 
 export function isModJSON(object: any): object is ModsJSON {
-    return isJsonProperty(object?.RimColor);
+    return object?.RimColor !== undefined && isJsonProperty(object.RimColor);
 }
