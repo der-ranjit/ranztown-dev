@@ -72,10 +72,11 @@ type MenuType = 'vehicleMenu' | 'pedMenu' |'locationMenu' | 'flyHighSpecial' | n
 @NuiMessageEvents
 export class AppRootComponent {
     @ViewChild(EntityContextMenuComponent)
-    public entityContextMenu!: EntityContextMenuComponent;
+    public entityContextMenu: EntityContextMenuComponent | null = null;
 
     public nuiMode: NuiMode = "inactive";
     public activeMenu: MenuType = null;
+    public previouslyActiveMenu: MenuType = null;
 
     @NuiMessageListener(Message.SetNuiMode)
     private handleSetNuiMode(event: Message.SetNuiMode) {
@@ -96,8 +97,11 @@ export class AppRootComponent {
 
     private setNuiMode(nuiMode: NuiMode): void {
         this.nuiMode = nuiMode;
-        if (nuiMode === "inactive" && this.entityContextMenu) {
-            this.entityContextMenu.close();
+        if (nuiMode === "inactive") {
+            this.entityContextMenu?.close();
+            this.previouslyActiveMenu = this.activeMenu;
+        } else {
+            this.activeMenu = this.previouslyActiveMenu;
         }
     }
 
