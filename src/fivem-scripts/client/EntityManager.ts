@@ -1,16 +1,11 @@
 import { Vector3, Entity } from "fivem-js";
-import { Vec3 } from "fivem-js/lib/utils/Vector3";
 
 import { NuiCallbackEvents, NuiCallbackListener } from "./NuiEventsService";
-import { DefaultCallbackResponse, DeleteEntity, EntityType, GetEntityAtCursor } from "../../shared/nui-events/callbacks";
+import { DefaultCallbackResponse, DeleteEntity, EntityType, GetEntityAtCursor, GetEntityData, UpdateEntity } from "../../shared/nui-events/callbacks";
 import { raycastFromScreenPointerToWorld } from "./NuiRaycast";
 import { EntityToJson } from "../serialization/EntityJson";
+import { isVec3 } from "../../shared/Vector";
 
-
-function fromVector3(vector: Vector3): Vec3 {
-    const {x, y, z} = vector;
-    return {x, y, z};
-}
 
 @NuiCallbackEvents
 export class EntityManager {
@@ -55,4 +50,45 @@ export class EntityManager {
         }
         return DefaultCallbackResponse;
     }
+
+    @NuiCallbackListener(GetEntityData)
+    public async getEntityData(event: GetEntityData) {
+        const data = event.data;
+        if (data?.handle) {
+            const entity = Entity.fromHandle(data.handle);
+            return EntityToJson(entity);
+        }
+        return DefaultCallbackResponse;
+    }
+
+    @NuiCallbackListener(UpdateEntity)
+    public async updateEntity(event: UpdateEntity) {
+        const data = event.data;
+        if (data?.handle && data?.propertyPaths && data?.value !== undefined) {
+            const entity = Entity.fromHandle(data.handle);
+            let value = data.value;
+            if (isVec3(value)) {
+                value = Vector3.create(value);
+            }
+
+            setPropertyByPaths(entity, data.propertyPaths, value);
+        }
+    }
+}
+
+function setPropertyByPaths(object: any, propertyPaths: string[], value: any) {
+    if (propertyPaths.length === 1) {
+        object[propertyPaths[0]] = value;
+        return
+    }
+    // } else if (propertyPaths.length > 1) {
+    //     let tmp = object;
+    //     for (let i = 0; i < propertyPaths.length -1; i++) {
+    //         tmp = object[propertyPaths[i]];
+    //         console.log(tmp);
+    //     }
+    //     console.log(tmp);
+    //     console.log(propertyPaths[propertyPaths.length-1]);
+    //     tmp[propertyPaths[propertyPaths.length-1]] = value;
+    // }
 }

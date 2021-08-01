@@ -24,7 +24,8 @@ type Writable<T> = { -readonly [k in keyof T]: T[k] };
 
 type JSONCompatible<T> = Writable<NonFunctionProperties<T>>;
 type PartialJSONCompatible<T> = Partial<JSONCompatible<T>>;
-type FivemJSONProperty<T> = {value: T, readonly: boolean};
+
+export type FivemJSONProperty<T> = {value: T, readonly: boolean};
 
 export type FivemJSON<T> = {[k in keyof PartialJSONCompatible<T>]: FivemJSONProperty<JSONCompatible<T>[k]>}
 

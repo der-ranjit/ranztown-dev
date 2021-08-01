@@ -1,5 +1,6 @@
 import { UserSavedLocation } from "../storage/UserSavedLocation";
 import { Vec3 } from "fivem-js/lib/utils/Vector3";
+import type { EntityJSON } from "../../fivem-scripts/serialization/EntityJson";
 
 export abstract class AbstractCallback<D = void, R = void> {
     /**
@@ -39,6 +40,7 @@ export interface EntityInformation {
     type: EntityType;
 }
 export type EntityType = "no entity" | "ped" | "vehicle" | "object";
-export type GetEntityAtCursorResponseData = EntityInformation | null;
-export class GetEntityAtCursor extends AbstractCallback<null, GetEntityAtCursorResponseData> {}
+export class GetEntityAtCursor extends AbstractCallback<null, EntityJSON | typeof DefaultCallbackResponse> {}
+export class GetEntityData extends AbstractCallback<{handle: number}, EntityJSON | typeof DefaultCallbackResponse> {}
 export class DeleteEntity extends AbstractCallback<{handle: number}> {}
+export class UpdateEntity extends AbstractCallback<{propertyPaths: string[], value: any, handle: number}> {}

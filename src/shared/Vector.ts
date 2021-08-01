@@ -6,7 +6,9 @@ export interface Vector2 {
 }
 
 export function isVec3(value: any): value is Vec3 {
-    return value != null && value !== undefined && typeof value.x === "number"
+    return value != null && value !== undefined
+        && Object.keys(value).length === 3
+        && typeof value.x === "number"
         && typeof value.y === "number"
         && typeof value.z === "number";
 }
