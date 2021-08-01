@@ -86,6 +86,9 @@ export class LocationsMenuComponent implements OnInit {
 
     public isLocationNameValid(locationName: string): boolean {
         return locationName !== ""
+            // only allow letter, numbers, underlines and hyphens
+            // TODO fix spaces; \s
+            && !locationName.match(/[^a-zA-Z\d_-]/gi)?.length
             && this.locations$.getValue().findIndex(location => location.locationName === locationName) === -1;
     }
 
