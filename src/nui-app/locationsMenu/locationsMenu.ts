@@ -1,5 +1,6 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
-import { BehaviorSubject } from "rxjs";
+import { AnimationEvent } from "@angular/animations";
+import { Component, Input, OnInit, Output, ViewChild } from "@angular/core";
+import { BehaviorSubject, Subject } from "rxjs";
 
 import { GetCurrentPlayerPosition, GetUserLocations, MovePlayerToLocation, SaveUserLocation } from "../../shared/nui-events/callbacks";
 import { UserLocationsUpdate } from "../../shared/nui-events/messages";
@@ -13,7 +14,7 @@ import { AppNuiEventsService } from "../core/nui-events/nuiEvents.service";
 @Component({
     selector: "nui-app-locations-menu",
     template: `
-        <div class="locationsMenu" [@slideIn]="'left'">
+        <div class="locationsMenu" [@slideIn]="'left'" *ngIf="active" (@slideIn.done)="onCloseAnimationDone($event)">
             <button mat-raised-button
                 [disabled]="!isLocationNameValid(scroll.currentFilterValue)"
                 (click)="saveCurrentUserLocation()">Save current</button>
@@ -49,6 +50,12 @@ import { AppNuiEventsService } from "../core/nui-events/nuiEvents.service";
 })
 @NuiMessageEvents
 export class LocationsMenuComponent implements OnInit {
+    @Input()
+    public active = false;
+
+    @Output()
+    public afterClose = new Subject();
+
     @ViewChild("scroll")
     private virtualFilterList!: VirtualFilterListComponent;
 
@@ -99,5 +106,11 @@ export class LocationsMenuComponent implements OnInit {
             ...playerPosition
         }
         const result = await this.events.emitNuiCallback(SaveUserLocation, { location });
+    }
+
+    public onCloseAnimationDone(event: AnimationEvent) {
+        if (event.toState === 'void') {
+            this.afterClose.next();
+        }
     }
 }

@@ -26,8 +26,8 @@ type MenuType = 'vehicleMenu' | 'pedMenu' |'locationMenu' | 'flyHighSpecial' | n
         <div class="mainWrapper">
             <nui-app-vehicle-menu [active]="isMenuActive" (afterClose)="setMenuActive(null)" *ngIf="isSubMenuActive('vehicleMenu')"></nui-app-vehicle-menu>
             <nui-app-ped-menu [active]="isMenuActive" (afterClose)="setMenuActive(null)" *ngIf="isSubMenuActive('pedMenu')"></nui-app-ped-menu>
-            <nui-app-locations-menu *ngIf="isMenuActive && isSubMenuActive('locationMenu')"></nui-app-locations-menu>
-            <nui-app-fly-high *ngIf="isMenuActive && isSubMenuActive('flyHighSpecial')"></nui-app-fly-high>
+            <nui-app-locations-menu [active]="isMenuActive" (afterClose)="setMenuActive(null)" *ngIf="isSubMenuActive('locationMenu')"></nui-app-locations-menu>
+            <nui-app-fly-high [active]="isMenuActive" (afterClose)="setMenuActive(null)" *ngIf="isSubMenuActive('flyHighSpecial')"></nui-app-fly-high>
         </div>
         <app-entity-context-menu *ngIf="isInspectorActive"></app-entity-context-menu>
 
