@@ -1,11 +1,11 @@
 import { AnimationEvent } from '@angular/animations';
 import { Component, Input, OnInit, Output } from '@angular/core';
 import { Subject } from 'rxjs';
-import { isVehicleJSON, VehicleJSON } from '../../fivem-scripts/serialization/VehicleJson';
+import { isVehicleJSON, VehicleJSON } from '../../../fivem-scripts/serialization/VehicleJson';
 
-import { Callback } from '../../shared/nui-events';
-import { GetPlayerVehicleData } from '../../shared/nui-events/callbacks';
-import { Vehicles } from '../../shared/Vehicles';
+import { Callback } from '../../../shared/nui-events';
+import { GetPlayerVehicleData } from '../../../shared/nui-events/callbacks';
+import { Vehicles } from '../../../shared/Vehicles';
 import { slideIn } from '../core/animations';
 import { AppNuiEventsService } from '../core/nui-events/nuiEvents.service';
 

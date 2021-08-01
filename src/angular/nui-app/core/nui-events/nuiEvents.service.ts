@@ -1,7 +1,7 @@
 import { fromEvent, Observable } from "rxjs";
 import { filter, map } from "rxjs/operators";
 
-import { Callback, Message } from "../../../shared/nui-events";
+import { Callback, Message } from "../../../../shared/nui-events";
 
 declare var RESOURCE_NAME: string;
 

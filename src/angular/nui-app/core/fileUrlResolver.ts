@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { GetFileServerBaseUrl } from "../../shared/nui-events/callbacks";
+import { GetFileServerBaseUrl } from "../../../shared/nui-events/callbacks";
 import { AppNuiEventsService } from "./nui-events/nuiEvents.service";
 
 @Injectable({providedIn: "root"})

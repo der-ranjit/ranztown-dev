@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
-import { Message } from '../shared/nui-events';
-import { NuiMode } from '../shared/nui-events/messages';
+import { Message } from '../../shared/nui-events';
+import { NuiMode } from '../../shared/nui-events/messages';
 import { fade, slideIn } from './core/animations';
 import { NuiMessageEvents, NuiMessageListener } from './core/nui-events/decorators';
 

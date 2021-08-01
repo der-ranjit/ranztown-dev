@@ -1,10 +1,10 @@
 import { Component, HostListener, ViewChild } from "@angular/core";
 import { MatMenuTrigger } from "@angular/material/menu";
 
-import { EntityJSON, isEntityJSON } from "../../fivem-scripts/serialization/EntityJson";
-import { isVehicleJSON, VehicleJSON } from "../../fivem-scripts/serialization/VehicleJson";
-import { DeleteEntity, EntityType, GetEntityDataAtNuiCursor } from "../../shared/nui-events/callbacks";
-import { sleep } from "../../shared/utils";
+import { EntityJSON, isEntityJSON } from "../../../fivem-scripts/serialization/EntityJson";
+import { isVehicleJSON, VehicleJSON } from "../../../fivem-scripts/serialization/VehicleJson";
+import { DeleteEntity, EntityType, GetEntityDataAtNuiCursor } from "../../../shared/nui-events/callbacks";
+import { sleep } from "../../../shared/utils";
 import { AppNuiEventsService } from "../core/nui-events/nuiEvents.service";
 
 @Component({

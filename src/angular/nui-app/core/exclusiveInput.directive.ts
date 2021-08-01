@@ -1,5 +1,5 @@
 import { Directive, ElementRef, HostListener } from "@angular/core";
-import { Callback } from "../../shared/nui-events";
+import { Callback } from "../../../shared/nui-events";
 import { AppNuiEventsService } from "./nui-events/nuiEvents.service";
 
 @Directive({

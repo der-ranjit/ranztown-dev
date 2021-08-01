@@ -14,7 +14,7 @@
         }
       },
       "root": "",
-      "sourceRoot": "src",
+      "sourceRoot": "src/angular",
       "prefix": "nui-app",
       "architect": {
         "build": {
@@ -24,17 +24,17 @@
                 "path": "config/nui-webpack.config.js"
              },
             "outputPath": "dist/nui-app",
-            "index": "src/index.html",
-            "main": "src/main.ts",
-            "polyfills": "src/polyfills.ts",
+            "index": "src/angular/index.html",
+            "main": "src/angular/main.ts",
+            "polyfills": "src/angular/polyfills.ts",
             "tsConfig": "config/tsconfig.nui.json",
             "inlineStyleLanguage": "scss",
             "baseHref": "/nui-app/",
             "assets": [
-              "src/assets"
+              "src/angular/assets"
             ],
             "styles": [
-              "src/styles.scss"
+              "src/angular/styles.scss"
             ],
             "scripts": [],
             "deleteOutputPath": false
@@ -55,8 +55,8 @@
               ],
               "fileReplacements": [
                 {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.prod.ts"
+                  "replace": "src/angular/environments/environment.ts",
+                  "with": "src/angular/environments/environment.prod.ts"
                 }
               ],
               "outputHashing": "none"
@@ -96,17 +96,17 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "src/test.ts",
-            "polyfills": "src/polyfills.ts",
+            "main": "src/angular/test.ts",
+            "polyfills": "src/angular/polyfills.ts",
             "tsConfig": "config/tsconfig.spec.json",
             "karmaConfig": "config/karma.conf.js",
             "inlineStyleLanguage": "scss",
             "assets": [
-              "src/favicon.ico",
-              "src/assets"
+              "src/angular/favicon.ico",
+              "src/angular/assets"
             ],
             "styles": [
-              "src/styles.scss"
+              "src/angular/styles.scss"
             ],
             "scripts": []
           }
