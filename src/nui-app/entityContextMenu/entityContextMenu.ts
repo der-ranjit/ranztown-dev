@@ -3,7 +3,7 @@ import { MatMenuTrigger } from "@angular/material/menu";
 import { Vec3 } from "fivem-js/lib/utils/Vector3";
 
 import type { EntityJSON } from "../../fivem-scripts/serialization/EntityJson";
-import { DefaultCallbackResponse, DeleteEntity, GetEntityAtCursor, GetEntityData, UpdateEntity } from "../../shared/nui-events/callbacks";
+import { DefaultCallbackResponse, DeleteEntity, GetEntityDataAtNuiCursor, GetEntityData, UpdateEntity } from "../../shared/nui-events/callbacks";
 import { sleep } from "../../shared/utils";
 import { isVec3 } from "../../shared/Vector";
 import { AppNuiEventsService } from "../core/nui-events/nuiEvents.service";
@@ -64,7 +64,7 @@ export class EntityContextMenuComponent implements OnInit, OnDestroy {
     @HostListener("window:contextmenu", ["$event"])
     public async onContextMenu(event: MouseEvent) {
         event.preventDefault();
-        const result = await this.events.emitNuiCallback(GetEntityAtCursor, null);
+        const result = await this.events.emitNuiCallback(GetEntityDataAtNuiCursor, null);
         if (this.contextMenuTrigger.menuOpen) {
             this.contextMenuTrigger.closeMenu();
             // wait for menu closing animation

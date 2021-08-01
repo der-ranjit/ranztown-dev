@@ -40,7 +40,7 @@ export interface EntityInformation {
     type: EntityType;
 }
 export type EntityType = "no entity" | "ped" | "vehicle" | "object";
-export class GetEntityAtCursor extends AbstractCallback<null, EntityJSON | typeof DefaultCallbackResponse> {}
+export class GetEntityDataAtNuiCursor extends AbstractCallback<null, EntityJSON | typeof DefaultCallbackResponse> {}
 export class GetEntityData extends AbstractCallback<{handle: number}, EntityJSON | typeof DefaultCallbackResponse> {}
 export class DeleteEntity extends AbstractCallback<{handle: number}> {}
 export class UpdateEntity extends AbstractCallback<{propertyPaths: string[], value: any, handle: number}> {}
