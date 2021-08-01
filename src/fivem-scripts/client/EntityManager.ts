@@ -1,7 +1,7 @@
-import { Vector3, Entity, Vehicle } from "fivem-js";
+import { Vector3, Entity, Vehicle, Game } from "fivem-js";
 
 import { NuiCallbackEvents, NuiCallbackListener } from "./NuiEventsService";
-import { DefaultCallbackResponse, DeleteEntity, GetEntityDataAtNuiCursor, GetEntityData, UpdateEntity, EntityType } from "../../shared/nui-events/callbacks";
+import { DeleteEntity, GetEntityDataAtNuiCursor, GetEntityData, UpdateEntity, EntityType, GetPlayerVehicleData } from "../../shared/nui-events/callbacks";
 import { raycastFromScreenPointerToWorld } from "./NuiRaycast";
 import { isVec3 } from "../../shared/Vector";
 import { EntityJSON, EntityToJson } from "../serialization/EntityJson";
@@ -31,7 +31,7 @@ export class EntityManager {
                return json;
            }
         }
-        return DefaultCallbackResponse;
+        return null;
     }
 
     @NuiCallbackListener(GetEntityData)
@@ -44,7 +44,17 @@ export class EntityManager {
                 return json;
             }
         }
-        return DefaultCallbackResponse;
+        return null;
+    }
+
+    @NuiCallbackListener(GetPlayerVehicleData)
+    public async getPlayerVehicleData(event: GetPlayerVehicleData) {
+        if (Game.PlayerPed.isInAnyVehicle()) {
+            const vehicle = Game.PlayerPed.CurrentVehicle;
+            return VehicleToJson(vehicle);
+        } else {
+            return null;
+        }
     }
 
     @NuiCallbackListener(UpdateEntity)

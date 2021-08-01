@@ -1,8 +1,10 @@
 import { AnimationEvent } from '@angular/animations';
-import { Component, Input, Output } from '@angular/core';
+import { Component, Input, OnInit, Output } from '@angular/core';
 import { Subject } from 'rxjs';
+import { isVehicleJSON, VehicleJSON } from '../../fivem-scripts/serialization/VehicleJson';
 
 import { Callback } from '../../shared/nui-events';
+import { GetPlayerVehicleData } from '../../shared/nui-events/callbacks';
 import { Vehicles } from '../../shared/Vehicles';
 import { slideIn } from '../core/animations';
 import { AppNuiEventsService } from '../core/nui-events/nuiEvents.service';
@@ -53,7 +55,7 @@ import { AppNuiEventsService } from '../core/nui-events/nuiEvents.service';
         slideIn
     ]
 })
-export class VehicleMenuComponent {
+export class VehicleMenuComponent implements OnInit {
     @Input()
     public active = false;
 
@@ -62,7 +64,20 @@ export class VehicleMenuComponent {
 
     public vehiclesNames = [...Object.values(Vehicles)].map(vehicle => vehicle.name).sort();
 
+    public vehicleJSON: VehicleJSON | null = null;
+
     constructor(private events: AppNuiEventsService) {
+    }
+
+    public ngOnInit() {
+        this.updateVehicleData();
+    }
+
+    public async updateVehicleData() {
+        const result = await this.events.emitNuiCallback(GetPlayerVehicleData, null);
+        if (isVehicleJSON(result)) {
+            this.vehicleJSON = result;
+        }
     }
 
     public handleSpawn(carModel: string): void {
