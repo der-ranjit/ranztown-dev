@@ -31,11 +31,11 @@ export function VehicleToJSON(vehicle: Vehicle): FivemVehicleJSON {
     result.CanEngineDegrade = toFivemJSONProperty(vehicle.CanEngineDegrade, WRITE_ONLY);
     result.CanTiresBurst = toFivemJSONProperty(vehicle.CanTiresBurst);
     result.CanWheelsBreak = toFivemJSONProperty(vehicle.CanWheelsBreak, WRITE_ONLY);
-    result.ClassDisplayName = toFivemJSONProperty(vehicle.ClassDisplayName);
+    result.ClassDisplayName = toFivemJSONProperty(GetLabelText(vehicle.ClassDisplayName));
     result.CurrentGear = toFivemJSONProperty(vehicle.CurrentGear, READ_ONLY);
     result.CurrentRPM = toFivemJSONProperty(vehicle.CurrentRPM);
     result.DirtLevel = toFivemJSONProperty(vehicle.DirtLevel);
-    result.DisplayName = toFivemJSONProperty(vehicle.DisplayName, READ_ONLY);
+    result.DisplayName = toFivemJSONProperty(GetLabelText(vehicle.DisplayName), READ_ONLY);
     result.DropsMoneyOnExplosion = toFivemJSONProperty(vehicle.DropsMoneyOnExplosion, WRITE_ONLY);
     result.EngineHealth = toFivemJSONProperty(vehicle.EngineHealth);
     result.EnginePowerMultiplier = toFivemJSONProperty(vehicle.EnginePowerMultiplier, WRITE_ONLY);
