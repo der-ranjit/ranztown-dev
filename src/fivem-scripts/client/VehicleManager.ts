@@ -4,6 +4,8 @@ import { CfxNuiEventsService, NuiCallbackListener, NuiCallbackEvents } from "./N
 import { Callback, Message } from "../../shared/nui-events";
 import { Color } from "fivem-js";
 import { cssHexStringToRgb } from "../Colors";
+import { GetPlayerVehicleData } from "../../shared/nui-events/callbacks";
+import { VehicleToJSON } from "../serialization/VehicleToJSON";
 
 @NuiCallbackEvents
 export class VehicleManager {
@@ -48,6 +50,16 @@ export class VehicleManager {
                 playerVehicle.Mods.CustomSecondaryColor = Color.fromRgb(secondary.r, secondary.g, secondary.b);
 
             }
+        }
+    }
+
+    @NuiCallbackListener(GetPlayerVehicleData)
+    public async getPlayerVehicleData(event: GetPlayerVehicleData) {
+        if (Cfx.Game.PlayerPed.isInAnyVehicle()) {
+            const vehicle = Cfx.Game.PlayerPed.CurrentVehicle;
+            return VehicleToJSON(vehicle);
+        } else {
+            return null;
         }
     }
 

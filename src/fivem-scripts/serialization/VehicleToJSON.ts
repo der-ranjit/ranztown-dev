@@ -127,13 +127,16 @@ function VehicleModCollectionToJSON(modCollection: VehicleModCollection): FivemM
     return result;
 }
 
-export function ModCollectionToModTypeSlots(modCollection: VehicleModCollection): ModTypeSlot[] {
+function ModCollectionToModTypeSlots(modCollection: VehicleModCollection): ModTypeSlot[] {
     const modTypeSlots: ModTypeSlot[] = [];
 
-    const modSlots = modCollection.getAllMods();
+    // fivem-does not provide a getter (；′⌒`)
+    const vehicle = (<any>modCollection)._owner?.Handle;
     // not setting the mod-kit will prevent getting all available mods
-    SetVehicleModKit(modSlots[0].Vehicle.Handle, 0);
-
+    if (vehicle) {
+        SetVehicleModKit(vehicle, 0);
+    }
+    const modSlots = modCollection.getAllMods();
     for (let slot of modSlots) {
         const slotType = slot.ModType;
         const slotValues: ModTypeValue[] = [{
