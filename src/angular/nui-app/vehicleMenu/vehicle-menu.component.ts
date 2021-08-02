@@ -1,10 +1,10 @@
 import { AnimationEvent } from '@angular/animations';
 import { Component, Input, OnInit, Output } from '@angular/core';
 import { Subject } from 'rxjs';
-import { isVehicleJSON, VehicleJSON } from '../../../fivem-scripts/serialization/VehicleJson';
 
 import { Callback } from '../../../shared/nui-events';
 import { GetPlayerVehicleData } from '../../../shared/nui-events/callbacks';
+import { FivemVehicleJSON, isFivemVehicleJSON } from '../../../shared/serialization/FivemVehicleJSON';
 import { Vehicles } from '../../../shared/Vehicles';
 import { slideIn } from '../core/animations';
 import { AppNuiEventsService } from '../core/nui-events/nuiEvents.service';
@@ -13,7 +13,7 @@ import { AppNuiEventsService } from '../core/nui-events/nuiEvents.service';
     selector: 'nui-app-vehicle-menu',
     template: `
         <div class="vehicleListContainer" *ngIf="active" [@slideIn]="'left'" (@slideIn.done)="onCloseAnimationDone($event)">
-            <app-virtual-filter-list #scroll
+        <app-virtual-filter-list #scroll
                 [items]="vehiclesNames"
                 [filterLabel]="'vehicle name'"
                 [filterDescription]="'press enter or click to spawn'"
@@ -64,7 +64,7 @@ export class VehicleMenuComponent implements OnInit {
 
     public vehiclesNames = [...Object.values(Vehicles)].map(vehicle => vehicle.name).sort();
 
-    public vehicleJSON: VehicleJSON | null = null;
+    public vehicleJSON: FivemVehicleJSON | null = null;
 
     constructor(private events: AppNuiEventsService) {
     }
@@ -75,7 +75,7 @@ export class VehicleMenuComponent implements OnInit {
 
     public async updateVehicleData() {
         const result = await this.events.emitNuiCallback(GetPlayerVehicleData, null);
-        if (isVehicleJSON(result)) {
+        if (isFivemVehicleJSON(result)) {
             this.vehicleJSON = result;
         }
     }

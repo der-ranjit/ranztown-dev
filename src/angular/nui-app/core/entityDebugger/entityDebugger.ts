@@ -1,9 +1,9 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Vec3 } from "fivem-js/lib/utils/Vector3";
 
-import { EntityJSON } from "../../../../fivem-scripts/serialization/EntityJson";
-import { VehicleJSON } from "../../../../fivem-scripts/serialization/VehicleJson";
-import { DefaultCallbackResponse, GetEntityData, UpdateEntity } from "../../../../shared/nui-events/callbacks";
+import { GetEntityData, UpdateEntity } from "../../../../shared/nui-events/callbacks";
+import { FivemEntityJSON, isFivemEntityJSON } from "../../../../shared/serialization/FivemEntityJSON";
+import { FivemVehicleJSON } from "../../../../shared/serialization/FivemVehicleJSON";
 import { isVec3 } from "../../../../shared/Vector";
 import { AppNuiEventsService } from "../nui-events/nuiEvents.service";
 
@@ -12,8 +12,8 @@ import { AppNuiEventsService } from "../nui-events/nuiEvents.service";
     template: `
         <div *ngFor="let property of entityJSON | keyvalue" (click)="$event.stopPropagation()">
             <span>{{ property.key }}</span>
-            <pre *ngIf="property.value?.readonly"> {{ property.value?.value | json }}</pre>
-            <ng-container *ngIf="!property.value?.readonly && isVector(property.value?.value) as vector">
+            <pre *ngIf="property.value?.access === 'read'"> {{ property.value?.value | json }}</pre>
+            <ng-container *ngIf="!(property.value?.access === 'read') && isVector(property.value?.value) as vector">
                 <div><input type="number" [ngModel]="vector.x" (ngModelChange)="vector.x = $event; updateVectorProperty(property.key)"></div>
                 <div><input type="number" [ngModel]="vector.y" (ngModelChange)="vector.y = $event; updateVectorProperty(property.key)"></div>
                 <div><input type="number" [ngModel]="vector.z" (ngModelChange)="vector.z = $event; updateVectorProperty(property.key)"></div>
@@ -23,7 +23,7 @@ import { AppNuiEventsService } from "../nui-events/nuiEvents.service";
     styles: [``]
 })
 export class EntityDebuggerComponent implements OnInit, OnDestroy {
-    public entityJSON: EntityJSON | VehicleJSON | null = null;
+    public entityJSON:  FivemEntityJSON | FivemVehicleJSON | null = null;
 
     private entityUpdateIntervalMS = 100;
     private entityUpdateInterval: number | null = null;
@@ -62,7 +62,7 @@ export class EntityDebuggerComponent implements OnInit, OnDestroy {
         const handle = this.getHandle();
         if (handle) {
             const result = await this.events.emitNuiCallback(GetEntityData, { handle });
-            if (result !== DefaultCallbackResponse) {
+            if (isFivemEntityJSON(result)) {
                 this.entityJSON = result;
             }
         }

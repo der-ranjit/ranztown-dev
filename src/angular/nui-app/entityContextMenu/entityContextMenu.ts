@@ -1,9 +1,9 @@
 import { Component, HostListener, ViewChild } from "@angular/core";
 import { MatMenuTrigger } from "@angular/material/menu";
 
-import { EntityJSON, isEntityJSON } from "../../../fivem-scripts/serialization/EntityJson";
-import { isVehicleJSON, VehicleJSON } from "../../../fivem-scripts/serialization/VehicleJson";
 import { DeleteEntity, EntityType, GetEntityDataAtNuiCursor } from "../../../shared/nui-events/callbacks";
+import { FivemEntityJSON, isFivemEntityJSON } from "../../../shared/serialization/FivemEntityJSON";
+import { FivemVehicleJSON, isFivemVehicleJSON } from "../../../shared/serialization/FivemVehicleJSON";
 import { sleep } from "../../../shared/utils";
 import { AppNuiEventsService } from "../core/nui-events/nuiEvents.service";
 
@@ -31,7 +31,7 @@ export class EntityContextMenuComponent  {
 
     public entityType: EntityType = "no entity";
 
-    public entityJSON: EntityJSON | VehicleJSON | null = null;
+    public entityJSON: FivemEntityJSON | FivemVehicleJSON | null = null;
     public contextMenuPosition = { x: "0px", y: "0px" };
 
     constructor(private events: AppNuiEventsService) { }
@@ -52,8 +52,8 @@ export class EntityContextMenuComponent  {
 
         this.contextMenuPosition.x = event.clientX + 'px';
         this.contextMenuPosition.y = event.clientY + 'px';
-        if (isEntityJSON(result)) {
-            this.entityType = isVehicleJSON(result) ? "vehicle" : "object";
+        if (isFivemEntityJSON(result)) {
+            this.entityType = isFivemVehicleJSON(result) ? "vehicle" : "object";
             this.entityJSON = result;
             this.contextMenuTrigger.openMenu();
         }

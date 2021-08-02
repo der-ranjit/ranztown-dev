@@ -1,7 +1,8 @@
-import { UserSavedLocation } from "../storage/UserSavedLocation";
 import { Vec3 } from "fivem-js/lib/utils/Vector3";
-import type { EntityJSON } from "../../fivem-scripts/serialization/EntityJson";
-import { VehicleJSON } from "../../fivem-scripts/serialization/VehicleJson";
+
+import { UserSavedLocation } from "../storage/UserSavedLocation";
+import { FivemEntityJSON } from "../serialization/FivemEntityJSON";
+import { FivemVehicleJSON } from "../serialization/FivemVehicleJSON";
 
 export abstract class AbstractCallback<D = void, R = void> {
     /**
@@ -41,8 +42,8 @@ export interface EntityInformation {
     type: EntityType;
 }
 export type EntityType = "no entity" | "ped" | "vehicle" | "object";
-export class GetEntityDataAtNuiCursor extends AbstractCallback<null, EntityJSON | null> {}
-export class GetEntityData extends AbstractCallback<{handle: number}, EntityJSON | null> {}
-export class GetPlayerVehicleData extends AbstractCallback<null, VehicleJSON | null> {}
+export class GetEntityDataAtNuiCursor extends AbstractCallback<null, FivemEntityJSON | null> {}
+export class GetEntityData extends AbstractCallback<{handle: number}, FivemEntityJSON | null> {}
+export class GetPlayerVehicleData extends AbstractCallback<null, FivemVehicleJSON | null> {}
 export class DeleteEntity extends AbstractCallback<{handle: number}> {}
 export class UpdateEntity extends AbstractCallback<{propertyPaths: string[], value: any, handle: number}> {}
