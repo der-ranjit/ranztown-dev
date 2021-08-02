@@ -31,6 +31,7 @@ import { ThemeChooserButtonComponent } from './core/themeChooserButton';
 import { VirtualFilterListComponent } from './common/virtualFilterList';
 import { EntityContextMenuComponent } from './entityContextMenu/entityContextMenu';
 import { EntityDebuggerComponent } from './core/entityDebugger/entityDebugger';
+import { ModSlotNamePipe } from './vehicleMenu/modSlotName.pipe';
 
 @NgModule({
     declarations: [
@@ -44,7 +45,8 @@ import { EntityDebuggerComponent } from './core/entityDebugger/entityDebugger';
         ThemeChooserButtonComponent,
         VirtualFilterListComponent,
         EntityContextMenuComponent,
-        EntityDebuggerComponent
+        EntityDebuggerComponent,
+        ModSlotNamePipe
     ],
     imports: [
         BrowserModule,
