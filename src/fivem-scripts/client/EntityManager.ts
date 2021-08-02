@@ -4,8 +4,10 @@ import { NuiCallbackEvents, NuiCallbackListener } from "./NuiEventsService";
 import { DeleteEntity, GetEntityDataAtNuiCursor, GetEntityData, UpdateEntity, EntityType, GetPlayerVehicleData } from "../../shared/nui-events/callbacks";
 import { raycastFromScreenPointerToWorld } from "./NuiRaycast";
 import { isVec3 } from "../../shared/Vector";
-import { EntityJSON, EntityToJson } from "../serialization/EntityJson";
-import { VehicleJSON, VehicleToJson } from "../serialization/VehicleJson";
+import { FivemEntityJSON } from "../../shared/serialization/FivemEntityJSON";
+import { FivemVehicleJSON } from "../../shared/serialization/FivemVehicleJSON";
+import { VehicleToJSON } from "../serialization/VehicleToJSON";
+import { EntityToJSON } from "../serialization/EntityToJSON";
 
 @NuiCallbackEvents
 export class EntityManager {
@@ -51,7 +53,7 @@ export class EntityManager {
     public async getPlayerVehicleData(event: GetPlayerVehicleData) {
         if (Game.PlayerPed.isInAnyVehicle()) {
             const vehicle = Game.PlayerPed.CurrentVehicle;
-            return VehicleToJson(vehicle);
+            return VehicleToJSON(vehicle);
         } else {
             return null;
         }
@@ -71,18 +73,18 @@ export class EntityManager {
         }
     }
 
-    private createJSONForEntity(entity: Entity): EntityJSON | VehicleJSON | null {
+    private createJSONForEntity(entity: Entity): FivemEntityJSON | FivemVehicleJSON | null {
         const eType = GetEntityType(entity.Handle);
         let type: EntityType = "no entity";
         if(eType === 1) {
             type = "ped";
-            return EntityToJson(entity);
+            return EntityToJSON(entity);
         } else if (eType === 2) {
             type = "vehicle";
-            return VehicleToJson(entity as Vehicle);
+            return VehicleToJSON(entity as Vehicle);
         } else if (eType === 3) {
             type = "object";
-            return EntityToJson(entity);
+            return EntityToJSON(entity);
         }
         return null;
     }

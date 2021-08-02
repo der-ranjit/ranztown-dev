@@ -14,31 +14,35 @@
  * can be applied by setting the the changed value on the property path of the entity
  */
 
-type NonFunctionPropertyNames<T> = {
-    [K in keyof T]: T[K] extends Function ? never : K;
-  }[keyof T];
-type NonFunctionProperties<T> = Pick<T, NonFunctionPropertyNames<T>>;
+// type NonFunctionPropertyNames<T> = {
+//     [K in keyof T]: T[K] extends Function ? never : K;
+//   }[keyof T];
+// type NonFunctionProperties<T> = Pick<T, NonFunctionPropertyNames<T>>;
 
-/* we have to remove all readonly modifiers, since otherwise we could not write the date into the JSON */
-type Writable<T> = { -readonly [k in keyof T]: T[k] };
+// /* we have to remove all readonly modifiers, since otherwise we could not write the date into the JSON */
+// type Writable<T> = { -readonly [k in keyof T]: T[k] };
 
-type JSONCompatible<T> = Writable<NonFunctionProperties<T>>;
-type PartialJSONCompatible<T> = Partial<JSONCompatible<T>>;
+// type JSONCompatible<T> = Writable<NonFunctionProperties<T>>;
+// type PartialJSONCompatible<T> = Partial<JSONCompatible<T>>;
 
-export type FivemJSONProperty<T> = {value: T, readonly: boolean};
+// /* to create toJSON functions for derived classes, it is helpful to exclude all types of the extended class */
+// export type OmitClass<T, O> = Omit<T, keyof O>;
 
-export type FivemJSON<T> = {[k in keyof PartialJSONCompatible<T>]: FivemJSONProperty<JSONCompatible<T>[k]>}
+// export type FivemJSON<T> = {[k in keyof PartialJSONCompatible<T>]: FivemJSONProperty<JSONCompatible<T>[k]>}
 
-/* to create toJSON functions for derived classes, it is helpful to exclude all types of the extended class */
-export type OmitClass<T, O> = Omit<T, keyof O>;
+export const READ_ONLY = "read";
+export const WRITE_ONLY = "write";
+export const READ_WRITE = "readwrite";
+export type JSONPropertyAccess = typeof READ_ONLY | typeof WRITE_ONLY | typeof READ_WRITE;
+export type FivemJSONProperty<T> = {value: T, access: JSONPropertyAccess};
 
-export function toJsonProperty<T>(value: T, readonly = false): FivemJSONProperty<T> {
+export function toFivemJSONProperty<T>(value: T, access: JSONPropertyAccess = "readwrite"): FivemJSONProperty<T> {
     return {
         value,
-        readonly
+        access
     }
 }
 
-export function isJsonProperty(property: any): property is FivemJSONProperty<any> {
-    return property?.value !== undefined && property?.readonly !== undefined;
+export function isFivemJSONProperty(property: any): property is FivemJSONProperty<any> {
+    return property?.value !== undefined && property?.access !== undefined;
 }
