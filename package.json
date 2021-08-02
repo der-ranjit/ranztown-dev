@@ -33,6 +33,7 @@
     "@citizenfx/http-wrapper": "^0.2.2",
     "@citizenfx/server": "^2.0.4207-1",
     "@citizenfx/three": "^0.100.0",
+    "@types/raphael": "^2.3.2",
     "fivem-js": "^1.5.2",
     "koa": "^2.6.2",
     "koa-body": "^4.0.6",
@@ -44,6 +45,7 @@
     "ngx-virtual-scroller": "^4.0.3",
     "rxjs": "~6.6.0",
     "tslib": "^2.2.0",
+    "wheelnav": "^1.7.1",
     "zone.js": "~0.11.4"
   },
   "devDependencies": {
