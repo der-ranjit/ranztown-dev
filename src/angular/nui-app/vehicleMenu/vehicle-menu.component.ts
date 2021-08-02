@@ -1,5 +1,5 @@
 import { AnimationEvent } from '@angular/animations';
-import { Component, Input, OnInit, Output } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { VehicleModType } from 'fivem-js';
 import { Subject } from 'rxjs';
 
@@ -9,6 +9,8 @@ import { FivemVehicleJSON, isFivemVehicleJSON, ModTypeSlot } from '../../../shar
 import { Vehicles } from '../../../shared/Vehicles';
 import { slideIn } from '../core/animations';
 import { AppNuiEventsService } from '../core/nui-events/nuiEvents.service';
+
+type ModValue = {modType: VehicleModType, modValue: number};
 
 @Component({
     selector: 'nui-app-vehicle-menu',
@@ -29,9 +31,14 @@ import { AppNuiEventsService } from '../core/nui-events/nuiEvents.service';
         <div class="vehicleEditorContainer" *ngIf="active" [@slideIn]="'right'">
             <div class="overflowWrapper">
                 <mat-form-field *ngFor="let slot of modSlots" appearance="fill">
-                    <mat-label>{{ slot.slotType | modSlotName }}</mat-label>
-                    <mat-select (selectionChange)="updateVehicleMod(slot.slotType, $event.value)" [value]="slot.selectedValue.value">
-                        <mat-option *ngFor="let modValue of slot.slotValues" [value]="modValue.value">{{ modValue.displayName }}</mat-option>
+                    <mat-label>{{ slot.slotType | modSlotName }} ({{slot.slotValues.length}})</mat-label>
+                    <mat-select (selectionChange)="onModTypeSelectionChange(slot.slotType, $event.value)"
+                        (openedChange)="onSelectOpenChanged($event, slot.slotType, slot.selectedValue.value)"
+                        [value]="slot.selectedValue.value">
+                        <mat-option *ngFor="let modValue of slot.slotValues"
+                            (mouseenter)="onMouseEnterModType(slot.slotType, modValue.value)"
+                            (mouseleave)="onMouseLeaveModType()"
+                            [value]="modValue.value">{{ modValue.displayName }}</mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>
@@ -81,7 +88,7 @@ import { AppNuiEventsService } from '../core/nui-events/nuiEvents.service';
         slideIn
     ]
 })
-export class VehicleMenuComponent implements OnInit {
+export class VehicleMenuComponent implements OnInit, OnDestroy {
     @Input()
     public active = false;
 
@@ -96,11 +103,19 @@ export class VehicleMenuComponent implements OnInit {
         return this.vehicleJSON?.Mods?.value.ModTypeSlots?.value ?? [];
     }
 
+    // used to save the selected mod type when starting to hover options
+    public modTypeValueOnSelectionStart: ModValue | null = null;
+    public isModTypeSelectionActive = false;
+
     constructor(private events: AppNuiEventsService) {
     }
 
     public ngOnInit() {
         this.updateVehicleData();
+    }
+
+    public ngOnDestroy() {
+        this.restoreModType();
     }
 
     public async updateVehicleData() {
@@ -121,11 +136,51 @@ export class VehicleMenuComponent implements OnInit {
         }
     }
 
-    public async updateVehicleMod(modType: VehicleModType, modValue: number) {
+    public async onModTypeSelectionChange(modType: VehicleModType, modValue: number) {
+        this.updateVehicleMod(modType, modValue);
+        this.isModTypeSelectionActive = false;
+        this.modTypeValueOnSelectionStart = null;
+    }
+
+    /* updateData parameter is useful to prevent the ui from resetting its data when e.g hovering over options */
+    public async updateVehicleMod(modType: VehicleModType, modValue: number, updateData = true) {
         const vehicleHandle = this.vehicleJSON?.Handle?.value;
         if (vehicleHandle) {
             await this.events.emitNuiCallback(Callback.UpdateVehicleMod, { vehicleHandle, modType, modValue });
-            this.updateVehicleData();
+            if (updateData) {
+                this.updateVehicleData();
+            }
+        }
+    }
+
+    public onSelectOpenChanged(opened: boolean, modType: VehicleModType, modValue: number) {
+        if (opened) {
+            this.modTypeValueOnSelectionStart = { modValue, modType };
+            this.isModTypeSelectionActive = true;
+        } else {
+            // only false when closed without selecting a new value
+            this.restoreModType();
+            this.modTypeValueOnSelectionStart = null;
+            this.isModTypeSelectionActive = false;
+        }
+    }
+
+    public onMouseEnterModType(modType: VehicleModType, modValue: number) {
+        if (this.isModTypeSelectionActive) {
+            this.updateVehicleMod(modType, modValue, false);
+        }
+    }
+
+    public onMouseLeaveModType() {
+        if (this.isModTypeSelectionActive) {
+            this.restoreModType(false);
+        }
+    }
+
+    private restoreModType(updateData = true) {
+        if (this.modTypeValueOnSelectionStart) {
+            const {modType, modValue} = this.modTypeValueOnSelectionStart;
+            this.updateVehicleMod(modType, modValue, updateData);
         }
     }
 }
