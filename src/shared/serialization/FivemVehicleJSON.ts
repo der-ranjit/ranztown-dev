@@ -129,8 +129,8 @@ export class FivemModCollectionJSON {
 
 export interface ModTypeSlot {
     slotType: VehicleModType,
-    slotValues: ModTypeValue[]
-    slotValueCount: number;
+    slotValues: ModTypeValue[],
+    selectedValue: ModTypeValue,
     slotVariation: boolean;
 }
 export interface ModTypeValue {

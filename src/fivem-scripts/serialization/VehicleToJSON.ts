@@ -99,7 +99,6 @@ export function VehicleToJSON(vehicle: Vehicle): FivemVehicleJSON {
 
 function VehicleModCollectionToJSON(modCollection: VehicleModCollection): FivemModCollectionJSON {
     const result: FivemModCollectionJSON = {};
-
     result.ModTypeSlots = toFivemJSONProperty(ModCollectionToModTypeSlots(modCollection));
     result.ColorCombination = toFivemJSONProperty(modCollection.ColorCombination);
     result.ColorCombinationCount = toFivemJSONProperty(modCollection.ColorCombinationCount, READ_ONLY);
@@ -139,10 +138,11 @@ function ModCollectionToModTypeSlots(modCollection: VehicleModCollection): ModTy
     const modSlots = modCollection.getAllMods();
     for (let slot of modSlots) {
         const slotType = slot.ModType;
-        const slotValues: ModTypeValue[] = [{
+        const stockValue: ModTypeValue = {
             displayName: "stock",
             value: -1
-        }];
+        }
+        const slotValues: ModTypeValue[] = [ stockValue ];
         for (let i = 0; i < slot.ModCount - 1; i++) {
             const modSlotValueName = GetLabelText(GetModTextLabel(slot.Vehicle.Handle, slot.ModType, i));
             slotValues.push({
@@ -150,13 +150,13 @@ function ModCollectionToModTypeSlots(modCollection: VehicleModCollection): ModTy
                 value: i
             });
         }
-        const slotValueCount = slot.ModCount;
+        const selectedValue = slotValues.find(value => value.value === slot.Index) ?? stockValue;
         const slotVariation = slot.Variation
         modTypeSlots.push({
             slotType,
-            slotValueCount,
             slotValues,
-            slotVariation
+            slotVariation,
+            selectedValue
         })
     }
 

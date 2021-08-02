@@ -29,8 +29,8 @@ import { AppNuiEventsService } from '../core/nui-events/nuiEvents.service';
         <div class="vehicleEditorContainer" *ngIf="active" [@slideIn]="'right'">
             <div class="overflowWrapper">
                 <mat-form-field *ngFor="let slot of modSlots" appearance="fill">
-                    <mat-label>{{ slot.slotType | modSlotName}}</mat-label>
-                    <mat-select (selectionChange)="updateVehicleMod(slot.slotType, $event.value)">
+                    <mat-label>{{ slot.slotType | modSlotName }}</mat-label>
+                    <mat-select (selectionChange)="updateVehicleMod(slot.slotType, $event.value)" [value]="slot.selectedValue.value">
                         <mat-option *ngFor="let modValue of slot.slotValues" [value]="modValue.value">{{ modValue.displayName }}</mat-option>
                     </mat-select>
                 </mat-form-field>
