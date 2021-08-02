@@ -13,6 +13,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatMenuModule} from '@angular/material/menu';
 import { MatIconModule} from '@angular/material/icon';
+import { MatSelectModule} from '@angular/material/select';
+
 
 import { VirtualScrollerModule } from 'ngx-virtual-scroller';
 import { AppRoutingModule } from './app-routing.module';
@@ -65,7 +67,8 @@ import { ModSlotNamePipe } from './vehicleMenu/modSlotName.pipe';
         BrowserAnimationsModule,
         VirtualScrollerModule,
         MatMenuModule,
-        MatIconModule
+        MatIconModule,
+        MatSelectModule
     ],
     providers: [
         { provide: AppNuiEventsService, useValue: AppNuiEventsService.getInstance() }

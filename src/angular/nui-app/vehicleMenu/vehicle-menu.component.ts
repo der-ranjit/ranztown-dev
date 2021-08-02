@@ -13,12 +13,6 @@ import { AppNuiEventsService } from '../core/nui-events/nuiEvents.service';
 @Component({
     selector: 'nui-app-vehicle-menu',
     template: `
-        <div class="rightMenu" *ngIf="active" [@slideIn]="'right'">
-            <div *ngFor="let slot of modSlots">
-                <div>{{ slot.slotType | modSlotName}}</div>
-                <div *ngFor="let modValue of slot.slotValues" (click)="updateVehicleMod(slot.slotType, modValue.value)">{{ modValue.displayName }} : {{ modValue.value }}</div>
-            </div>
-        </div>
         <div class="vehicleListContainer" *ngIf="active" [@slideIn]="'left'" (@slideIn.done)="onCloseAnimationDone($event)">
             <app-virtual-filter-list #scroll
                 [items]="vehiclesNames"
@@ -32,28 +26,43 @@ import { AppNuiEventsService } from '../core/nui-events/nuiEvents.service';
                 </div>
             </app-virtual-filter-list>
         </div>
+        <div class="vehicleEditorContainer" *ngIf="active" [@slideIn]="'right'">
+            <div class="overflowWrapper">
+                <mat-form-field *ngFor="let slot of modSlots" appearance="fill">
+                    <mat-label>{{ slot.slotType | modSlotName}}</mat-label>
+                    <mat-select (selectionChange)="updateVehicleMod(slot.slotType, $event.value)">
+                        <mat-option *ngFor="let modValue of slot.slotValues" [value]="modValue.value">{{ modValue.displayName }}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </div>
 `,
     styles: [`
         :host {
+            position: relative;
             display: flex;
             flex: 1;
             flex-direction: column;
-            max-width: 300px;
             overflow: hidden;
         }
-        .rightMenu {
+        .overflowWrapper {
+            overflow-y: scroll;
+            display: flex;
+            flex-direction: column;
+        }
+        .vehicleEditorContainer {
             position: absolute;
             right: 0px;
-            width: 300px;
-            background-color: white;
-            opacity: .8;
+            display: flex;
+            flex-direction: column;
+            max-height: 100%;
             max-width: 300px;
-            max-height: 600px;
-            overflow-y: scroll;
+            background-color: var(--background-color);
         }
         .vehicleListContainer {
             display: flex;
             flex-direction: column;
+            max-width: 300px;
             overflow: hidden;
             background-color: var(--background-color);
         }
