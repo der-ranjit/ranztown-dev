@@ -37,10 +37,9 @@ export class VehicleManager {
     @NuiCallbackListener(Callback.ChangeVehicleColor)
     private async handleChangeVehicleColorEvent(event: Callback.ChangeVehicleColor): Promise<void> {
         const data = event.data;
-        if (data != null) {
+        if (data != null && Cfx.Game.PlayerPed.isInAnyVehicle()) {
             const primary = cssHexStringToRgb(event.data.primaryColor);
             const secondary = cssHexStringToRgb(event.data.secondaryColor);
-            // TODO error handling
             const playerVehicle = Cfx.Game.PlayerPed.CurrentVehicle;
             // TODO alpha (rgba)
             if (primary != null) {
@@ -50,6 +49,14 @@ export class VehicleManager {
                 playerVehicle.Mods.CustomSecondaryColor = Color.fromRgb(secondary.r, secondary.g, secondary.b);
 
             }
+        }
+    }
+
+    @NuiCallbackListener(Callback.UpdateVehicleMod)
+    private async handleUpdateVehicleModEvent(event: Callback.UpdateVehicleMod): Promise<void> {
+        const data = event.data;
+        if (data != null) {
+            SetVehicleMod(data.vehicleHandle, data.modType, data.modValue, false);
         }
     }
 

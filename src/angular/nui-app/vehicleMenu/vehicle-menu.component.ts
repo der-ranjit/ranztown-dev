@@ -1,10 +1,11 @@
 import { AnimationEvent } from '@angular/animations';
 import { Component, Input, OnInit, Output } from '@angular/core';
+import { VehicleModType } from 'fivem-js';
 import { Subject } from 'rxjs';
 
 import { Callback } from '../../../shared/nui-events';
 import { GetPlayerVehicleData } from '../../../shared/nui-events/callbacks';
-import { FivemVehicleJSON, isFivemVehicleJSON } from '../../../shared/serialization/FivemVehicleJSON';
+import { FivemVehicleJSON, isFivemVehicleJSON, ModTypeSlot } from '../../../shared/serialization/FivemVehicleJSON';
 import { Vehicles } from '../../../shared/Vehicles';
 import { slideIn } from '../core/animations';
 import { AppNuiEventsService } from '../core/nui-events/nuiEvents.service';
@@ -12,8 +13,14 @@ import { AppNuiEventsService } from '../core/nui-events/nuiEvents.service';
 @Component({
     selector: 'nui-app-vehicle-menu',
     template: `
+        <div class="rightMenu" *ngIf="active" [@slideIn]="'right'">
+            <div *ngFor="let slot of modSlots">
+                <div>{{ slot.slotType | modSlotName}}</div>
+                <div *ngFor="let modValue of slot.slotValues" (click)="updateVehicleMod(slot.slotType, modValue.value)">{{ modValue.displayName }} : {{ modValue.value }}</div>
+            </div>
+        </div>
         <div class="vehicleListContainer" *ngIf="active" [@slideIn]="'left'" (@slideIn.done)="onCloseAnimationDone($event)">
-        <app-virtual-filter-list #scroll
+            <app-virtual-filter-list #scroll
                 [items]="vehiclesNames"
                 [filterLabel]="'vehicle name'"
                 [filterDescription]="'press enter or click to spawn'"
@@ -33,6 +40,16 @@ import { AppNuiEventsService } from '../core/nui-events/nuiEvents.service';
             flex-direction: column;
             max-width: 300px;
             overflow: hidden;
+        }
+        .rightMenu {
+            position: absolute;
+            right: 0px;
+            width: 300px;
+            background-color: white;
+            opacity: .8;
+            max-width: 300px;
+            max-height: 600px;
+            overflow-y: scroll;
         }
         .vehicleListContainer {
             display: flex;
@@ -66,6 +83,10 @@ export class VehicleMenuComponent implements OnInit {
 
     public vehicleJSON: FivemVehicleJSON | null = null;
 
+    public get modSlots(): ModTypeSlot[] {
+        return this.vehicleJSON?.Mods?.value.ModTypeSlots?.value ?? [];
+    }
+
     constructor(private events: AppNuiEventsService) {
     }
 
@@ -80,13 +101,22 @@ export class VehicleMenuComponent implements OnInit {
         }
     }
 
-    public handleSpawn(carModel: string): void {
-        this.events.emitNuiCallback(Callback.SpawnVehicle, { model: carModel });
+    public async handleSpawn(carModel: string) {
+        await this.events.emitNuiCallback(Callback.SpawnVehicle, { model: carModel });
+        this.updateVehicleData();
     }
 
     public onCloseAnimationDone(event: AnimationEvent) {
         if (event.toState === 'void') {
             this.afterClose.next();
+        }
+    }
+
+    public async updateVehicleMod(modType: VehicleModType, modValue: number) {
+        const vehicleHandle = this.vehicleJSON?.Handle?.value;
+        if (vehicleHandle) {
+            await this.events.emitNuiCallback(Callback.UpdateVehicleMod, { vehicleHandle, modType, modValue });
+            this.updateVehicleData();
         }
     }
 }

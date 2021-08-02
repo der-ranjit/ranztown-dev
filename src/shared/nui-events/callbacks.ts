@@ -1,3 +1,4 @@
+import { VehicleModType } from "fivem-js/lib/enums/Vehicle";
 import { Vec3 } from "fivem-js/lib/utils/Vector3";
 
 import { UserSavedLocation } from "../storage/UserSavedLocation";
@@ -32,6 +33,7 @@ export class MovePlayerToLocation extends AbstractCallback<{location: UserSavedL
 export class FlyHigh extends AbstractCallback {}
 export class GetFileServerBaseUrl extends AbstractCallback<null, {baseUrl: string}> {}
 export class ChangeVehicleColor extends AbstractCallback<{primaryColor: string, secondaryColor: string}> {}
+export class UpdateVehicleMod extends AbstractCallback<{vehicleHandle: number, modType: VehicleModType, modValue: number}> {}
 export interface EntityInformation {
     handle: number;
     health: number;
