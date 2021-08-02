@@ -3,15 +3,16 @@ import * as Cfx from "fivem-js";
 import { CfxNuiEventsService, NuiCallbackListener, NuiCallbackEvents } from "./NuiEventsService";
 import { Callback, Message } from "../../shared/nui-events";
 import { Color } from "fivem-js";
+import { cssHexStringToRgb } from "../Colors";
 
 @NuiCallbackEvents
-export class VehicleSpawner {
-    private static instance: VehicleSpawner | null = null;
-    public static getInstance(): VehicleSpawner {
-        if (!VehicleSpawner.instance) {
-            VehicleSpawner.instance = new VehicleSpawner();
+export class VehicleManager {
+    private static instance: VehicleManager | null = null;
+    public static getInstance(): VehicleManager {
+        if (!VehicleManager.instance) {
+            VehicleManager.instance = new VehicleManager();
         }
-        return VehicleSpawner.instance;
+        return VehicleManager.instance;
     }
 
     private eventsService = CfxNuiEventsService.getInstance();
@@ -35,8 +36,8 @@ export class VehicleSpawner {
     private async handleChangeVehicleColorEvent(event: Callback.ChangeVehicleColor): Promise<void> {
         const data = event.data;
         if (data != null) {
-            const primary = this.cssHexStringToRgb(event.data.primaryColor);
-            const secondary = this.cssHexStringToRgb(event.data.secondaryColor);
+            const primary = cssHexStringToRgb(event.data.primaryColor);
+            const secondary = cssHexStringToRgb(event.data.secondaryColor);
             // TODO error handling
             const playerVehicle = Cfx.Game.PlayerPed.CurrentVehicle;
             // TODO alpha (rgba)
@@ -63,14 +64,4 @@ export class VehicleSpawner {
         }
         vehicle.RadioStation = Cfx.RadioStation.RadioOff;
     }
-
-    private cssHexStringToRgb(cssHexString: string) {
-        var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(cssHexString);
-        return result ? {
-          r: parseInt(result[1], 16),
-          g: parseInt(result[2], 16),
-          b: parseInt(result[3], 16)
-        } : null;
-      }
-
 }
