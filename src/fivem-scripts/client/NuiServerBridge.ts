@@ -1,4 +1,4 @@
-import { GetCurrentPlayerPosition, GetFileServerBaseUrl, GetUserLocations, MovePlayerToLocation, SaveUserLocation } from "../../shared/nui-events/callbacks";
+import { GetCurrentPlayerPosition, GetFileServerBaseUrl, GetUserLocations, IsAdmin, MovePlayerToLocation, SaveUserLocation } from "../../shared/nui-events/callbacks";
 import { UserLocationsUpdate } from "../../shared/nui-events/messages";
 import { UserSavedLocation } from "../../shared/storage/UserSavedLocation";
 import { Locations } from "./Locations";
@@ -21,6 +21,18 @@ export class NuiServerBridge {
         onNet("server:userLocationsUpdated", (locations: UserSavedLocation[]) => {
             this.events.emitNuiMessage(UserLocationsUpdate, { locations })
         });
+    }
+
+    @NuiCallbackListener(IsAdmin)
+    private async getIsAdmin(event: IsAdmin) {
+        emitNet("client:getIsAdmin");
+        const promise = new Promise<boolean>(resolve => {
+            onNet("server:emitIsAdmin", (isAdmin: boolean) => {
+                resolve(isAdmin)
+            })
+        });
+        const isAdmin = await promise;
+        return { isAdmin }
     }
 
     @NuiCallbackListener(GetUserLocations)

@@ -3,7 +3,7 @@ import { Component, Input, OnInit, Output, ViewChild } from "@angular/core";
 import { Vec3 } from "fivem-js/lib/utils/Vector3";
 import { BehaviorSubject, Subject } from "rxjs";
 
-import { GetCurrentPlayerPosition, GetUserLocations, MovePlayerToCoords, MovePlayerToLocation, SaveUserLocation } from "../../../shared/nui-events/callbacks";
+import { GetCurrentPlayerPosition, GetUserLocations, IsAdmin, MovePlayerToCoords, MovePlayerToLocation, SaveUserLocation } from "../../../shared/nui-events/callbacks";
 import { UserLocationsUpdate } from "../../../shared/nui-events/messages";
 import { UserSavedLocation } from "../../../shared/storage/UserSavedLocation";
 import { VirtualFilterListComponent } from "../common/virtualFilterList";
@@ -16,7 +16,7 @@ import { AppNuiEventsService } from "../core/nui-events/nuiEvents.service";
     selector: "nui-app-locations-menu",
     template: `
         <div class="locationsMenu" [@slideIn]="'left'" *ngIf="active" (@slideIn.done)="onCloseAnimationDone($event)">
-            <div>
+            <div *ngIf="isAdmin">
                 <input type="number" #x>
                 <input type="number" #y>
                 <input type="number" #z>
@@ -69,13 +69,15 @@ export class LocationsMenuComponent implements OnInit {
     public locations$ = new BehaviorSubject<UserSavedLocation[]>([]);
     public currentPlayerLocation: Vec3 = {x:0, y:0, z:0};
 
+    public isAdmin = false;
     constructor(
         private events: AppNuiEventsService,
         private fileUrlResolver: FileUrlResolver
     ) {}
 
-    public ngOnInit() {
+    public async ngOnInit() {
         this.requestUpdateUserLocations();
+        this.isAdmin = (await this.events.emitNuiCallback(IsAdmin, null)).isAdmin;
     }
 
     @NuiMessageListener(UserLocationsUpdate)

@@ -25,6 +25,7 @@ export class SpawnVehicle extends AbstractCallback<{ model: string }> {}
 export class ChangePed extends AbstractCallback<{ ped: string }> {}
 export class SetControlsDisabled extends AbstractCallback<{ disabled: boolean }> {}
 
+export class IsAdmin extends AbstractCallback <null, { isAdmin: boolean }> {}
 export class GetUserLocations extends AbstractCallback {}
 export class SaveUserLocation extends AbstractCallback<{location: UserSavedLocation}> {}
 export type PlayerPosition =  {x: number, y: number, z: number, heading: number};
