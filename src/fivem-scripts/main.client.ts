@@ -10,12 +10,17 @@ import { PedSpawner } from "./client/PedSpawner";
 import { NuiServerBridge } from "./client/NuiServerBridge";
 import { EntityManager } from "./client/EntityManager";
 import { FlyHigh } from "./client/FlyHigh";
+import { bootstrap } from "./client-server-shared/bootstrap";
 
-const vehicleManager = VehicleManager.getInstance();
-const pedSpawner = PedSpawner.getInstance();
-const eventsService = CfxNuiEventsService.getInstance();
-const menuControls = MenuControls.getInstance();
-const nuiServerBridge = NuiServerBridge.getInstance();
-const entityManager = EntityManager.getInstance();
-const flyHigh = FlyHigh.getInstance();
+const bootstrapped = [
+    MenuControls,
+    CfxNuiEventsService,
+    VehicleManager,
+    PedSpawner,
+    NuiServerBridge,
+    EntityManager,
+    FlyHigh
+];
+
+bootstrap(bootstrapped);
 

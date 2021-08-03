@@ -2,12 +2,14 @@
 import "@citizenfx/server";
 // init screen-shot basic script
 import "./screenshot-basic/server";
+
 import { AdminDatabase } from "./server/storage/AdminsDatabase";
 import { UserLocationsDatabase } from "./server/storage/UserLocationsDatabase";
+import { bootstrap } from "./client-server-shared/bootstrap";
 
-init();
+const bootstrapped = [
+    AdminDatabase,
+    UserLocationsDatabase
+];
 
-async function init() {
-    const userLocationsDatabase = await UserLocationsDatabase.getInstance();
-    const adminDatabase = await AdminDatabase.getInstance();
-}
+bootstrap(bootstrapped);
