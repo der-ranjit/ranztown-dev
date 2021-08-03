@@ -1,8 +1,8 @@
 import * as Cfx from "fivem-js";
 import { Entity } from "fivem-js";
 
-import { Callback, Message } from "../../shared/nui-events";
-import { NuiMode } from "../../shared/nui-events/messages";
+import { Callback, Message } from "../../angular-fivem-shared/nui-events";
+import { NuiMode } from "../../angular-fivem-shared/nui-events/messages";
 import { CfxNuiEventsService, NuiCallbackEvents, NuiCallbackListener } from "./NuiEventsService";
 import { raycastFromScreenPointerToWorld } from "./NuiRaycast";
 

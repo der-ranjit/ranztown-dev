@@ -1,6 +1,6 @@
 import * as Cfx from "fivem-js";
 import { Vector3 } from "fivem-js";
-import { Vector2 } from "../../shared/Vector";
+import { Vector2 } from "../../angular-fivem-shared/Vector";
 import { Vector3Ext } from "../Vector";
 
 export function raycastFromScreenPointerToWorld(intersectionFlags = 30, ignoredEntity = 0, raycastLength = 50.0) {

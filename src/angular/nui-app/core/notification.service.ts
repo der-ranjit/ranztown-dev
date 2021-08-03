@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { MatSnackBar } from "@angular/material/snack-bar";
 
-import { Message } from "../../../shared/nui-events";
+import { Message } from "../../../angular-fivem-shared/nui-events";
 import { BaseNuiService } from "./nui-events/base.service";
 import { NuiMessageEvents, NuiMessageListener } from "./nui-events/decorators";
 

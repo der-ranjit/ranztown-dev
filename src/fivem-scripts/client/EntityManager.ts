@@ -1,11 +1,11 @@
 import { Vector3, Entity, Vehicle } from "fivem-js";
 
 import { NuiCallbackEvents, NuiCallbackListener } from "./NuiEventsService";
-import { DeleteEntity, GetEntityDataAtNuiCursor, GetEntityData, UpdateEntity, EntityType } from "../../shared/nui-events/callbacks";
+import { DeleteEntity, GetEntityDataAtNuiCursor, GetEntityData, UpdateEntity, EntityType } from "../../angular-fivem-shared/nui-events/callbacks";
 import { raycastFromScreenPointerToWorld } from "./NuiRaycast";
-import { isVec3 } from "../../shared/Vector";
-import { FivemEntityJSON } from "../../shared/serialization/FivemEntityJSON";
-import { FivemVehicleJSON } from "../../shared/serialization/FivemVehicleJSON";
+import { isVec3 } from "../../angular-fivem-shared/Vector";
+import { FivemEntityJSON } from "../../angular-fivem-shared/serialization/FivemEntityJSON";
+import { FivemVehicleJSON } from "../../angular-fivem-shared/serialization/FivemVehicleJSON";
 import { VehicleToJSON } from "./serialization/VehicleToJSON";
 import { EntityToJSON } from "./serialization/EntityToJSON";
 

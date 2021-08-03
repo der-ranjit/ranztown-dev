@@ -2,8 +2,8 @@ import { AnimationEvent } from '@angular/animations';
 import { Component, Input, Output } from '@angular/core';
 import { Subject } from 'rxjs';
 
-import { Peds } from '../../../shared/Peds';
-import { Callback } from '../../../shared/nui-events';
+import { Peds } from '../../../angular-fivem-shared/Peds';
+import { Callback } from '../../../angular-fivem-shared/nui-events';
 import { slideIn } from '../core/animations';
 import { AppNuiEventsService } from '../core/nui-events/nuiEvents.service';
 

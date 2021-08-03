@@ -1,8 +1,8 @@
 import * as Cfx from "fivem-js";
 import { Vector3 } from "fivem-js";
-import { MovePlayerToCoords, PlayerPosition } from "../../shared/nui-events/callbacks";
-import { UserSavedLocation } from "../../shared/storage/UserSavedLocation";
-import { isVec3 } from "../../shared/Vector";
+import { MovePlayerToCoords, PlayerPosition } from "../../angular-fivem-shared/nui-events/callbacks";
+import { UserSavedLocation } from "../../angular-fivem-shared/storage/UserSavedLocation";
+import { isVec3 } from "../../angular-fivem-shared/Vector";
 import { NuiCallbackEvents, NuiCallbackListener } from "./NuiEventsService";
 
 @NuiCallbackEvents

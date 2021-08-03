@@ -1,6 +1,6 @@
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
-import { Message } from "../../../../shared/nui-events";
+import { Message } from "../../../../angular-fivem-shared/nui-events";
 import { AppNuiEventsService } from "./nuiEvents.service";
 
 /* https://github.com/angular/angular/issues/30497 */

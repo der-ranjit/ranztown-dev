@@ -1,7 +1,7 @@
 import { Entity } from "fivem-js";
 
-import { FivemEntityJSON } from "../../../shared/serialization/FivemEntityJSON";
-import { READ_ONLY, toFivemJSONProperty, WRITE_ONLY } from "../../../shared/serialization/FivemJSON";
+import { FivemEntityJSON } from "../../../angular-fivem-shared/serialization/FivemEntityJSON";
+import { READ_ONLY, toFivemJSONProperty, WRITE_ONLY } from "../../../angular-fivem-shared/serialization/FivemJSON";
 
 export function EntityToJSON(entity: Entity): FivemEntityJSON {
     const result: FivemEntityJSON = {};

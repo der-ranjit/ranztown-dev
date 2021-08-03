@@ -1,10 +1,10 @@
 import * as Cfx from "fivem-js";
 
 import { CfxNuiEventsService, NuiCallbackListener, NuiCallbackEvents } from "./NuiEventsService";
-import { Callback, Message } from "../../shared/nui-events";
+import { Callback, Message } from "../../angular-fivem-shared/nui-events";
 import { Color } from "fivem-js";
 import { cssHexStringToRgb } from "../Colors";
-import { GetPlayerVehicleData } from "../../shared/nui-events/callbacks";
+import { GetPlayerVehicleData } from "../../angular-fivem-shared/nui-events/callbacks";
 import { VehicleToJSON } from "./serialization/VehicleToJSON";
 
 @NuiCallbackEvents

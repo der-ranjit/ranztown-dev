@@ -1,7 +1,7 @@
 import * as Cfx from "fivem-js";
 import { Vector3, WeaponHash } from "fivem-js";
 
-import { Callback } from "../../shared/nui-events";
+import { Callback } from "../../angular-fivem-shared/nui-events";
 import { NuiCallbackEvents, NuiCallbackListener } from "./NuiEventsService";
 
 @NuiCallbackEvents

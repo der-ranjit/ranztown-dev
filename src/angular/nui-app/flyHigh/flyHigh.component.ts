@@ -2,7 +2,7 @@ import { AnimationEvent } from "@angular/animations";
 import { Component, Input, Output } from "@angular/core";
 import { Subject } from "rxjs";
 
-import { FlyHigh } from "../../../shared/nui-events/callbacks";
+import { FlyHigh } from "../../../angular-fivem-shared/nui-events/callbacks";
 import { slideIn } from "../core/animations";
 import { AppNuiEventsService } from "../core/nui-events/nuiEvents.service";
 

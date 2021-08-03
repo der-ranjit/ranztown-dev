@@ -1,7 +1,7 @@
 import { Observable, Observer } from "rxjs";
 
-import { Callback, Message } from "../../shared/nui-events";
-import { DefaultCallbackResponse } from "../../shared/nui-events/callbacks";
+import { Callback, Message } from "../../angular-fivem-shared/nui-events";
+import { DefaultCallbackResponse } from "../../angular-fivem-shared/nui-events/callbacks";
 
 export class CfxNuiEventsService {
     private static instance: CfxNuiEventsService | null = null;

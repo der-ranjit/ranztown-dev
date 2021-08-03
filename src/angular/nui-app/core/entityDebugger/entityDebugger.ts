@@ -1,10 +1,10 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Vec3 } from "fivem-js/lib/utils/Vector3";
 
-import { GetEntityData, UpdateEntity } from "../../../../shared/nui-events/callbacks";
-import { FivemEntityJSON, isFivemEntityJSON } from "../../../../shared/serialization/FivemEntityJSON";
-import { FivemVehicleJSON } from "../../../../shared/serialization/FivemVehicleJSON";
-import { isVec3 } from "../../../../shared/Vector";
+import { GetEntityData, UpdateEntity } from "../../../../angular-fivem-shared/nui-events/callbacks";
+import { FivemEntityJSON, isFivemEntityJSON } from "../../../../angular-fivem-shared/serialization/FivemEntityJSON";
+import { FivemVehicleJSON } from "../../../../angular-fivem-shared/serialization/FivemVehicleJSON";
+import { isVec3 } from "../../../../angular-fivem-shared/Vector";
 import { AppNuiEventsService } from "../nui-events/nuiEvents.service";
 
 @Component({

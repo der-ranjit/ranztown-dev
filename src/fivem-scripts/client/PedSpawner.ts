@@ -1,6 +1,6 @@
 import { CfxNuiEventsService, NuiCallbackListener, NuiCallbackEvents } from "./NuiEventsService";
-import { Callback, Message } from "../../shared/nui-events";
-import { sleep } from "../../shared/utils";
+import { Callback, Message } from "../../angular-fivem-shared/nui-events";
+import { sleep } from "../../angular-fivem-shared/utils";
 
 @NuiCallbackEvents
 export class PedSpawner {

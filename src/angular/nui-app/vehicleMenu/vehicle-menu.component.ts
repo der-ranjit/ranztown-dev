@@ -3,10 +3,10 @@ import { Component, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { VehicleModType } from 'fivem-js';
 import { Subject } from 'rxjs';
 
-import { Callback } from '../../../shared/nui-events';
-import { GetPlayerVehicleData } from '../../../shared/nui-events/callbacks';
-import { FivemVehicleJSON, isFivemVehicleJSON, ModTypeSlot } from '../../../shared/serialization/FivemVehicleJSON';
-import { Vehicles } from '../../../shared/Vehicles';
+import { Callback } from '../../../angular-fivem-shared/nui-events';
+import { GetPlayerVehicleData } from '../../../angular-fivem-shared/nui-events/callbacks';
+import { FivemVehicleJSON, isFivemVehicleJSON, ModTypeSlot } from '../../../angular-fivem-shared/serialization/FivemVehicleJSON';
+import { Vehicles } from '../../../angular-fivem-shared/Vehicles';
 import { slideIn } from '../core/animations';
 import { AppNuiEventsService } from '../core/nui-events/nuiEvents.service';
 

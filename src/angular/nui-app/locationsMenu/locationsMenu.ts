@@ -3,9 +3,9 @@ import { Component, Input, OnInit, Output, ViewChild } from "@angular/core";
 import { Vec3 } from "fivem-js/lib/utils/Vector3";
 import { BehaviorSubject, Subject } from "rxjs";
 
-import { GetCurrentPlayerPosition, GetUserLocations, IsAdmin, MovePlayerToCoords, MovePlayerToLocation, SaveUserLocation } from "../../../shared/nui-events/callbacks";
-import { UserLocationsUpdate } from "../../../shared/nui-events/messages";
-import { UserSavedLocation } from "../../../shared/storage/UserSavedLocation";
+import { GetCurrentPlayerPosition, GetUserLocations, IsAdmin, MovePlayerToCoords, MovePlayerToLocation, SaveUserLocation } from "../../../angular-fivem-shared/nui-events/callbacks";
+import { UserLocationsUpdate } from "../../../angular-fivem-shared/nui-events/messages";
+import { UserSavedLocation } from "../../../angular-fivem-shared/storage/UserSavedLocation";
 import { VirtualFilterListComponent } from "../common/virtualFilterList";
 import { slideIn } from "../core/animations";
 import { FileUrlResolver } from "../core/fileUrlResolver";

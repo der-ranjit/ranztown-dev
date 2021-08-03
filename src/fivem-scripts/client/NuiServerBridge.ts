@@ -1,6 +1,6 @@
-import { GetCurrentPlayerPosition, GetFileServerBaseUrl, GetUserLocations, IsAdmin, MovePlayerToLocation, SaveUserLocation } from "../../shared/nui-events/callbacks";
-import { UserLocationsUpdate } from "../../shared/nui-events/messages";
-import { UserSavedLocation } from "../../shared/storage/UserSavedLocation";
+import { GetCurrentPlayerPosition, GetFileServerBaseUrl, GetUserLocations, IsAdmin, MovePlayerToLocation, SaveUserLocation } from "../../angular-fivem-shared/nui-events/callbacks";
+import { UserLocationsUpdate } from "../../angular-fivem-shared/nui-events/messages";
+import { UserSavedLocation } from "../../angular-fivem-shared/storage/UserSavedLocation";
 import { Locations } from "./Locations";
 import { CfxNuiEventsService, NuiCallbackEvents, NuiCallbackListener } from "./NuiEventsService";
 
