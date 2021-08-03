@@ -1,9 +1,10 @@
 import * as Cfx from "fivem-js";
 import { Vector3 } from "fivem-js";
-import { MovePlayerToCoords, PlayerPosition } from "../../angular-fivem-shared/nui-events/callbacks";
+import { GetCurrentPlayerPosition, GetUserLocations, MovePlayerToCoords, MovePlayerToLocation, PlayerPosition, SaveUserLocation } from "../../angular-fivem-shared/nui-events/callbacks";
+import { UserLocationsUpdate } from "../../angular-fivem-shared/nui-events/messages";
 import { UserSavedLocation } from "../../angular-fivem-shared/storage/UserSavedLocation";
 import { isVec3 } from "../../angular-fivem-shared/Vector";
-import { NuiCallbackEvents, NuiCallbackListener } from "./NuiEventsService";
+import { CfxNuiEventsService, NuiCallbackEvents, NuiCallbackListener } from "./NuiEventsService";
 
 @NuiCallbackEvents
 export class Locations {
@@ -15,6 +16,34 @@ export class Locations {
         return Locations.instance;
     }
 
+    private events = CfxNuiEventsService.getInstance();
+
+    constructor() {
+        onNet("server:userLocationsUpdated", (locations: UserSavedLocation[]) => {
+            this.events.emitNuiMessage(UserLocationsUpdate, { locations })
+        });
+    }
+
+    @NuiCallbackListener(GetUserLocations)
+    private async onGetUserLocations(event: GetUserLocations): Promise<void> {
+        emitNet("client:getUserLocations");
+    }
+
+    @NuiCallbackListener(SaveUserLocation)
+    private async onSaveUserLocation(event: SaveUserLocation): Promise<void> {
+        emitNet("client:saveUserLocation", event.data.location);
+    }
+
+    @NuiCallbackListener(MovePlayerToLocation)
+    private async onMovePlayerToLocation(event: MovePlayerToLocation): Promise<void> {
+        this.movePlayerToLocation(event.data.location);
+    }
+
+    @NuiCallbackListener(GetCurrentPlayerPosition)
+    private async onGetCurrentPlayerPosition(event: GetCurrentPlayerPosition) {
+        return this.getCurrentPlayerPosition();
+    }
+
     public movePlayerToLocation(location: UserSavedLocation): void {
         const player = Cfx.Game.Player.Character;
         const target = player.isInAnyVehicle() ? player.CurrentVehicle: player;
@@ -24,6 +53,13 @@ export class Locations {
         Cfx.GameplayCamera.RelativeHeading = 0;
     }
 
+    @NuiCallbackListener(MovePlayerToCoords)
+    public async teleportPlayer(event: MovePlayerToCoords) {
+        if (isVec3(event?.data?.coords)) {
+            Cfx.Game.PlayerPed.Position = Vector3.create(event.data.coords);
+        }
+    }
+
     public getCurrentPlayerPosition(): PlayerPosition {
         const player = Cfx.Game.Player.Character;
         const target = player.isInAnyVehicle() ? player.CurrentVehicle: player;
@@ -31,12 +67,5 @@ export class Locations {
         const {x, y, z} = target.Position;
         const heading = target.Heading;
         return {x, y, z, heading};
-    }
-
-    @NuiCallbackListener(MovePlayerToCoords)
-    public async teleportPlayer(event: MovePlayerToCoords) {
-        if (isVec3(event?.data?.coords)) {
-            Cfx.Game.PlayerPed.Position = Vector3.create(event.data.coords);
-        }
     }
 }

@@ -11,6 +11,8 @@ import { NuiServerBridge } from "./client/NuiServerBridge";
 import { EntityManager } from "./client/EntityManager";
 import { FlyHigh } from "./client/FlyHigh";
 import { bootstrap } from "./client-server-shared/bootstrap";
+import { AdminTools } from "./client/AdminTools";
+import { Locations } from "./client/Locations";
 
 const bootstrapped = [
     MenuControls,
@@ -19,7 +21,9 @@ const bootstrapped = [
     PedSpawner,
     NuiServerBridge,
     EntityManager,
-    FlyHigh
+    FlyHigh,
+    AdminTools,
+    Locations
 ];
 
 bootstrap(bootstrapped);
