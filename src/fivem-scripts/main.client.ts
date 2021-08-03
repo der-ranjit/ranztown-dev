@@ -7,7 +7,7 @@ import { MenuControls } from "./client/MenuControls";
 import { CfxNuiEventsService } from "./client/NuiEventsService";
 import { VehicleManager } from "./client/VehicleManager";
 import { PedSpawner } from "./client/PedSpawner";
-import { NuiServerBridge } from "./client/NuiServerBridge";
+import { ClientConfiguration } from "./client/ClientConfiguration";
 import { EntityManager } from "./client/EntityManager";
 import { FlyHigh } from "./client/FlyHigh";
 import { bootstrap } from "./client-server-shared/bootstrap";
@@ -19,7 +19,7 @@ const bootstrapped = [
     CfxNuiEventsService,
     VehicleManager,
     PedSpawner,
-    NuiServerBridge,
+    ClientConfiguration,
     EntityManager,
     FlyHigh,
     AdminTools,

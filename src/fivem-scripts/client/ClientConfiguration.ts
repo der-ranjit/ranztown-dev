@@ -2,13 +2,13 @@ import { GetFileServerBaseUrl } from "../../angular-fivem-shared/nui-events/call
 import { NuiCallbackEvents, NuiCallbackListener } from "./NuiEventsService";
 
 @NuiCallbackEvents
-export class NuiServerBridge {
-    private static instance: NuiServerBridge | null = null;
-    public static getInstance(): NuiServerBridge {
-        if (!NuiServerBridge.instance) {
-            NuiServerBridge.instance = new NuiServerBridge();
+export class ClientConfiguration {
+    private static instance: ClientConfiguration | null = null;
+    public static getInstance(): ClientConfiguration {
+        if (!ClientConfiguration.instance) {
+            ClientConfiguration.instance = new ClientConfiguration();
         }
-        return NuiServerBridge.instance;
+        return ClientConfiguration.instance;
     }
 
     @NuiCallbackListener(GetFileServerBaseUrl)
