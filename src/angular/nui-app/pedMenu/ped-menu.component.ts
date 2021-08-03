@@ -4,8 +4,8 @@ import { Subject } from 'rxjs';
 
 import { Peds } from '../../../angular-fivem-shared/Peds';
 import { Callback } from '../../../angular-fivem-shared/nui-events';
-import { slideIn } from '../core/animations';
-import { AppNuiEventsService } from '../core/nui-events/nuiEvents.service';
+import { slideIn } from '../_core/animations';
+import { AppNuiEventsService } from '../_core/nui-events/nuiEvents.service';
 
 @Component({
     selector: 'nui-app-ped-menu',

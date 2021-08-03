@@ -3,8 +3,8 @@ import { Component, Input, Output } from "@angular/core";
 import { Subject } from "rxjs";
 
 import { FlyHigh } from "../../../angular-fivem-shared/nui-events/callbacks";
-import { slideIn } from "../core/animations";
-import { AppNuiEventsService } from "../core/nui-events/nuiEvents.service";
+import { slideIn } from "../_core/animations";
+import { AppNuiEventsService } from "../_core/nui-events/nuiEvents.service";
 
 @Component({
     selector: "nui-app-fly-high",

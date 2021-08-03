@@ -1,11 +1,11 @@
 import { Component, ViewChild } from '@angular/core';
 import { Message } from '../../angular-fivem-shared/nui-events';
 import { NuiMode } from '../../angular-fivem-shared/nui-events/messages';
-import { fade, slideIn } from './core/animations';
-import { NuiMessageEvents, NuiMessageListener } from './core/nui-events/decorators';
+import { fade, slideIn } from './_core/animations';
+import { NuiMessageEvents, NuiMessageListener } from './_core/nui-events/decorators';
 
 // init screen-shot basic script
-import "./core/screenshot-basic";
+import "./_core/screenshot-basic";
 import { EntityContextMenuComponent } from './entityContextMenu/entityContextMenu';
 
 type MenuType = 'vehicleMenu' | 'pedMenu' |'locationMenu' | 'flyHighSpecial' | null;

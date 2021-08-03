@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { slideIn } from '../core/animations';
+import { slideIn } from '../_core/animations';
 
 declare const wheelnav: any;
 

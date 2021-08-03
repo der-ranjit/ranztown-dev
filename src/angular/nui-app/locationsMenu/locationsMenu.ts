@@ -6,11 +6,11 @@ import { BehaviorSubject, Subject } from "rxjs";
 import { GetCurrentPlayerPosition, GetUserLocations, IsAdmin, MovePlayerToCoords, MovePlayerToLocation, SaveUserLocation } from "../../../angular-fivem-shared/nui-events/callbacks";
 import { UserLocationsUpdate } from "../../../angular-fivem-shared/nui-events/messages";
 import { UserSavedLocation } from "../../../angular-fivem-shared/storage/UserSavedLocation";
-import { VirtualFilterListComponent } from "../common/virtualFilterList";
-import { slideIn } from "../core/animations";
-import { FileUrlResolver } from "../core/fileUrlResolver";
-import { NuiMessageEvents, NuiMessageListener } from "../core/nui-events/decorators";
-import { AppNuiEventsService } from "../core/nui-events/nuiEvents.service";
+import { VirtualFilterListComponent } from "../_core/virtualFilterList";
+import { slideIn } from "../_core/animations";
+import { FileUrlResolver } from "../_core/fileUrlResolver";
+import { NuiMessageEvents, NuiMessageListener } from "../_core/nui-events/decorators";
+import { AppNuiEventsService } from "../_core/nui-events/nuiEvents.service";
 
 @Component({
     selector: "nui-app-locations-menu",

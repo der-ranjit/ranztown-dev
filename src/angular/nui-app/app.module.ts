@@ -17,23 +17,22 @@ import { MatSelectModule} from '@angular/material/select';
 
 
 import { VirtualScrollerModule } from 'ngx-virtual-scroller';
-import { AppRoutingModule } from './app-routing.module';
 import { AppRootComponent } from './app-root.component';
 
-import { NotificationService } from './core/notification.service';
+import { NotificationService } from './_core/notification.service';
 import { VehicleMenuComponent } from './vehicleMenu/vehicle-menu.component';
 import { CircularMenuComponent } from './circularMenu/circular-menu.component';
 import { PedMenuComponent } from './pedMenu/ped-menu.component';
 import { FlyHighComponent } from './flyHigh/flyHigh.component';
-import { AppNuiEventsService } from './core/nui-events/nuiEvents.service';
-import { ExclusiveInputDirective } from './core/exclusiveInput.directive';
+import { AppNuiEventsService } from './_core/nui-events/nuiEvents.service';
+import { ExclusiveInputDirective } from './_core/exclusiveInput.directive';
 import { LocationsMenuComponent } from './locationsMenu/locationsMenu';
-import { FileUrlResolver } from './core/fileUrlResolver';
-import { ResolveFileUrlPipe } from './core/resolveFileUrl.pipe';
-import { ThemeChooserButtonComponent } from './core/themeChooserButton';
-import { VirtualFilterListComponent } from './common/virtualFilterList';
+import { FileUrlResolver } from './_core/fileUrlResolver';
+import { ResolveFileUrlPipe } from './_core/resolveFileUrl.pipe';
+import { ThemeChooserButtonComponent } from './_core/themeChooserButton';
+import { VirtualFilterListComponent } from './_core/virtualFilterList';
 import { EntityContextMenuComponent } from './entityContextMenu/entityContextMenu';
-import { EntityDebuggerComponent } from './core/entityDebugger/entityDebugger';
+import { EntityDebuggerComponent } from './_core/entityDebugger/entityDebugger';
 import { ModSlotNamePipe } from './vehicleMenu/modSlotName.pipe';
 
 @NgModule({
@@ -65,7 +64,6 @@ import { ModSlotNamePipe } from './vehicleMenu/modSlotName.pipe';
         DragDropModule,
         MatExpansionModule,
         MatAutocompleteModule,
-        AppRoutingModule,
         BrowserAnimationsModule,
         VirtualScrollerModule,
         MatMenuModule,
