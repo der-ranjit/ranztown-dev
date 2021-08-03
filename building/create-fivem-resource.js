@@ -34,8 +34,9 @@ function createFXManifest() {
     const description = FiveMResourceConfig.description ?? "Angular-NUI";
 
         // *.ts/*.js files are automatically moved to dist path by tsc, but *.lua files have to be copied manually
-    glob.sync(`${RESOURCE_SCRIPTS_PATH}/*.lua`)
-        .forEach(file => fs.copyFileSync(file, `${DIST_PATH}/${path.basename(file)}`))
+    fse.ensureDir(`${DIST_PATH}/lua`);
+    glob.sync(`${RESOURCE_SCRIPTS_PATH}/_lua/*.lua`)
+        .forEach(file => fs.copyFileSync(file, `${DIST_PATH}/lua/${path.basename(file)}`))
     // *.ts/*.js files are automatically moved to dist path by tsc, but *.lua files have to be handled manually
     let resourceFilesNames = glob.sync(`${DIST_PATH}/**/*.*`)
         // filter out possibly existing fxmanifest.lua; it should not appear in the files list
@@ -75,6 +76,7 @@ function copyFilesToResourceTarget() {
     const distFiles = glob.sync(`${DIST_PATH}/**/*.*`).filter(file => file.indexOf("assets") === -1)
     // make sure subfolder for nui-app exists so fse shuts up; this needs to be refactored so hard
     fse.ensureDir(`${TARGET_PATH}`);
+    fse.ensureDir(`${TARGET_PATH}/lua`);
     fse.ensureDir(`${TARGET_PATH}/nui-app`);
     distFiles.forEach(file => {
         fse.copyFileSync(file, getAssetCopyPath(file, TARGET_PATH), )
