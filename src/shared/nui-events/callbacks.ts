@@ -30,6 +30,7 @@ export class SaveUserLocation extends AbstractCallback<{location: UserSavedLocat
 export type PlayerPosition =  {x: number, y: number, z: number, heading: number};
 export class GetCurrentPlayerPosition extends AbstractCallback<null, PlayerPosition> {}
 export class MovePlayerToLocation extends AbstractCallback<{location: UserSavedLocation}> {}
+export class MovePlayerToCoords extends AbstractCallback<{coords: Vec3}> {}
 export class FlyHigh extends AbstractCallback {}
 export class GetFileServerBaseUrl extends AbstractCallback<null, {baseUrl: string}> {}
 export class ChangeVehicleColor extends AbstractCallback<{primaryColor: string, secondaryColor: string}> {}

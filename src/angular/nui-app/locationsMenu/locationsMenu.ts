@@ -1,8 +1,9 @@
 import { AnimationEvent } from "@angular/animations";
 import { Component, Input, OnInit, Output, ViewChild } from "@angular/core";
+import { Vec3 } from "fivem-js/lib/utils/Vector3";
 import { BehaviorSubject, Subject } from "rxjs";
 
-import { GetCurrentPlayerPosition, GetUserLocations, MovePlayerToLocation, SaveUserLocation } from "../../../shared/nui-events/callbacks";
+import { GetCurrentPlayerPosition, GetUserLocations, MovePlayerToCoords, MovePlayerToLocation, SaveUserLocation } from "../../../shared/nui-events/callbacks";
 import { UserLocationsUpdate } from "../../../shared/nui-events/messages";
 import { UserSavedLocation } from "../../../shared/storage/UserSavedLocation";
 import { VirtualFilterListComponent } from "../common/virtualFilterList";
@@ -15,6 +16,12 @@ import { AppNuiEventsService } from "../core/nui-events/nuiEvents.service";
     selector: "nui-app-locations-menu",
     template: `
         <div class="locationsMenu" [@slideIn]="'left'" *ngIf="active" (@slideIn.done)="onCloseAnimationDone($event)">
+            <div>
+                <input type="number" #x>
+                <input type="number" #y>
+                <input type="number" #z>
+                <button (click)="teleport(x.value, y.value, z.value)"> tp </button>
+            </div>
             <button mat-raised-button
                 [disabled]="!isLocationNameValid(scroll.currentFilterValue)"
                 (click)="saveCurrentUserLocation()">Save current</button>
@@ -60,6 +67,7 @@ export class LocationsMenuComponent implements OnInit {
     private virtualFilterList!: VirtualFilterListComponent;
 
     public locations$ = new BehaviorSubject<UserSavedLocation[]>([]);
+    public currentPlayerLocation: Vec3 = {x:0, y:0, z:0};
 
     constructor(
         private events: AppNuiEventsService,
@@ -82,6 +90,15 @@ export class LocationsMenuComponent implements OnInit {
 
     public onLocationClick(location: UserSavedLocation) {
         this.events.emitNuiCallback(MovePlayerToLocation, { location });
+    }
+
+    public teleport(x: string, y: string, z: string) {
+        const coords = {
+            x: parseInt(x),
+            y: parseInt(y),
+            z: parseInt(z),
+         };
+        this.events.emitNuiCallback(MovePlayerToCoords, { coords } );
     }
 
     public isLocationNameValid(locationName: string): boolean {
