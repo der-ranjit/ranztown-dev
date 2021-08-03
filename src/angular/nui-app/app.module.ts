@@ -22,6 +22,7 @@ import { AppRootComponent } from './app-root.component';
 
 import { NotificationService } from './core/notification.service';
 import { VehicleMenuComponent } from './vehicleMenu/vehicle-menu.component';
+import { CircularMenuComponent } from './circularMenu/circular-menu.component';
 import { PedMenuComponent } from './pedMenu/ped-menu.component';
 import { FlyHighComponent } from './flyHigh/flyHigh.component';
 import { AppNuiEventsService } from './core/nui-events/nuiEvents.service';
@@ -39,6 +40,7 @@ import { ModSlotNamePipe } from './vehicleMenu/modSlotName.pipe';
     declarations: [
         AppRootComponent,
         VehicleMenuComponent,
+        CircularMenuComponent,
         PedMenuComponent,
         FlyHighComponent,
         ExclusiveInputDirective,

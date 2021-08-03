@@ -1,5 +1,6 @@
 const ShellPlugin = require("webpack-shell-plugin-next");
 const DefinePlugin = require("webpack/lib/DefinePlugin");
+const CopyPlugin = require("copy-webpack-plugin");
 const { FiveMResourceConfig } = require("./fivem-resource-config");
 
 const resourceName = FiveMResourceConfig.resourceName;
@@ -27,6 +28,13 @@ module.exports = (config, options, targetOptions) => {
             new DefinePlugin({
                 RESOURCE_NAME: JSON.stringify(resourceName)
             }),
+            //to is relative to root
+            new CopyPlugin({
+                patterns: [
+                    { from: 'node_modules/wheelnav/js/dist/raphael.min.js', to: './' },
+                    { from: 'node_modules/wheelnav/js/dist/wheelnav.min.js', to: './' },
+                ],
+            }),  
             new ShellPlugin({
                 onBuildEnd: {
                     scripts: ["npm run nui:copy-assets"]
@@ -37,6 +45,5 @@ module.exports = (config, options, targetOptions) => {
             })
         );
     }
-
     return config;
 }
