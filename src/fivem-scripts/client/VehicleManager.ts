@@ -3,7 +3,7 @@ import * as Cfx from "fivem-js";
 import { CfxNuiEventsService, NuiCallbackListener, NuiCallbackEvents } from "./NuiEventsService";
 import { Callback, Message } from "../../angular-fivem-shared/nui-events";
 import { Color } from "fivem-js";
-import { cssHexStringToRgb } from "../Colors";
+import { cssHexStringToRgb } from "../client-server-shared/Colors";
 import { GetPlayerVehicleData } from "../../angular-fivem-shared/nui-events/callbacks";
 import { VehicleToJSON } from "./serialization/VehicleToJSON";
 

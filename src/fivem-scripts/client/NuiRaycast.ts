@@ -1,7 +1,7 @@
 import * as Cfx from "fivem-js";
 import { Vector3 } from "fivem-js";
 import { Vector2 } from "../../angular-fivem-shared/Vector";
-import { Vector3Ext } from "../Vector";
+import { Vector3Ext } from "../client-server-shared/Vector";
 
 export function raycastFromScreenPointerToWorld(intersectionFlags = 30, ignoredEntity = 0, raycastLength = 50.0) {
     const cameraRotation = Cfx.GameplayCamera.Rotation;
