@@ -1,7 +1,7 @@
 import { VehicleModType } from "fivem-js/lib/enums/Vehicle";
 import { Vec3 } from "fivem-js/lib/utils/Vector3";
 
-import { UserSavedLocation } from "../storage/UserSavedLocation";
+import { UserSavedLocation } from "../serialization/UserSavedLocation";
 import { FivemEntityJSON } from "../serialization/FivemEntityJSON";
 import { FivemVehicleJSON } from "../serialization/FivemVehicleJSON";
 

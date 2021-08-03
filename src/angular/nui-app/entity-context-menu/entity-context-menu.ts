@@ -5,7 +5,7 @@ import { DeleteEntity, EntityType, GetEntityDataAtNuiCursor } from "../../../ang
 import { FivemEntityJSON, isFivemEntityJSON } from "../../../angular-fivem-shared/serialization/FivemEntityJSON";
 import { FivemVehicleJSON, isFivemVehicleJSON } from "../../../angular-fivem-shared/serialization/FivemVehicleJSON";
 import { sleep } from "../../../angular-fivem-shared/utils";
-import { AppNuiEventsService } from "../_core/nui-events/nuiEvents.service";
+import { AppNuiEventsService } from "../_core/nui-events/nui-events.service";
 
 @Component({
     selector: "app-entity-context-menu",

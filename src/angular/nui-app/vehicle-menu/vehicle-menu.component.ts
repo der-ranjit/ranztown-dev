@@ -6,9 +6,9 @@ import { Subject } from 'rxjs';
 import { Callback } from '../../../angular-fivem-shared/nui-events';
 import { GetPlayerVehicleData } from '../../../angular-fivem-shared/nui-events/callbacks';
 import { FivemVehicleJSON, isFivemVehicleJSON, ModTypeSlot } from '../../../angular-fivem-shared/serialization/FivemVehicleJSON';
-import { Vehicles } from '../../../angular-fivem-shared/Vehicles';
+import { Vehicles } from '../../../angular-fivem-shared/gta-data/Vehicles';
 import { slideIn } from '../_core/animations';
-import { AppNuiEventsService } from '../_core/nui-events/nuiEvents.service';
+import { AppNuiEventsService } from '../_core/nui-events/nui-events.service';
 
 type ModValue = {modType: VehicleModType, modValue: number};
 

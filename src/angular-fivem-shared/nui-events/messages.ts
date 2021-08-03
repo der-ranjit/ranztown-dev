@@ -1,4 +1,4 @@
-import { UserSavedLocation } from "../storage/UserSavedLocation";
+import { UserSavedLocation } from "../serialization/UserSavedLocation";
 
 export abstract class AbstractMessage<D = void> {
     /**

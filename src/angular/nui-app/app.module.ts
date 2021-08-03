@@ -20,20 +20,20 @@ import { VirtualScrollerModule } from 'ngx-virtual-scroller';
 import { AppRootComponent } from './app-root.component';
 
 import { NotificationService } from './_core/notification.service';
-import { VehicleMenuComponent } from './vehicleMenu/vehicle-menu.component';
-import { CircularMenuComponent } from './circularMenu/circular-menu.component';
-import { PedMenuComponent } from './pedMenu/ped-menu.component';
-import { FlyHighComponent } from './flyHigh/flyHigh.component';
-import { AppNuiEventsService } from './_core/nui-events/nuiEvents.service';
-import { ExclusiveInputDirective } from './_core/exclusiveInput.directive';
-import { LocationsMenuComponent } from './locationsMenu/locationsMenu';
-import { FileUrlResolver } from './_core/fileUrlResolver';
-import { ResolveFileUrlPipe } from './_core/resolveFileUrl.pipe';
-import { ThemeChooserButtonComponent } from './_core/themeChooserButton';
-import { VirtualFilterListComponent } from './_core/virtualFilterList';
-import { EntityContextMenuComponent } from './entityContextMenu/entityContextMenu';
-import { EntityDebuggerComponent } from './_core/entityDebugger/entityDebugger';
-import { ModSlotNamePipe } from './vehicleMenu/modSlotName.pipe';
+import { VehicleMenuComponent } from './vehicle-menu/vehicle-menu.component';
+import { CircularMenuComponent } from './circular-menu/circular-menu.component';
+import { PedMenuComponent } from './ped-menu/ped-menu.component';
+import { FlyHighComponent } from './fly-high/fly-high.component';
+import { AppNuiEventsService } from './_core/nui-events/nui-events.service';
+import { ExclusiveInputDirective } from './_core/exclusive-input.directive';
+import { LocationsMenuComponent } from './locations-menu/locations-menu';
+import { FileUrlResolver } from './_core/file-url-resolver';
+import { ResolveFileUrlPipe } from './_core/resolve-file-url.pipe';
+import { ThemeChooserButtonComponent } from './_core/theme-chooser-button';
+import { VirtualFilterListComponent } from './_core/virtual-filter-list';
+import { EntityContextMenuComponent } from './entity-context-menu/entity-context-menu';
+import { EntityDebuggerComponent } from './_core/entity-debugger/entity-debugger';
+import { ModSlotNamePipe } from './vehicle-menu/mod-slot-name.pipe';
 
 @NgModule({
     declarations: [

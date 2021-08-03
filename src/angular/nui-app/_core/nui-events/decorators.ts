@@ -1,7 +1,7 @@
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { Message } from "../../../../angular-fivem-shared/nui-events";
-import { AppNuiEventsService } from "./nuiEvents.service";
+import { AppNuiEventsService } from "./nui-events.service";
 
 /* https://github.com/angular/angular/issues/30497 */
 /* Unique symbol to prevent naming collisions. Used to store functions marked by @NuiCallbackListener in target class */

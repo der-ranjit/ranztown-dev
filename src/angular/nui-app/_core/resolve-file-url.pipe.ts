@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from "@angular/core";
-import { FileUrlResolver } from "./fileUrlResolver";
+import { FileUrlResolver } from "./file-url-resolver";
 
 @Pipe({name: "resolveFileUrl"})
 export class ResolveFileUrlPipe implements PipeTransform {

@@ -2,10 +2,10 @@ import { AnimationEvent } from '@angular/animations';
 import { Component, Input, Output } from '@angular/core';
 import { Subject } from 'rxjs';
 
-import { Peds } from '../../../angular-fivem-shared/Peds';
+import { Peds } from '../../../angular-fivem-shared/gta-data/Peds';
 import { Callback } from '../../../angular-fivem-shared/nui-events';
 import { slideIn } from '../_core/animations';
-import { AppNuiEventsService } from '../_core/nui-events/nuiEvents.service';
+import { AppNuiEventsService } from '../_core/nui-events/nui-events.service';
 
 @Component({
     selector: 'nui-app-ped-menu',

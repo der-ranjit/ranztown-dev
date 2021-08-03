@@ -4,7 +4,7 @@ import { Subject } from "rxjs";
 
 import { FlyHigh } from "../../../angular-fivem-shared/nui-events/callbacks";
 import { slideIn } from "../_core/animations";
-import { AppNuiEventsService } from "../_core/nui-events/nuiEvents.service";
+import { AppNuiEventsService } from "../_core/nui-events/nui-events.service";
 
 @Component({
     selector: "nui-app-fly-high",

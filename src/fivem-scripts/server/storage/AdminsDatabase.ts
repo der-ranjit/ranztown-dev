@@ -1,4 +1,4 @@
-import { User } from "../../../angular-fivem-shared/storage/User";
+import { User } from "../../../angular-fivem-shared/serialization/User";
 import { LOCALHOST, Identifiers } from "../Identifiers";
 import { LowDatabase } from "./LowDatabase.abstract";
 

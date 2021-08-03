@@ -6,7 +6,7 @@ import { NuiMessageEvents, NuiMessageListener } from './_core/nui-events/decorat
 
 // init screen-shot basic script
 import "./_core/screenshot-basic";
-import { EntityContextMenuComponent } from './entityContextMenu/entityContextMenu';
+import { EntityContextMenuComponent } from './entity-context-menu/entity-context-menu';
 
 type MenuType = 'vehicleMenu' | 'pedMenu' |'locationMenu' | 'flyHighSpecial' | null;
 

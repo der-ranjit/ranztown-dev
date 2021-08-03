@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { GetFileServerBaseUrl } from "../../../angular-fivem-shared/nui-events/callbacks";
-import { AppNuiEventsService } from "./nui-events/nuiEvents.service";
+import { AppNuiEventsService } from "./nui-events/nui-events.service";
 
 @Injectable({providedIn: "root"})
 export class FileUrlResolver {

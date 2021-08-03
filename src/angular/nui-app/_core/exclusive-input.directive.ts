@@ -1,6 +1,6 @@
 import { Directive, ElementRef, HostListener } from "@angular/core";
 import { Callback } from "../../../angular-fivem-shared/nui-events";
-import { AppNuiEventsService } from "./nui-events/nuiEvents.service";
+import { AppNuiEventsService } from "./nui-events/nui-events.service";
 
 @Directive({
     selector:"[exclusiveInput]"

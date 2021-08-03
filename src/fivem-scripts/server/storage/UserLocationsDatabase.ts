@@ -1,6 +1,6 @@
 import { ensureDirSync } from "fs-extra";
 import { relative, resolve } from "path";
-import { UserSavedLocation } from "../../../angular-fivem-shared/storage/UserSavedLocation";
+import { UserSavedLocation } from "../../../angular-fivem-shared/serialization/UserSavedLocation";
 import { requestClientScreenshot } from "../../screenshot-basic/server";
 import { Identifiers } from "../Identifiers";
 import { LowDatabase } from "./LowDatabase.abstract";

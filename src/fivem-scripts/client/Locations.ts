@@ -2,7 +2,7 @@ import * as Cfx from "fivem-js";
 import { Vector3 } from "fivem-js";
 import { GetCurrentPlayerPosition, GetUserLocations, MovePlayerToCoords, MovePlayerToLocation, PlayerPosition, SaveUserLocation } from "../../angular-fivem-shared/nui-events/callbacks";
 import { UserLocationsUpdate } from "../../angular-fivem-shared/nui-events/messages";
-import { UserSavedLocation } from "../../angular-fivem-shared/storage/UserSavedLocation";
+import { UserSavedLocation } from "../../angular-fivem-shared/serialization/UserSavedLocation";
 import { isVec3 } from "../../angular-fivem-shared/Vector";
 import { CfxNuiEventsService, NuiCallbackEvents, NuiCallbackListener } from "./NuiEventsService";
 

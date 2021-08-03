@@ -5,7 +5,7 @@ import { GetEntityData, UpdateEntity } from "../../../../angular-fivem-shared/nu
 import { FivemEntityJSON, isFivemEntityJSON } from "../../../../angular-fivem-shared/serialization/FivemEntityJSON";
 import { FivemVehicleJSON } from "../../../../angular-fivem-shared/serialization/FivemVehicleJSON";
 import { isVec3 } from "../../../../angular-fivem-shared/Vector";
-import { AppNuiEventsService } from "../nui-events/nuiEvents.service";
+import { AppNuiEventsService } from "../nui-events/nui-events.service";
 
 @Component({
     selector: "app-entity-debugger",
