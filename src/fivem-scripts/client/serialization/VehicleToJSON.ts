@@ -1,8 +1,8 @@
 import { Vehicle, VehicleModCollection } from "fivem-js";
 
 import { EntityToJSON } from "./EntityToJSON";
-import { READ_ONLY, toFivemJSONProperty, WRITE_ONLY } from "../../shared/serialization/FivemJSON";
-import { FivemModCollectionJSON, FivemVehicleJSON, ModTypeSlot, ModTypeValue } from "../../shared/serialization/FivemVehicleJSON";
+import { READ_ONLY, toFivemJSONProperty, WRITE_ONLY } from "../../../shared/serialization/FivemJSON";
+import { FivemModCollectionJSON, FivemVehicleJSON, ModTypeSlot, ModTypeValue } from "../../../shared/serialization/FivemVehicleJSON";
 
 export function VehicleToJSON(vehicle: Vehicle): FivemVehicleJSON {
     const entityJSON = EntityToJSON(vehicle);

@@ -6,8 +6,8 @@ import { raycastFromScreenPointerToWorld } from "./NuiRaycast";
 import { isVec3 } from "../../shared/Vector";
 import { FivemEntityJSON } from "../../shared/serialization/FivemEntityJSON";
 import { FivemVehicleJSON } from "../../shared/serialization/FivemVehicleJSON";
-import { VehicleToJSON } from "../serialization/VehicleToJSON";
-import { EntityToJSON } from "../serialization/EntityToJSON";
+import { VehicleToJSON } from "./serialization/VehicleToJSON";
+import { EntityToJSON } from "./serialization/EntityToJSON";
 
 @NuiCallbackEvents
 export class EntityManager {

@@ -5,7 +5,7 @@ import { Callback, Message } from "../../shared/nui-events";
 import { Color } from "fivem-js";
 import { cssHexStringToRgb } from "../Colors";
 import { GetPlayerVehicleData } from "../../shared/nui-events/callbacks";
-import { VehicleToJSON } from "../serialization/VehicleToJSON";
+import { VehicleToJSON } from "./serialization/VehicleToJSON";
 
 @NuiCallbackEvents
 export class VehicleManager {
