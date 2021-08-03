@@ -1,6 +1,6 @@
 export const LOCALHOST = "127.0.0.1";
 
-export namespace ServerUtils {
+export namespace Identifiers {
     export function getFivemId(source: number): string {
         const identifiers = getPlayerIdentifiers(source.toString());
         return identifiers.find(identifier => identifier.indexOf("fivem:") !== -1)!.replace(":", "_");

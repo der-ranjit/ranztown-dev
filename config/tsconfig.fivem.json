@@ -3,7 +3,7 @@
     "extends": "../tsconfig.json",
     "compilerOptions": {
         "outDir": "../dist",
-        "paths": { "*": ["../src/fivem-scripts/types/*"] },
+        "paths": { "*": ["../src/fivem-scripts/server/types/*"] },
         "types": ["@citizenfx/client", "@citizenfx/server", "fivem-js", "node"],
         "sourceMap": false,
         "strict": false

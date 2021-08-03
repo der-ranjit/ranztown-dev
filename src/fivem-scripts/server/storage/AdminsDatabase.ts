@@ -1,5 +1,5 @@
 import { User } from "../../../shared/storage/User";
-import { LOCALHOST, ServerUtils } from "../utils";
+import { LOCALHOST, Identifiers } from "../Identifiers";
 import { LowDatabase } from "./LowDatabase.abstract";
 
 export class AdminDatabase extends LowDatabase<User>{
@@ -20,10 +20,10 @@ export class AdminDatabase extends LowDatabase<User>{
     }
 
     private async emitIsAdmin(source: number) {
-        const id = ServerUtils.getFivemId(source);
+        const id = Identifiers.getFivemId(source);
         await this.read();
         const isAdminInDatabase = !!this.database.chain.find({userId: id}).value();
-        const isLocalHost = ServerUtils.getIp(source).indexOf(LOCALHOST) !== -1;
+        const isLocalHost = Identifiers.getIp(source).indexOf(LOCALHOST) !== -1;
         emitNet("server:emitIsAdmin", source, isAdminInDatabase || isLocalHost);
     }
 }

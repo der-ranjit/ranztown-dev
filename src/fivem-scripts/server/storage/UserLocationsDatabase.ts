@@ -2,7 +2,7 @@ import { ensureDirSync } from "fs-extra";
 import { relative, resolve } from "path";
 import { UserSavedLocation } from "../../../shared/storage/UserSavedLocation";
 import { requestClientScreenshot } from "../../screenshot-basic/server";
-import { ServerUtils } from "../utils";
+import { Identifiers } from "../Identifiers";
 import { LowDatabase } from "./LowDatabase.abstract";
 
 const resourcePath = resolve(GetResourcePath(GetCurrentResourceName()));
@@ -28,14 +28,14 @@ export class UserLocationsDatabase extends LowDatabase<UserSavedLocation>{
     }
 
     private async emitUserLocations(source: number) {
-        const id = ServerUtils.getFivemId(source);
+        const id = Identifiers.getFivemId(source);
         await this.read();
         const locations = this.database.chain.filter({userId: id}).value();
         emitNet("server:userLocationsUpdated", source, locations);
     }
 
     private async saveUserLocation(source: number, location: UserSavedLocation) {
-        const id = ServerUtils.getFivemId(source);
+        const id = Identifiers.getFivemId(source);
         const previewPath = await this.getClientScreenshot(id, location, source);
         // fix windows paths with replace
         const relativePreviewPath = relative(resourcePath, previewPath).replace(/\\/g, '/');;
