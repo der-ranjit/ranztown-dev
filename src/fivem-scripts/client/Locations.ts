@@ -1,6 +1,8 @@
 import * as Cfx from "fivem-js";
 import { Vector3 } from "fivem-js";
-import { GetCurrentPlayerPosition, GetUserLocations, MovePlayerToCoords, MovePlayerToLocation, PlayerPosition, SaveUserLocation } from "../../angular-fivem-shared/nui-events/callbacks";
+
+import { GetCurrentPlayerPosition, GetUserLocations, MovePlayerToCoords, MovePlayerToLocation, PlayerPosition,
+         SaveUserLocation, SetNoClipAboveGround } from "../../angular-fivem-shared/nui-events/callbacks";
 import { UserLocationsUpdate } from "../../angular-fivem-shared/nui-events/messages";
 import { UserSavedLocation } from "../../angular-fivem-shared/serialization/UserSavedLocation";
 import { isVec3 } from "../../angular-fivem-shared/Vector";
@@ -58,6 +60,11 @@ export class Locations {
         if (isVec3(event?.data?.coords)) {
             Cfx.Game.PlayerPed.Position = Vector3.create(event.data.coords);
         }
+    }
+
+    @NuiCallbackListener(SetNoClipAboveGround)
+    public async setNoClipAboveGround(event: SetNoClipAboveGround) {
+        exports[GetCurrentResourceName()].SetNoClipAboveGround(event.data.active);
     }
 
     public getCurrentPlayerPosition(): PlayerPosition {

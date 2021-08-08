@@ -44,9 +44,36 @@ config = {
 -- End Of Config
 --==--==--==--
 
+exports("SetNoClipAboveGround", function(active)
+    if active and not noclipActive then
+        toggleNoClipActive()
+    end
+    if not active and noclipActive then
+        toggleNoClipActive()
+    end
+    clipToGround = active
+end)
+
 noclipActive = false -- [[Wouldn't touch this.]]
 
+clipToGround = false
+
 index = 1 -- [[Used to determine the index of the speeds table.]]
+
+function toggleNoClipActive()
+    noclipActive = not noclipActive
+
+    if IsPedInAnyVehicle(PlayerPedId(), false) then
+        noclipEntity = GetVehiclePedIsIn(PlayerPedId(), false)
+    else
+        noclipEntity = PlayerPedId()
+    end
+
+    SetEntityCollision(noclipEntity, not noclipActive, not noclipActive)
+    FreezeEntityPosition(noclipEntity, noclipActive)
+    SetEntityInvincible(noclipEntity, noclipActive)
+    SetVehicleRadioEnabled(noclipEntity, not noclipActive) -- [[Stop radio from appearing when going upwards.]]
+end
 
 Citizen.CreateThread(function()
 
@@ -58,18 +85,7 @@ Citizen.CreateThread(function()
         Citizen.Wait(1)
 
         if IsControlJustPressed(1, config.controls.openKey) then
-            noclipActive = not noclipActive
-
-            if IsPedInAnyVehicle(PlayerPedId(), false) then
-                noclipEntity = GetVehiclePedIsIn(PlayerPedId(), false)
-            else
-                noclipEntity = PlayerPedId()
-            end
-
-            SetEntityCollision(noclipEntity, not noclipActive, not noclipActive)
-            FreezeEntityPosition(noclipEntity, noclipActive)
-            SetEntityInvincible(noclipEntity, noclipActive)
-            SetVehicleRadioEnabled(noclipEntity, not noclipActive) -- [[Stop radio from appearing when going upwards.]]
+            toggleNoClipActive()
         end
 
         if noclipActive then
@@ -121,14 +137,15 @@ Citizen.CreateThread(function()
             SetEntityRotation(noclipEntity, 0.0, 0.0, 0.0, 0, false)
             SetEntityHeading(noclipEntity, heading)
 
-            -- TODO make clipToGround optional
-            -- check position a little higher than current to prevent getting a topZero of 0 because we're underground
-            local _, topZ = GetGroundZFor_3dCoord(newPos.x, newPos.y, newPos.z + 2.5, 0);
             local newZ = newPos.z
-            -- topZ is zero when underground; so when already underground we would go further underground
-            if newPos.z < topZ and topZ > 0 then
-              -- put player on top of ground
-              newZ = topZ + 1
+            if clipToGround then
+              -- check position a little higher than current to prevent getting a topZero of 0 because we're underground
+              local _, topZ = GetGroundZFor_3dCoord(newPos.x, newPos.y, newPos.z + 2.5, 0);
+              -- topZ is zero when underground; so when already underground we would go further underground
+              if newPos.z < topZ and topZ > 0 then
+                -- put player on top of ground
+                newZ = topZ + 1
+              end
             end
             SetEntityCoordsNoOffset(noclipEntity, newPos.x, newPos.y, newZ, noclipActive, noclipActive, noclipActive)
         end

@@ -4,6 +4,7 @@ import { Vec3 } from "fivem-js/lib/utils/Vector3";
 import { UserSavedLocation } from "../serialization/UserSavedLocation";
 import { FivemEntityJSON } from "../serialization/FivemEntityJSON";
 import { FivemVehicleJSON } from "../serialization/FivemVehicleJSON";
+import { CheckpointPosition, Race } from "../Racing";
 
 export abstract class AbstractCallback<D = void, R = void> {
     /**
@@ -36,18 +37,15 @@ export class FlyHigh extends AbstractCallback {}
 export class GetFileServerBaseUrl extends AbstractCallback<null, {baseUrl: string}> {}
 export class ChangeVehicleColor extends AbstractCallback<{primaryColor: string, secondaryColor: string}> {}
 export class UpdateVehicleMod extends AbstractCallback<{vehicleHandle: number, modType: VehicleModType, modValue: number}> {}
-export interface EntityInformation {
-    handle: number;
-    health: number;
-    model: number;
-    networkId: number;
-    position: Vec3;
-    velocity: Vec3;
-    type: EntityType;
-}
+
 export type EntityType = "no entity" | "ped" | "vehicle" | "object";
 export class GetEntityDataAtNuiCursor extends AbstractCallback<null, FivemEntityJSON | null> {}
 export class GetEntityData extends AbstractCallback<{handle: number}, FivemEntityJSON | null> {}
 export class GetPlayerVehicleData extends AbstractCallback<null, FivemVehicleJSON | null> {}
 export class DeleteEntity extends AbstractCallback<{handle: number}> {}
 export class UpdateEntity extends AbstractCallback<{propertyPaths: string[], value: any, handle: number}> {}
+export class StartRace extends AbstractCallback<{race: Race}> {}
+export class StopRace extends AbstractCallback {}
+export class EditRaceAddTempPosition extends AbstractCallback<CheckpointPosition> {}
+export class EditRaceStopEdit extends AbstractCallback {}
+export class SetNoClipAboveGround extends AbstractCallback<{active: boolean}> {}
