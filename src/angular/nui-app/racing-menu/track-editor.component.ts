@@ -55,7 +55,7 @@ export class TrackEditorComponent implements OnInit, OnDestroy {
     public trackName = "";
 
     public checkpoints: CheckpointPosition[] = [];
-    public nextCheckpointClipToGround = false;
+    public nextCheckpointClipToGround = true;
     public nextCheckpointRadius = 10;
     public nextCheckpointColorInput = "#ffffff";
 
