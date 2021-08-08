@@ -78,7 +78,7 @@ export class RacingManager {
         this.currentCheckpoint?.show();
         this.movePlayerToStartPosition();
         this.freezePlayer(true);
-        await Text.createCountdown(["3", "2", "1"], 1000, "Go", 2, 6);
+        await Text.createCountdown(["3", "2", "1"], 1000, "Go", 2.0, 6.0);
         this.activeRaceTickHandler = setTick(() => this.raceLoop());
         this.freezePlayer(false);
     }
