@@ -1,9 +1,10 @@
 import { CheckpointIcon, Game, GameplayCamera } from "fivem-js";
-import { Vec3, Vector3 } from "fivem-js/lib/utils/Vector3";
+import { Vector3 } from "fivem-js/lib/utils/Vector3";
 
-import { StartRace, StopRace } from "../../../angular-fivem-shared/nui-events/callbacks";
+import { GetRaceTracks, StartRace, StopRace } from "../../../angular-fivem-shared/nui-events/callbacks";
+import { RaceTracksUpdated } from "../../../angular-fivem-shared/nui-events/messages";
 import {  CheckpointPosition, Race } from "../../../angular-fivem-shared/Racing";
-import { NuiCallbackEvents, NuiCallbackListener } from "../NuiEventsService";
+import { CfxNuiEventsService, NuiCallbackEvents, NuiCallbackListener } from "../NuiEventsService";
 import { RaceCheckpoint } from "./Checkpoint";
 import { EditRaceMode } from "./EditRaceMode";
 
@@ -16,6 +17,8 @@ export class RacingManager {
         }
         return RacingManager.instance;
     }
+
+    private events = CfxNuiEventsService.getInstance();
 
     private editRaceMode = EditRaceMode.getInstance();
 
@@ -32,6 +35,17 @@ export class RacingManager {
 
     private get currentCheckpoint(): RaceCheckpoint | null {
         return this.raceCheckpoints[this.activeCheckpointIndex] ?? null;
+    }
+
+    constructor() {
+        onNet("server:emitRaceTracks", (raceTracks: Race[]) => {
+            this.events.emitNuiMessage(RaceTracksUpdated, { raceTracks });
+        });
+    }
+
+    @NuiCallbackListener(GetRaceTracks)
+    private async onGetRaceTracks(event: GetRaceTracks): Promise<void> {
+        emitNet("client:getRaceTracks");
     }
 
     @NuiCallbackListener(StartRace)

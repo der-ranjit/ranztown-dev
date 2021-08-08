@@ -1,3 +1,4 @@
+import { Race } from "../Racing";
 import { UserSavedLocation } from "../serialization/UserSavedLocation";
 
 export abstract class AbstractMessage<D = void> {
@@ -14,3 +15,4 @@ export class Notification extends AbstractMessage<{ message: string }> {}
 export type NuiMode = "menu" | "inspector" | "inactive";
 export class SetNuiMode extends AbstractMessage<{ nuiMode: NuiMode }> {}
 export class UserLocationsUpdate extends AbstractMessage<{ locations: UserSavedLocation[] }> {}
+export class RaceTracksUpdated extends AbstractMessage<{raceTracks: Race[]}> {}

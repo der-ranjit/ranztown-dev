@@ -1,10 +1,12 @@
 import { AnimationEvent } from "@angular/animations";
-import { Component, Input, Output } from "@angular/core";
-import { Subject } from "rxjs";
-import { StartRace, StopRace } from "../../../angular-fivem-shared/nui-events/callbacks";
+import { Component, Input, OnInit, Output } from "@angular/core";
+import { BehaviorSubject, Subject } from "rxjs";
+import { GetRaceTracks, StartRace, StopRace } from "../../../angular-fivem-shared/nui-events/callbacks";
+import { RaceTracksUpdated } from "../../../angular-fivem-shared/nui-events/messages";
 import { Race } from "../../../angular-fivem-shared/Racing";
 
 import { slideIn } from "../_core/animations";
+import { NuiMessageEvents, NuiMessageListener } from "../_core/nui-events/decorators";
 import { AppNuiEventsService } from "../_core/nui-events/nui-events.service";
 
 
@@ -14,12 +16,12 @@ import { AppNuiEventsService } from "../_core/nui-events/nui-events.service";
         <div *ngIf="active" class="racing" [@slideIn]="'left'" (@slideIn.done)="onCloseAnimationDone($event)" >
             <ng-container *ngIf="!editModeActive">
                 <button mat-raised-button color="primary" (click)="editModeActive = true">create track</button>
-                <div *ngFor="let race of races">
+                <div *ngFor="let race of (raceTracks$ | async)">
                     <button mat-raised-button (click)="startRace(race)">start {{race.name}}</button>
                     <button mat-raised-button (click)="stopRace()">stop race</button>
                 </div>
             </ng-container>
-            <nui-track-editor *ngIf="editModeActive" (onTrackSaved)="races.push($event);editModeActive = false"></nui-track-editor>
+            <nui-track-editor *ngIf="editModeActive" (onTrackSaved)="editModeActive = false"></nui-track-editor>
         </div>
     `,
     styles: [`
@@ -41,7 +43,8 @@ import { AppNuiEventsService } from "../_core/nui-events/nui-events.service";
         slideIn
     ]
 })
-export class RacingMenuComponent {
+@NuiMessageEvents
+export class RacingMenuComponent implements OnInit {
     @Input()
     public active = false;
 
@@ -49,7 +52,7 @@ export class RacingMenuComponent {
     public afterClose = new Subject();
 
     public editModeActive = false;
-    public races: Race[] = [];
+    public raceTracks$ = new BehaviorSubject<Race[]>([]);
 
     constructor(private events: AppNuiEventsService) {}
 
@@ -57,6 +60,19 @@ export class RacingMenuComponent {
         if (event.toState === "void") {
             this.afterClose.next();
         }
+    }
+
+    public ngOnInit() {
+        this.requestUpdateRaceTracks()
+    }
+
+    @NuiMessageListener(RaceTracksUpdated)
+    private onRaceTracksUpdate(event: RaceTracksUpdated) {
+        setTimeout(() => this.raceTracks$.next(event.data.raceTracks), 0)
+    }
+
+    private requestUpdateRaceTracks() {
+        this.events.emitNuiCallback(GetRaceTracks, null);
     }
 
     public async startRace(race: Race) {

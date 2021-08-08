@@ -2,7 +2,7 @@ import { BlipSprite } from "fivem-js/lib/enums/Blip";
 import { CheckpointIcon } from "fivem-js/lib/enums/Checkpoint";
 import { Vector3 } from "fivem-js/lib/utils/Vector3";
 
-import { EditRaceAddTempPosition, EditRaceStopEdit } from "../../../angular-fivem-shared/nui-events/callbacks";
+import { EditRaceAddTempPosition, EditRaceSave, EditRaceStopEdit } from "../../../angular-fivem-shared/nui-events/callbacks";
 import { CheckpointPosition, Race } from "../../../angular-fivem-shared/Racing";
 import { NuiCallbackEvents, NuiCallbackListener } from "../NuiEventsService";
 import { RaceCheckpoint, RingTripleArrowGroundHeight } from "./Checkpoint";
@@ -35,6 +35,11 @@ export class EditRaceMode {
         if (event.data.position) {
             this.addTempCheckpointPosition(event.data);
         }
+    }
+
+    @NuiCallbackListener(EditRaceSave)
+    private async onSaveRace(event: EditRaceSave): Promise<void> {
+        emitNet("client:saveRaceTrack", event.data.track);
     }
 
     public stopEditRace() {
