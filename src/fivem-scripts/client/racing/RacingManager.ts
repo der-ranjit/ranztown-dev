@@ -30,9 +30,6 @@ export class RacingManager {
     private raceCheckpoints: RaceCheckpoint[] = [];
     private activeCheckpointIndex = -1;
     private currentRoundIndex = -1;
-    private counter: number | null = null ;
-    private counterText: Array<string> = ["3", "2", "1", "Go!"];
-    private activeCounterText: string = '';
 
     private isRaceActive(): boolean {
         return this.activeRaceName !== null && this.activeRaceName !== "";
@@ -71,7 +68,7 @@ export class RacingManager {
        this.stopActiveRace();
     }
 
-    private startRace(race: Race) {
+    private async startRace(race: Race) {
         this.editRaceMode.stopEditRace();
 
         this.activeRaceName = race.name;
@@ -79,12 +76,11 @@ export class RacingManager {
         this.raceCheckpoints = this.createCheckpointsForRace(race);
         this.activeCheckpointIndex = 0;
         this.currentCheckpoint?.show();
-        this.activeRaceTickHandler = setTick(() => this.raceLoop());
         this.movePlayerToStartPosition();
-        this.freezeEntity(true);
-        this.counter = 0;
-        this.activeCounterText = this.counterText[this.counter];
-        this.drawCountdown();
+        this.freezePlayer(true);
+        await Text.createCountdown(["3", "2", "1"], 1000, "Go", 2, 6);
+        this.activeRaceTickHandler = setTick(() => this.raceLoop());
+        this.freezePlayer(false);
     }
 
     private movePlayerToStartPosition() {
@@ -105,8 +101,6 @@ export class RacingManager {
         this.activeCheckpointIndex = -1;
         this.raceCheckpoints = [];
         this.raceStartPosition = null;
-        this.counter = null;
-        this.activeCounterText = '';
 
         if (this.activeRaceTickHandler != null) {
             clearTick(this.activeRaceTickHandler);
@@ -157,30 +151,14 @@ export class RacingManager {
         return resultCheckpoints;
     }
 
-    private freezeEntity(freeze: boolean) {
+    private freezePlayer(freeze: boolean) {
         if (Game.PlayerPed.isInAnyVehicle()) {
             FreezeEntityPosition(Game.PlayerPed.CurrentVehicle.Handle, freeze)
         }
         FreezeEntityPosition(Game.PlayerPed.Handle, freeze);
     }
 
-    private async drawCountdown() {
-        await sleep(1000);
-        if (this.counter !== null) {
-            this.counter += 1;
-            this.activeCounterText = this.counterText[this.counter];
-            if (this.counter < 4) {
-                this.drawCountdown();
-            } else {
-                this.freezeEntity(false);
-            }
-        }
-    }
-
     private raceLoop() {
-        if (this.activeCheckpointIndex === 0) {
-            Text.draw2DText(0.5, 0.4, this.activeCounterText, 3.0)
-        }
         if (this.currentCheckpoint) {
             const checkpointHit = Game.PlayerPed.Position.distance(this.currentCheckpoint.position) < this.currentCheckpoint.radius;
             if (checkpointHit) {
