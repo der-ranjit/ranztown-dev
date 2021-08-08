@@ -1,4 +1,4 @@
-import { CheckpointIcon, Game } from "fivem-js";
+import { CheckpointIcon, Game, GameplayCamera } from "fivem-js";
 import { Vec3, Vector3 } from "fivem-js/lib/utils/Vector3";
 
 import { StartRace, StopRace } from "../../../angular-fivem-shared/nui-events/callbacks";
@@ -69,6 +69,8 @@ export class RacingManager {
             const target = Game.PlayerPed.isInAnyVehicle() ? Game.PlayerPed.CurrentVehicle : Game.PlayerPed;
             target.Position = Vector3.create(this.raceStartPosition.position);
             target.Heading = this.raceStartPosition.heading;
+            // set camera to look in direction of heading
+            GameplayCamera.RelativeHeading = 0;
         }
     }
 
