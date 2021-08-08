@@ -6,10 +6,12 @@ import "./screenshot-basic/server";
 import { AdminDatabase } from "./server/storage/AdminsDatabase";
 import { UserLocationsDatabase } from "./server/storage/UserLocationsDatabase";
 import { bootstrap } from "./client-server-shared/bootstrap";
+import { RaceTrackDatabase } from "./server/storage/RaceTracksDatabase";
 
 const bootstrapped = [
     AdminDatabase,
-    UserLocationsDatabase
+    UserLocationsDatabase,
+    RaceTrackDatabase
 ];
 
 bootstrap(bootstrapped);

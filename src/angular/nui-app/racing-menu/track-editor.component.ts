@@ -2,8 +2,9 @@ import { Component, OnDestroy, OnInit, Output } from "@angular/core";
 import { Subject } from "rxjs";
 import { Color } from "fivem-js/lib/utils/Color";
 
-import { EditRaceAddTempPosition, EditRaceStopEdit, GetCurrentPlayerPosition, SetNoClipAboveGround } from "../../../angular-fivem-shared/nui-events/callbacks";
-import { CheckpointPosition, Race } from "../../../angular-fivem-shared/Racing";
+import { EditRaceAddTempPosition, EditRaceSave, EditRaceStopEdit, GetCurrentPlayerPosition,
+         SetNoClipAboveGround} from "../../../angular-fivem-shared/nui-events/callbacks";
+import { CheckpointPosition } from "../../../angular-fivem-shared/Racing";
 import { AppNuiEventsService } from "../_core/nui-events/nui-events.service";
 import { cssHexStringToRgb } from "../../../fivem-scripts/client-server-shared/Colors";
 
@@ -41,7 +42,7 @@ import { cssHexStringToRgb } from "../../../fivem-scripts/client-server-shared/C
 })
 export class TrackEditorComponent implements OnInit, OnDestroy {
     @Output()
-    public onTrackSaved = new Subject<Race>();
+    public onTrackSaved = new Subject<void>();
 
     public get canSave(): boolean {
         return this.trackName.length > 0
@@ -69,14 +70,16 @@ export class TrackEditorComponent implements OnInit, OnDestroy {
         this.events.emitNuiCallback(SetNoClipAboveGround, {active: false});
     }
 
-    public saveTrack() {
-        this.onTrackSaved.next({
+    public async saveTrack() {
+        const track = {
             name: this.trackName,
             description: this.trackDescription,
             defaultRounds: this.raceRounds,
             checkpointPositions: this.checkpoints
-        });
+        };
+        const result = await this.events.emitNuiCallback(EditRaceSave, { track });
         this.events.emitNuiCallback(EditRaceStopEdit, null);
+        this.onTrackSaved.next();
     }
 
     public async addCurrentPositionAsTempCheckpoint() {
