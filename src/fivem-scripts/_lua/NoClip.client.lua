@@ -88,39 +88,49 @@ Citizen.CreateThread(function()
                 end
                 setupScaleform("instructional_buttons")
             end
-				
+
 				DisableControls()
 
 			if IsDisabledControlPressed(0, config.controls.goForward) then
                 yoff = config.offsets.y
 			end
-			
+
             if IsDisabledControlPressed(0, config.controls.goBackward) then
                 yoff = -config.offsets.y
 			end
-			
+
             if IsDisabledControlPressed(0, config.controls.turnLeft) then
                 SetEntityHeading(noclipEntity, GetEntityHeading(noclipEntity)+config.offsets.h)
 			end
-			
+
             if IsDisabledControlPressed(0, config.controls.turnRight) then
                 SetEntityHeading(noclipEntity, GetEntityHeading(noclipEntity)-config.offsets.h)
 			end
-			
+
             if IsDisabledControlPressed(0, config.controls.goUp) then
                 zoff = config.offsets.z
 			end
-			
+
             if IsDisabledControlPressed(0, config.controls.goDown) then
                 zoff = -config.offsets.z
 			end
-			
+
             local newPos = GetOffsetFromEntityInWorldCoords(noclipEntity, 0.0, yoff * (currentSpeed + 0.3), zoff * (currentSpeed + 0.3))
             local heading = GetEntityHeading(noclipEntity)
             SetEntityVelocity(noclipEntity, 0.0, 0.0, 0.0)
             SetEntityRotation(noclipEntity, 0.0, 0.0, 0.0, 0, false)
             SetEntityHeading(noclipEntity, heading)
-            SetEntityCoordsNoOffset(noclipEntity, newPos.x, newPos.y, newPos.z, noclipActive, noclipActive, noclipActive)
+
+            -- TODO make clipToGround optional
+            -- check position a little higher than current to prevent getting a topZero of 0 because we're underground
+            local _, topZ = GetGroundZFor_3dCoord(newPos.x, newPos.y, newPos.z + 2.5, 0);
+            local newZ = newPos.z
+            -- topZ is zero when underground; so when already underground we would go further underground
+            if newPos.z < topZ and topZ > 0 then
+              -- put player on top of ground
+              newZ = topZ + 1
+            end
+            SetEntityCoordsNoOffset(noclipEntity, newPos.x, newPos.y, newZ, noclipActive, noclipActive, noclipActive)
         end
     end
 end)
