@@ -1,3 +1,4 @@
+import { clamp } from "fivem-js";
 import { sleep } from "../../../angular-fivem-shared/utils";
 
 export class Text {
@@ -14,26 +15,43 @@ export class Text {
         DrawText(x, y)
     }
 
-    public static async createCountdown(
+    public static createCountdown(
         steps: string[],
         intervalMS: number,
         finishText: string,
-        animationMinScale: number,
-        animationMaxScale: number
+        animationMinScaleFloat: number,
+        animationMaxScaleFloat: number
     ) {
-        let currentStep = 0;
-        let displayText = steps[currentStep];
-        const tickHandler = setTick(() => {
-            // TODO better centering
-            Text.draw2DText(0.5, 0.4, displayText, 3.0)
+        return new Promise<void>(async resolve => {
+            let currentStep = 0;
+            let displayText = steps[currentStep];
+            let currentAnimationScale = animationMaxScaleFloat;
+            let countdownEnded = false;
+
+            let stepStartTime = Date.now();
+            const tickHandler = setTick(() => {
+                const elapsed = Date.now() - stepStartTime;
+
+                const progress = elapsed/intervalMS;
+                currentAnimationScale = clamp((1 - progress) * animationMaxScaleFloat, animationMinScaleFloat, animationMaxScaleFloat);
+
+                if (elapsed >= intervalMS && !countdownEnded) {
+                    currentStep++;
+                    stepStartTime = Date.now();
+                    if (steps[currentStep] !== undefined) {
+                        displayText = steps[currentStep];
+                    } else {
+                        displayText = finishText;
+                        countdownEnded = true;
+                        resolve();
+                        // return when countdown has finished, and set a timeout to later stop the tick handler
+                        setTimeout(() => clearTick(tickHandler), intervalMS);
+                    }
+                }
+
+                // TODO better centering
+                Text.draw2DText(0.5, 0.4, displayText, currentAnimationScale)
+            })
         })
-        for (let step of steps) {
-            await sleep(intervalMS);
-            currentStep++;
-            displayText = steps[currentStep];
-        }
-        displayText = finishText;
-        // return when countdown has finished, and set a timeout to later stop the tick handler
-        setTimeout(() => clearTick(tickHandler), intervalMS);
     }
 }
