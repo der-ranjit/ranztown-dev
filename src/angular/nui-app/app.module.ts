@@ -14,6 +14,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatMenuModule} from '@angular/material/menu';
 import { MatIconModule} from '@angular/material/icon';
 import { MatSelectModule} from '@angular/material/select';
+import { MatCheckboxModule} from '@angular/material/checkbox';
+
 
 
 import { VirtualScrollerModule } from 'ngx-virtual-scroller';
@@ -34,6 +36,8 @@ import { VirtualFilterListComponent } from './_core/virtual-filter-list';
 import { EntityContextMenuComponent } from './entity-context-menu/entity-context-menu';
 import { EntityDebuggerComponent } from './_core/entity-debugger/entity-debugger';
 import { ModSlotNamePipe } from './vehicle-menu/mod-slot-name.pipe';
+import { RacingMenuComponent } from './racing-menu/racing-menu.component';
+import { TrackEditorComponent } from './racing-menu/track-editor.component';
 
 @NgModule({
     declarations: [
@@ -49,7 +53,9 @@ import { ModSlotNamePipe } from './vehicle-menu/mod-slot-name.pipe';
         VirtualFilterListComponent,
         EntityContextMenuComponent,
         EntityDebuggerComponent,
-        ModSlotNamePipe
+        ModSlotNamePipe,
+        RacingMenuComponent,
+        TrackEditorComponent
     ],
     imports: [
         BrowserModule,
@@ -68,7 +74,8 @@ import { ModSlotNamePipe } from './vehicle-menu/mod-slot-name.pipe';
         VirtualScrollerModule,
         MatMenuModule,
         MatIconModule,
-        MatSelectModule
+        MatSelectModule,
+        MatCheckboxModule
     ],
     providers: [
         { provide: AppNuiEventsService, useValue: AppNuiEventsService.getInstance() }

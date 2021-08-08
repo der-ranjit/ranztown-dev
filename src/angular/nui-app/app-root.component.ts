@@ -8,7 +8,7 @@ import { NuiMessageEvents, NuiMessageListener } from './_core/nui-events/decorat
 import "./_core/screenshot-basic";
 import { EntityContextMenuComponent } from './entity-context-menu/entity-context-menu';
 
-type MenuType = 'vehicleMenu' | 'pedMenu' |'locationMenu' | 'flyHighSpecial' | null;
+type MenuType = 'vehicleMenu' | 'pedMenu' |'locationMenu' | 'flyHighSpecial' | 'racing' | null;
 
 @Component({
     selector: 'nui-app-root',
@@ -20,6 +20,7 @@ type MenuType = 'vehicleMenu' | 'pedMenu' |'locationMenu' | 'flyHighSpecial' | n
             <button mat-raised-button [color]="(isSubMenuActive('pedMenu') ? 'primary' : null)" (click)="setMenuActive('pedMenu')">Ped Menu</button>
             <button mat-raised-button [color]="(isSubMenuActive('locationMenu')? 'primary' : null)" (click)="setMenuActive('locationMenu')">Locations Menu</button>
             <button mat-raised-button [color]="(isSubMenuActive('flyHighSpecial')? 'primary' : null)" (click)="setMenuActive('flyHighSpecial')">Fligh High Special</button>
+            <button mat-raised-button [color]="(isSubMenuActive('racing')? 'primary' : null)" (click)="setMenuActive('racing')">racing</button>
             <span class="toolbar-spacer"></span>
             <app-theme-chooser-button></app-theme-chooser-button>
         </mat-toolbar>
@@ -28,6 +29,7 @@ type MenuType = 'vehicleMenu' | 'pedMenu' |'locationMenu' | 'flyHighSpecial' | n
             <nui-app-ped-menu [active]="isMenuActive" (afterClose)="setMenuActive(null)" *ngIf="isSubMenuActive('pedMenu')"></nui-app-ped-menu>
             <nui-app-locations-menu [active]="isMenuActive" (afterClose)="setMenuActive(null)" *ngIf="isSubMenuActive('locationMenu')"></nui-app-locations-menu>
             <nui-app-fly-high [active]="isMenuActive" (afterClose)="setMenuActive(null)" *ngIf="isSubMenuActive('flyHighSpecial')"></nui-app-fly-high>
+            <nui-racing [active]="isMenuActive" (afterClose)="setMenuActive(null)" *ngIf="isSubMenuActive('racing')"></nui-racing>
         </div>
         <app-entity-context-menu *ngIf="isInspectorActive"></app-entity-context-menu>
 

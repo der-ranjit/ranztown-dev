@@ -1,0 +1,105 @@
+import { Component, OnDestroy, OnInit, Output } from "@angular/core";
+import { Subject } from "rxjs";
+import { Color } from "fivem-js/lib/utils/Color";
+
+import { EditRaceAddTempPosition, EditRaceStopEdit, GetCurrentPlayerPosition, SetNoClipAboveGround } from "../../../angular-fivem-shared/nui-events/callbacks";
+import { CheckpointPosition, Race } from "../../../angular-fivem-shared/Racing";
+import { AppNuiEventsService } from "../_core/nui-events/nui-events.service";
+import { cssHexStringToRgb } from "../../../fivem-scripts/client-server-shared/Colors";
+
+@Component({
+    selector: "nui-track-editor",
+    template: `
+        <div><button mat-raised-button color="primary" (click)="saveTrack()" [disabled]="!canSave">save</button></div>
+        <mat-form-field appearance="fill">
+            <mat-label>track name</mat-label>
+            <input type="text" matInput [(ngModel)]="trackName">
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>track description</mat-label>
+            <input type="textarea" matInput [(ngModel)]="trackDescription">
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>rounds number</mat-label>
+            <input type="number" min="1" matInput [(ngModel)]="raceRounds">
+        </mat-form-field>
+
+        <button mat-raised-button (click)="addCurrentPositionAsTempCheckpoint()">create checkpoint</button>
+        <div><mat-checkbox [(ngModel)]="nextCheckpointClipToGround">clip to ground</mat-checkbox></div>
+        <div><input type="number" [(ngModel)]="nextCheckpointRadius">radius</div>
+        <div><input type="color" [(ngModel)]="nextCheckpointColorInput">color</div>
+        <div *ngFor="let checkpoint of checkpoints;let i=index">
+            <div>{{i}}</div>
+            <!-- <div>{{ checkpoint | json }}</div> -->
+        </div>
+    `,
+    styles: [`
+        :host {
+            display: block;
+        }
+    `]
+})
+export class TrackEditorComponent implements OnInit, OnDestroy {
+    @Output()
+    public onTrackSaved = new Subject<Race>();
+
+    public get canSave(): boolean {
+        return this.trackName.length > 0
+            && this.checkpoints.length > 1
+            && this.raceRounds > 0
+    }
+
+    public raceRounds = 1;
+    public trackDescription = "";
+    public trackName = "";
+
+    public checkpoints: CheckpointPosition[] = [];
+    public nextCheckpointClipToGround = false;
+    public nextCheckpointRadius = 10;
+    public nextCheckpointColorInput = "#ffffff";
+
+    constructor(private events: AppNuiEventsService) {}
+
+    public ngOnInit() {
+        this.events.emitNuiCallback(SetNoClipAboveGround, {active: true});
+    }
+
+    public ngOnDestroy() {
+        this.events.emitNuiCallback(EditRaceStopEdit, null);
+        this.events.emitNuiCallback(SetNoClipAboveGround, {active: false});
+    }
+
+    public saveTrack() {
+        this.onTrackSaved.next({
+            name: this.trackName,
+            description: this.trackDescription,
+            defaultRounds: this.raceRounds,
+            checkpointPositions: this.checkpoints
+        });
+        this.events.emitNuiCallback(EditRaceStopEdit, null);
+    }
+
+    public async addCurrentPositionAsTempCheckpoint() {
+        const currentPosition = await this.events.emitNuiCallback(GetCurrentPlayerPosition, null);
+        const {x, y, z} = currentPosition;
+
+        const checkpointPosition: CheckpointPosition = {
+            position: {x, y, z},
+            heading: currentPosition.heading,
+            clipToGround: this.nextCheckpointClipToGround,
+            radius: this.nextCheckpointRadius,
+            color: this.createColorFromInputString()
+        };
+        this.events.emitNuiCallback(EditRaceAddTempPosition, checkpointPosition)
+        this.checkpoints.push(checkpointPosition);
+    }
+
+    private createColorFromInputString(): Color {
+        const rgbColor = cssHexStringToRgb(this.nextCheckpointColorInput);
+        let color = Color.white
+        if (rgbColor != null) {
+            color = Color.fromRgb(rgbColor.r, rgbColor.g, rgbColor.b)
+        }
+        return color;
+    }
+}

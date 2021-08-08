@@ -13,6 +13,7 @@ import { FlyHigh } from "./client/FlyHigh";
 import { bootstrap } from "./client-server-shared/bootstrap";
 import { AdminTools } from "./client/AdminTools";
 import { Locations } from "./client/Locations";
+import { RacingManager } from "./client/racing/RacingManager";
 
 const bootstrapped = [
     MenuControls,
@@ -23,7 +24,8 @@ const bootstrapped = [
     EntityManager,
     FlyHigh,
     AdminTools,
-    Locations
+    Locations,
+    RacingManager
 ];
 
 bootstrap(bootstrapped);

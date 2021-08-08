@@ -144,7 +144,7 @@ Citizen.CreateThread(function()
               -- topZ is zero when underground; so when already underground we would go further underground
               if newPos.z < topZ and topZ > 0 then
                 -- put player on top of ground
-                newZ = topZ + 1
+                newZ = topZ + 0.5
               end
             end
             SetEntityCoordsNoOffset(noclipEntity, newPos.x, newPos.y, newZ, noclipActive, noclipActive, noclipActive)
