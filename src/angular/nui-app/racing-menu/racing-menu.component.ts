@@ -1,7 +1,7 @@
 import { AnimationEvent } from "@angular/animations";
 import { Component, Input, OnInit, Output } from "@angular/core";
 import { BehaviorSubject, Subject } from "rxjs";
-import { GetRaceTracks, StartRace, StopRace } from "../../../angular-fivem-shared/nui-events/callbacks";
+import { GetRaceTracks, LoadTrackIDForAllPlayers, StartRace, StopRace } from "../../../angular-fivem-shared/nui-events/callbacks";
 import { RaceTracksUpdated } from "../../../angular-fivem-shared/nui-events/messages";
 import { Race } from "../../../angular-fivem-shared/Racing";
 
@@ -18,6 +18,7 @@ import { AppNuiEventsService } from "../_core/nui-events/nui-events.service";
                 <button mat-raised-button color="primary" (click)="editModeActive = true">create track</button>
                 <div *ngFor="let race of (raceTracks$ | async)">
                     <button mat-raised-button (click)="startRace(race)">start {{race.name}}</button>
+                    <button mat-raised-button (click)="startRaceForAll(race.id)">start4all {{race.name}}</button>
                     <button mat-raised-button (click)="stopRace()">stop race</button>
                 </div>
             </ng-container>
@@ -77,6 +78,10 @@ export class RacingMenuComponent implements OnInit {
 
     public async startRace(race: Race) {
         this.events.emitNuiCallback(StartRace, {race})
+    }
+
+    public async startRaceForAll(id: string) {
+        this.events.emitNuiCallback(LoadTrackIDForAllPlayers, {id})
     }
 
     public async stopRace() {

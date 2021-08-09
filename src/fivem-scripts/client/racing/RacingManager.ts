@@ -1,8 +1,7 @@
 import { CheckpointIcon, Game, GameplayCamera } from "fivem-js";
 import { Vector3 } from "fivem-js/lib/utils/Vector3";
-import { sleep } from "../../../angular-fivem-shared/utils";
 
-import { GetRaceTracks, StartRace, StopRace } from "../../../angular-fivem-shared/nui-events/callbacks";
+import { GetRaceTracks, LoadTrackIDForAllPlayers, StartRace, StopRace } from "../../../angular-fivem-shared/nui-events/callbacks";
 import { RaceTracksUpdated } from "../../../angular-fivem-shared/nui-events/messages";
 import {  CheckpointPosition, Race } from "../../../angular-fivem-shared/Racing";
 import { CfxNuiEventsService, NuiCallbackEvents, NuiCallbackListener } from "../NuiEventsService";
@@ -43,11 +42,22 @@ export class RacingManager {
         onNet("server:emitRaceTracks", (raceTracks: Race[]) => {
             this.events.emitNuiMessage(RaceTracksUpdated, { raceTracks });
         });
+        onNet("server:loadTrack", (track: Race) => this.handleServerLoadTrack(track));
     }
 
     @NuiCallbackListener(GetRaceTracks)
     private async onGetRaceTracks(event: GetRaceTracks): Promise<void> {
         emitNet("client:getRaceTracks");
+    }
+
+    @NuiCallbackListener(LoadTrackIDForAllPlayers)
+    private async onLoadTrackForAllPlayers(event: LoadTrackIDForAllPlayers): Promise<void> {
+        emitNet("client:loadTrackIDForAllPlayers", event.data.id);
+    }
+
+    private handleServerLoadTrack(race: Race) {
+        this.stopActiveRace();
+        this.startRace(race);
     }
 
     @NuiCallbackListener(StartRace)

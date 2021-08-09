@@ -72,6 +72,8 @@ export class TrackEditorComponent implements OnInit, OnDestroy {
 
     public async saveTrack() {
         const track = {
+            id: "unset",
+            userId: "unset",
             name: this.trackName,
             description: this.trackDescription,
             defaultRounds: this.raceRounds,

@@ -49,5 +49,6 @@ export class StopRace extends AbstractCallback {}
 export class EditRaceAddTempPosition extends AbstractCallback<CheckpointPosition> {}
 export class EditRaceStopEdit extends AbstractCallback {}
 export class EditRaceSave extends AbstractCallback<{track: Race}> {}
+export class LoadTrackIDForAllPlayers extends AbstractCallback<{id: string}> {}
 export class GetRaceTracks extends AbstractCallback {}
 export class SetNoClipAboveGround extends AbstractCallback<{active: boolean}> {}
