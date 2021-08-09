@@ -23,7 +23,7 @@ export enum VehicleMod14_Horn {
     Fa = 19,
     Sol = 20,
     La = 21,
-    TI = 22,
+    Ti = 22,
     Do_high = 23,
     Jazz_1 = 24,
     Jazz_2 = 25,
