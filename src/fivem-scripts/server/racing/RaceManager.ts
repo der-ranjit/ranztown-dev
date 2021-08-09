@@ -1,4 +1,4 @@
-import { RaceTrackDatabase } from "./storage/RaceTracksDatabase";
+import { RaceTrackDatabase } from "../storage/RaceTracksDatabase";
 
 export class RaceManager {
     private static instance: RaceManager | null = null;
