@@ -39,6 +39,7 @@ import { ModSlotNamePipe } from './vehicle-menu/mod-slot-name.pipe';
 import { RacingMenuComponent } from './racing-menu/racing-menu.component';
 import { TrackEditorComponent } from './racing-menu/track-editor.component';
 import { ModValueNamePipe } from './vehicle-menu/mod-value-name.pipe';
+import { CircularSliderComponent } from './_core/circular-slider';
 
 @NgModule({
     declarations: [
@@ -57,7 +58,8 @@ import { ModValueNamePipe } from './vehicle-menu/mod-value-name.pipe';
         ModSlotNamePipe,
         RacingMenuComponent,
         TrackEditorComponent,
-        ModValueNamePipe
+        ModValueNamePipe,
+        CircularSliderComponent
     ],
     imports: [
         BrowserModule,
