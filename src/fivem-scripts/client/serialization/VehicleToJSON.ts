@@ -139,7 +139,7 @@ function ModCollectionToModTypeSlots(modCollection: VehicleModCollection): ModTy
     for (let slot of modSlots) {
         const slotType = slot.ModType;
         const stockValue: ModTypeValue = {
-            displayName: "stock",
+            displayName: "Standard",
             value: -1
         }
         const slotValues: ModTypeValue[] = [ stockValue ];

@@ -30,17 +30,19 @@ type ModValue = {modType: VehicleModType, modValue: number};
         </div>
         <div class="vehicleEditorContainer" *ngIf="active" [@slideIn]="'right'">
             <div class="overflowWrapper">
-                <mat-form-field *ngFor="let slot of modSlots" appearance="fill">
-                    <mat-label>{{ slot.slotType | modSlotName }} ({{slot.slotValues.length}})</mat-label>
-                    <mat-select (selectionChange)="onModTypeSelectionChange(slot.slotType, $event.value)"
-                        (openedChange)="onSelectOpenChanged($event, slot.slotType, slot.selectedValue.value)"
-                        [value]="slot.selectedValue.value">
-                        <mat-option *ngFor="let modValue of slot.slotValues"
-                            (mouseenter)="onMouseEnterModType(slot.slotType, modValue.value)"
-                            (mouseleave)="onMouseLeaveModType()"
-                            [value]="modValue.value">{{ modValue.displayName }}</mat-option>
-                    </mat-select>
-                </mat-form-field>
+                <ng-container *ngFor="let slot of modSlots">
+                    <mat-form-field *ngIf="slot.slotValues.length > 1" appearance="fill">
+                        <mat-label>{{ slot.slotType | modSlotName }} ({{slot.slotValues.length}})</mat-label>
+                        <mat-select (selectionChange)="onModTypeSelectionChange(slot.slotType, $event.value)"
+                            (openedChange)="onSelectOpenChanged($event, slot.slotType, slot.selectedValue.value)"
+                            [value]="slot.selectedValue.value">
+                            <mat-option *ngFor="let modValue of slot.slotValues; let i = index;"
+                                (mouseenter)="onMouseEnterModType(slot.slotType, modValue.value)"
+                                (mouseleave)="onMouseLeaveModType()"
+                                [value]="modValue.value">{{ modValue.displayName | modValueName:slot.slotType:i}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </ng-container>
             </div>
         </div>
 `,

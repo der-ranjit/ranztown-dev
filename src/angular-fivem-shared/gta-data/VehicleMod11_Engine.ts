@@ -1,7 +1,7 @@
 export enum VehicleMod11_Engine {
-    StandardEngine = -1,
-    EMS_Improvement_1 = 0,
-    EMS_Improvement_2 = 1,
-    EMS_Improvement_3 = 2,
-    EMS_Improvement_4 = 3
+    "Standard Engine" = -1,
+    "EMS-Improvement 1" = 0,
+    "EMS-Improvement 2" = 1,
+    "EMS-Improvement 3" = 2,
+    "EMS-Improvement 4" = 3
 }

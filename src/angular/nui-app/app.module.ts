@@ -38,6 +38,7 @@ import { EntityDebuggerComponent } from './_core/entity-debugger/entity-debugger
 import { ModSlotNamePipe } from './vehicle-menu/mod-slot-name.pipe';
 import { RacingMenuComponent } from './racing-menu/racing-menu.component';
 import { TrackEditorComponent } from './racing-menu/track-editor.component';
+import { ModValueNamePipe } from './vehicle-menu/mod-value-name.pipe';
 
 @NgModule({
     declarations: [
@@ -55,7 +56,8 @@ import { TrackEditorComponent } from './racing-menu/track-editor.component';
         EntityDebuggerComponent,
         ModSlotNamePipe,
         RacingMenuComponent,
-        TrackEditorComponent
+        TrackEditorComponent,
+        ModValueNamePipe
     ],
     imports: [
         BrowserModule,
