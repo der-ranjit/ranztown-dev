@@ -142,7 +142,7 @@ Citizen.CreateThread(function()
               -- check position a little higher than current to prevent getting a topZero of 0 because we're underground
               local _, topZ = GetGroundZFor_3dCoord(newPos.x, newPos.y, newPos.z + 2.5, 0);
               -- topZ is zero when underground; so when already underground we would go further underground
-              if newPos.z < topZ and topZ > 0 then
+              if newPos.z < topZ + 0.5 and topZ > 0 then
                 -- put player on top of ground
                 newZ = topZ + 0.5
               end
