@@ -143,7 +143,7 @@ function ModCollectionToModTypeSlots(modCollection: VehicleModCollection): ModTy
             value: -1
         }
         const slotValues: ModTypeValue[] = [ stockValue ];
-        for (let i = 0; i < slot.ModCount - 1; i++) {
+        for (let i = 0; i < slot.ModCount; i++) {
             const modSlotValueName = GetLabelText(GetModTextLabel(slot.Vehicle.Handle, slot.ModType, i));
             slotValues.push({
                 displayName: modSlotValueName,
