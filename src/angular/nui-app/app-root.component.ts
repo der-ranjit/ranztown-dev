@@ -15,7 +15,7 @@ type MenuType = 'vehicleMenu' | 'pedMenu' |'locationMenu' | 'flyHighSpecial' | '
     template: `
         <button mat-raised-button @fade *ngIf="!isNuiActive" class="menuInfo" color="accent">Tap X to open menu - hold for inspect-mode</button>
         <button mat-raised-button @fade *ngIf="isInspectorActive" class="menuInfo" color="primary">inspect-mode right click an entity to inspect it</button>
-        <mat-toolbar *ngIf="isMenuActive" [@slideIn]="'top'">
+        <mat-toolbar *ngIf="isMenuActive" [@slideIn]="'top'" [style.padding.px]="4" [style.height]="'unset'">
             <button mat-raised-button [color]="(isSubMenuActive('vehicleMenu') ? 'primary' : null)" (click)="setMenuActive('vehicleMenu')">Vehicle Menu</button>
             <button mat-raised-button [color]="(isSubMenuActive('pedMenu') ? 'primary' : null)" (click)="setMenuActive('pedMenu')">Ped Menu</button>
             <button mat-raised-button [color]="(isSubMenuActive('locationMenu')? 'primary' : null)" (click)="setMenuActive('locationMenu')">Locations Menu</button>
