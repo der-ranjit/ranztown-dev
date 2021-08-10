@@ -1,5 +1,8 @@
+import { ClientLoadTrackIDForAllPlayers, ServerLoadTrack } from "../../client-server-shared/events";
+import { ClientEventListener, ClientEvents, ServerEventsService } from "../ServerEventsService";
 import { RaceTrackDatabase } from "../storage/RaceTracksDatabase";
 
+@ClientEvents
 export class RaceManager {
     private static instance: RaceManager | null = null;
     public static async getInstance(): Promise<RaceManager> {
@@ -10,16 +13,14 @@ export class RaceManager {
         return RaceManager.instance;
     }
 
+    private serverEvents = ServerEventsService.getInstance();
 
-    constructor() {
-        onNet("client:loadTrackIDForAllPlayers", (id: string) => this.loadTrackIDForAllPlayers(id));
-    }
-
-    private async loadTrackIDForAllPlayers(id: string) {
+    @ClientEventListener(ClientLoadTrackIDForAllPlayers)
+    private async loadTrackIDForAllPlayers(event: ClientLoadTrackIDForAllPlayers, source: number) {
         const tracksDatabase = await RaceTrackDatabase.getInstance();
-        const track = await tracksDatabase.getTrackById(id);
+        const track = await tracksDatabase.getTrackById(event.data.id);
         if (track != null) {
-            emitNet("server:loadTrack", -1, track)
+            this.serverEvents.emitNet(ServerLoadTrack, -1, { track });
         }
     }
 }

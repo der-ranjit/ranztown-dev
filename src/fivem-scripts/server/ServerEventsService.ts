@@ -20,8 +20,8 @@ export class ServerEventsService {
      */
     public emitNet<D, T extends AbstractEvent<D>>(
         eventType: EventConstructor<T,D>,
-        data: D | null = null,
-        clientIds: number | number[]
+        clientIds: number | number[],
+        data: D | null = null
     ): void {
         if (typeof clientIds === "number") {
             emitNet(eventType.name, clientIds, data);

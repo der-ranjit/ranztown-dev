@@ -4,12 +4,15 @@ import { Vector3 } from "fivem-js/lib/utils/Vector3";
 import { GetRaceTracks, LoadTrackIDForAllPlayers, StartRace, StopRace } from "../../../angular-fivem-shared/nui-events/callbacks";
 import { RaceTracksUpdated } from "../../../angular-fivem-shared/nui-events/messages";
 import {  CheckpointPosition, Race } from "../../../angular-fivem-shared/Racing";
+import { ClientGetRaceTracks, ClientLoadTrackIDForAllPlayers, ServerEmitRaceTracks, ServerLoadTrack } from "../../client-server-shared/events";
+import { ClientEventsService, ServerEventListener, ServerEvents } from "../ClientEventsService";
 import { CfxNuiEventsService, NuiCallbackEvents, NuiCallbackListener } from "../NuiEventsService";
 import { RaceCheckpoint } from "./Checkpoint";
 import { EditRaceMode } from "./EditRaceMode";
 import { Text } from "./Text";
 
 @NuiCallbackEvents
+@ServerEvents
 export class RacingManager {
     private static instance: RacingManager | null = null;
     public static getInstance(): RacingManager {
@@ -19,7 +22,8 @@ export class RacingManager {
         return RacingManager.instance;
     }
 
-    private events = CfxNuiEventsService.getInstance();
+    private nuiEvents = CfxNuiEventsService.getInstance();
+    private clientEvents = ClientEventsService.getInstance();
 
     private editRaceMode = EditRaceMode.getInstance();
 
@@ -38,21 +42,24 @@ export class RacingManager {
         return this.raceCheckpoints[this.activeCheckpointIndex] ?? null;
     }
 
-    constructor() {
-        onNet("server:emitRaceTracks", (raceTracks: Race[]) => {
-            this.events.emitNuiMessage(RaceTracksUpdated, { raceTracks });
-        });
-        onNet("server:loadTrack", (track: Race) => this.handleServerLoadTrack(track));
+    @ServerEventListener(ServerEmitRaceTracks)
+    private handleServerEmitRaceTracks(event: ServerEmitRaceTracks) {
+        this.nuiEvents.emitNuiMessage(RaceTracksUpdated, { raceTracks: event.data.tracks });
+    }
+
+    @ServerEventListener(ServerLoadTrack)
+    private onServerLoadTrack(event: ServerLoadTrack) {
+        this.handleServerLoadTrack(event.data.track);
     }
 
     @NuiCallbackListener(GetRaceTracks)
     private async onGetRaceTracks(event: GetRaceTracks): Promise<void> {
-        emitNet("client:getRaceTracks");
+        this.clientEvents.emitNet(ClientGetRaceTracks);
     }
 
     @NuiCallbackListener(LoadTrackIDForAllPlayers)
     private async onLoadTrackForAllPlayers(event: LoadTrackIDForAllPlayers): Promise<void> {
-        emitNet("client:loadTrackIDForAllPlayers", event.data.id);
+        this.clientEvents.emitNet(ClientLoadTrackIDForAllPlayers, {id: event.data.id});
     }
 
     private handleServerLoadTrack(race: Race) {

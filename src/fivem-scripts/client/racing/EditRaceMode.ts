@@ -4,6 +4,8 @@ import { Vector3 } from "fivem-js/lib/utils/Vector3";
 
 import { EditRaceAddTempPosition, EditRaceSave, EditRaceStopEdit } from "../../../angular-fivem-shared/nui-events/callbacks";
 import { CheckpointPosition, Race } from "../../../angular-fivem-shared/Racing";
+import { ClientSaveRaceTrack } from "../../client-server-shared/events";
+import { ClientEventsService } from "../ClientEventsService";
 import { NuiCallbackEvents, NuiCallbackListener } from "../NuiEventsService";
 import { RaceCheckpoint, RingTripleArrowGroundHeight } from "./Checkpoint";
 
@@ -22,6 +24,8 @@ export class EditRaceMode {
         return EditRaceMode.instance;
     }
 
+    private events = ClientEventsService.getInstance();
+
     private editModeBlipHandles: number[] = [];
     private editModeCheckpointHandles: number[] = [];
 
@@ -39,7 +43,7 @@ export class EditRaceMode {
 
     @NuiCallbackListener(EditRaceSave)
     private async onSaveRace(event: EditRaceSave): Promise<void> {
-        emitNet("client:saveRaceTrack", event.data.track);
+        this.events.emitNet(ClientSaveRaceTrack, { track: event.data.track });
     }
 
     public stopEditRace() {

@@ -6,9 +6,12 @@ import { GetCurrentPlayerPosition, GetUserLocations, MovePlayerToCoords, MovePla
 import { UserLocationsUpdate } from "../../angular-fivem-shared/nui-events/messages";
 import { UserSavedLocation } from "../../angular-fivem-shared/serialization/UserSavedLocation";
 import { isVec3 } from "../../angular-fivem-shared/Vector";
+import { ClientGetUserLocations, ClientSaveUserLocation, ServerUserLocationsUpdated } from "../client-server-shared/events";
+import { ClientEventsService, ServerEventListener, ServerEvents } from "./ClientEventsService";
 import { CfxNuiEventsService, NuiCallbackEvents, NuiCallbackListener } from "./NuiEventsService";
 
 @NuiCallbackEvents
+@ServerEvents
 export class Locations {
     private static instance: Locations | null = null;
     public static getInstance(): Locations {
@@ -18,22 +21,22 @@ export class Locations {
         return Locations.instance;
     }
 
-    private events = CfxNuiEventsService.getInstance();
+    private nuiEvents = CfxNuiEventsService.getInstance();
+    private events = ClientEventsService.getInstance();
 
-    constructor() {
-        onNet("server:userLocationsUpdated", (locations: UserSavedLocation[]) => {
-            this.events.emitNuiMessage(UserLocationsUpdate, { locations })
-        });
+    @ServerEventListener(ServerUserLocationsUpdated)
+    private handleServerUserLocationsUpdated(event: ServerUserLocationsUpdated) {
+        this.nuiEvents.emitNuiMessage(UserLocationsUpdate, { locations: event.data.locations })
     }
 
     @NuiCallbackListener(GetUserLocations)
     private async onGetUserLocations(event: GetUserLocations): Promise<void> {
-        emitNet("client:getUserLocations");
+        this.events.emitNet(ClientGetUserLocations);
     }
 
     @NuiCallbackListener(SaveUserLocation)
     private async onSaveUserLocation(event: SaveUserLocation): Promise<void> {
-        emitNet("client:saveUserLocation", event.data.location);
+        this.events.emitNet(ClientSaveUserLocation, {location: event.data.location});
     }
 
     @NuiCallbackListener(MovePlayerToLocation)

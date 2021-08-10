@@ -1,5 +1,4 @@
 import { clamp } from "fivem-js";
-import { sleep } from "../../../angular-fivem-shared/utils";
 
 export class Text {
     public static draw2DText(x: number, y: number, text: string, scale: number) {

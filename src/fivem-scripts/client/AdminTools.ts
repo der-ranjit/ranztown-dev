@@ -1,4 +1,7 @@
+import { take } from "rxjs/operators";
 import { IsAdmin } from "../../angular-fivem-shared/nui-events/callbacks";
+import { ClientGetIsAdmin, ServerEmitIsAdmin } from "../client-server-shared/events";
+import { ClientEventsService } from "./ClientEventsService";
 import { NuiCallbackEvents, NuiCallbackListener } from "./NuiEventsService";
 
 @NuiCallbackEvents
@@ -11,15 +14,13 @@ export class AdminTools {
         return AdminTools.instance;
     }
 
+    private events = ClientEventsService.getInstance();
+
     @NuiCallbackListener(IsAdmin)
-    private async OnGetIsAdmin(event: IsAdmin) {
-        emitNet("client:getIsAdmin");
-        const promise = new Promise<boolean>(resolve => {
-            onNet("server:emitIsAdmin", (isAdmin: boolean) => {
-                resolve(isAdmin)
-            })
-        });
-        const isAdmin = await promise;
-        return { isAdmin }
+    private async handleGetIsAdmin(event: IsAdmin) {
+        this.events.emitNet(ClientGetIsAdmin);
+        const serverEvent$ = this.events.getObservableForServerEvent(ServerEmitIsAdmin);
+        const eventResult = await serverEvent$.pipe(take(1)).toPromise();
+        return { isAdmin: eventResult.data.isAdmin }
     }
 }
