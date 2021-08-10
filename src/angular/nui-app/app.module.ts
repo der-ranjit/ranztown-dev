@@ -15,12 +15,10 @@ import { MatMenuModule} from '@angular/material/menu';
 import { MatIconModule} from '@angular/material/icon';
 import { MatSelectModule} from '@angular/material/select';
 import { MatCheckboxModule} from '@angular/material/checkbox';
-
-
+import { MatTabsModule } from '@angular/material/tabs';
 
 import { VirtualScrollerModule } from 'ngx-virtual-scroller';
 import { AppRootComponent } from './app-root.component';
-
 import { NotificationService } from './_core/notification.service';
 import { VehicleMenuComponent } from './vehicle-menu/vehicle-menu.component';
 import { CircularMenuComponent } from './circular-menu/circular-menu.component';
@@ -40,6 +38,7 @@ import { RacingMenuComponent } from './racing-menu/racing-menu.component';
 import { TrackEditorComponent } from './racing-menu/track-editor.component';
 import { ModValueNamePipe } from './vehicle-menu/mod-value-name.pipe';
 import { CircularSliderComponent } from './_core/circular-slider';
+
 
 @NgModule({
     declarations: [
@@ -79,7 +78,8 @@ import { CircularSliderComponent } from './_core/circular-slider';
         MatMenuModule,
         MatIconModule,
         MatSelectModule,
-        MatCheckboxModule
+        MatCheckboxModule,
+        MatTabsModule
     ],
     providers: [
         { provide: AppNuiEventsService, useValue: AppNuiEventsService.getInstance() }
