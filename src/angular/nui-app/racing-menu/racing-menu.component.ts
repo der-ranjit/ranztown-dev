@@ -1,14 +1,13 @@
 import { AnimationEvent } from "@angular/animations";
 import { Component, Input, OnInit, Output } from "@angular/core";
 import { BehaviorSubject, Subject } from "rxjs";
-import { GetRaceTracks, LoadTrackIDForAllPlayers, StartRace, StopRace } from "../../../angular-fivem-shared/nui-events/callbacks";
-import { RaceTracksUpdated } from "../../../angular-fivem-shared/nui-events/messages";
-import { Race } from "../../../angular-fivem-shared/Racing";
+import { NuiCB } from "../../../angular-fivem-shared/nui-events/callbacks";
+import { Nui } from "../../../angular-fivem-shared/nui-events/messages";
 
+import { Race } from "../../../angular-fivem-shared/Racing";
 import { slideIn } from "../_core/animations";
 import { NuiMessageEvents, NuiMessageListener } from "../_core/nui-events/decorators";
 import { AppNuiEventsService } from "../_core/nui-events/nui-events.service";
-
 
 @Component({
     selector: "nui-racing",
@@ -67,24 +66,24 @@ export class RacingMenuComponent implements OnInit {
         this.requestUpdateRaceTracks()
     }
 
-    @NuiMessageListener(RaceTracksUpdated)
-    private onRaceTracksUpdate(event: RaceTracksUpdated) {
+    @NuiMessageListener(Nui.Racing.RaceTracksUpdated)
+    private onRaceTracksUpdate(event: Nui.Racing.RaceTracksUpdated) {
         setTimeout(() => this.raceTracks$.next(event.data.raceTracks), 0)
     }
 
     private requestUpdateRaceTracks() {
-        this.events.emitNuiCallback(GetRaceTracks, null);
+        this.events.emitNuiCallback(NuiCB.Racing.GetRaceTracks, null);
     }
 
     public async startRace(race: Race) {
-        this.events.emitNuiCallback(StartRace, {race})
+        this.events.emitNuiCallback(NuiCB.Racing.StartRace, {race})
     }
 
     public async startRaceForAll(id: string) {
-        this.events.emitNuiCallback(LoadTrackIDForAllPlayers, {id})
+        this.events.emitNuiCallback(NuiCB.Racing.LoadTrackIDForAllPlayers, {id})
     }
 
     public async stopRace() {
-        this.events.emitNuiCallback(StopRace, null);
+        this.events.emitNuiCallback(NuiCB.Racing.StopRace, null);
     }
 }

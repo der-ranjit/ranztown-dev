@@ -1,10 +1,10 @@
 import { CheckpointIcon, Game, GameplayCamera } from "fivem-js";
 import { Vector3 } from "fivem-js/lib/utils/Vector3";
 
-import { GetRaceTracks, LoadTrackIDForAllPlayers, StartRace, StopRace } from "../../../angular-fivem-shared/nui-events/callbacks";
-import { RaceTracksUpdated } from "../../../angular-fivem-shared/nui-events/messages";
+import { NuiCB } from "../../../angular-fivem-shared/nui-events/callbacks";
+import { Nui } from "../../../angular-fivem-shared/nui-events/messages";
 import {  CheckpointPosition, Race } from "../../../angular-fivem-shared/Racing";
-import { ClientGetRaceTracks, ClientLoadTrackIDForAllPlayers, ServerEmitRaceTracks, ServerLoadTrack } from "../../client-server-shared/events";
+import { Client, Server } from "../../client-server-shared/events";
 import { ClientEventsService, ServerEventListener, ServerEvents } from "../ClientEventsService";
 import { CfxNuiEventsService, NuiCallbackEvents, NuiCallbackListener } from "../NuiEventsService";
 import { RaceCheckpoint } from "./Checkpoint";
@@ -42,24 +42,24 @@ export class RacingManager {
         return this.raceCheckpoints[this.activeCheckpointIndex] ?? null;
     }
 
-    @ServerEventListener(ServerEmitRaceTracks)
-    private handleServerEmitRaceTracks(event: ServerEmitRaceTracks) {
-        this.nuiEvents.emitNuiMessage(RaceTracksUpdated, { raceTracks: event.data.tracks });
+    @ServerEventListener(Server.Racing.EmitRaceTracks)
+    private handleServerEmitRaceTracks(event: Server.Racing.EmitRaceTracks) {
+        this.nuiEvents.emitNuiMessage(Nui.Racing.RaceTracksUpdated, { raceTracks: event.data.tracks });
     }
 
-    @ServerEventListener(ServerLoadTrack)
-    private onServerLoadTrack(event: ServerLoadTrack) {
+    @ServerEventListener(Server.Racing.LoadTrack)
+    private onServerLoadTrack(event: Server.Racing.LoadTrack) {
         this.handleServerLoadTrack(event.data.track);
     }
 
-    @NuiCallbackListener(GetRaceTracks)
-    private async onGetRaceTracks(event: GetRaceTracks): Promise<void> {
-        this.clientEvents.emitNet(ClientGetRaceTracks);
+    @NuiCallbackListener(NuiCB.Racing.GetRaceTracks)
+    private async onGetRaceTracks(event: NuiCB.Racing.GetRaceTracks): Promise<void> {
+        this.clientEvents.emitNet(Client.Racing.GetRaceTracks);
     }
 
-    @NuiCallbackListener(LoadTrackIDForAllPlayers)
-    private async onLoadTrackForAllPlayers(event: LoadTrackIDForAllPlayers): Promise<void> {
-        this.clientEvents.emitNet(ClientLoadTrackIDForAllPlayers, {id: event.data.id});
+    @NuiCallbackListener(NuiCB.Racing.LoadTrackIDForAllPlayers)
+    private async onLoadTrackForAllPlayers(event: NuiCB.Racing.LoadTrackIDForAllPlayers): Promise<void> {
+        this.clientEvents.emitNet(Client.Racing.LoadTrackIDForAllPlayers, {id: event.data.id});
     }
 
     private handleServerLoadTrack(race: Race) {
@@ -67,8 +67,8 @@ export class RacingManager {
         this.startRace(race);
     }
 
-    @NuiCallbackListener(StartRace)
-    public async handleStartRaceEvent(event: StartRace) {
+    @NuiCallbackListener(NuiCB.Racing.StartRace)
+    public async handleStartRaceEvent(event: NuiCB.Racing.StartRace) {
         if (this.isRaceActive()) {
             console.log(`there already is an active race: ${this.activeRaceName}`);
             return;
@@ -80,8 +80,8 @@ export class RacingManager {
         this.startRace(race);
     }
 
-    @NuiCallbackListener(StopRace)
-    public async stopRace(event: StopRace) {
+    @NuiCallbackListener(NuiCB.Racing.StopRace)
+    public async stopRace(event: NuiCB.Racing.StopRace) {
        this.stopActiveRace();
     }
 

@@ -2,11 +2,10 @@ import { Component, OnDestroy, OnInit, Output } from "@angular/core";
 import { Subject } from "rxjs";
 import { Color } from "fivem-js/lib/utils/Color";
 
-import { EditRaceAddTempPosition, EditRaceSave, EditRaceStopEdit, GetCurrentPlayerPosition,
-         SetNoClipAboveGround} from "../../../angular-fivem-shared/nui-events/callbacks";
 import { CheckpointPosition } from "../../../angular-fivem-shared/Racing";
 import { AppNuiEventsService } from "../_core/nui-events/nui-events.service";
 import { cssHexStringToRgb } from "../../../fivem-scripts/client-server-shared/Colors";
+import { NuiCB } from "../../../angular-fivem-shared/nui-events/callbacks";
 
 @Component({
     selector: "nui-track-editor",
@@ -62,12 +61,12 @@ export class TrackEditorComponent implements OnInit, OnDestroy {
     constructor(private events: AppNuiEventsService) {}
 
     public ngOnInit() {
-        this.events.emitNuiCallback(SetNoClipAboveGround, {active: true});
+        this.events.emitNuiCallback(NuiCB.NoClip.SetNoClipAboveGround, {active: true});
     }
 
     public ngOnDestroy() {
-        this.events.emitNuiCallback(EditRaceStopEdit, null);
-        this.events.emitNuiCallback(SetNoClipAboveGround, {active: false});
+        this.events.emitNuiCallback(NuiCB.Racing.EditRaceStopEdit, null);
+        this.events.emitNuiCallback(NuiCB.NoClip.SetNoClipAboveGround, {active: false});
     }
 
     public async saveTrack() {
@@ -79,13 +78,13 @@ export class TrackEditorComponent implements OnInit, OnDestroy {
             defaultRounds: this.raceRounds,
             checkpointPositions: this.checkpoints
         };
-        const result = await this.events.emitNuiCallback(EditRaceSave, { track });
-        this.events.emitNuiCallback(EditRaceStopEdit, null);
+        const result = await this.events.emitNuiCallback(NuiCB.Racing.EditRaceSave, { track });
+        this.events.emitNuiCallback(NuiCB.Racing.EditRaceStopEdit, null);
         this.onTrackSaved.next();
     }
 
     public async addCurrentPositionAsTempCheckpoint() {
-        const currentPosition = await this.events.emitNuiCallback(GetCurrentPlayerPosition, null);
+        const currentPosition = await this.events.emitNuiCallback(NuiCB.Locations.GetCurrentPlayerPosition, null);
         const {x, y, z} = currentPosition;
 
         const checkpointPosition: CheckpointPosition = {
@@ -95,7 +94,7 @@ export class TrackEditorComponent implements OnInit, OnDestroy {
             radius: this.nextCheckpointRadius,
             color: this.createColorFromInputString()
         };
-        this.events.emitNuiCallback(EditRaceAddTempPosition, checkpointPosition)
+        this.events.emitNuiCallback(NuiCB.Racing.EditRaceAddTempPosition, checkpointPosition)
         this.checkpoints.push(checkpointPosition);
     }
 

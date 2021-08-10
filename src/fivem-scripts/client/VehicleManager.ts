@@ -1,11 +1,11 @@
 import * as Cfx from "fivem-js";
 
 import { CfxNuiEventsService, NuiCallbackListener, NuiCallbackEvents } from "./NuiEventsService";
-import { Callback, Message } from "../../angular-fivem-shared/nui-events";
 import { Color } from "fivem-js";
 import { cssHexStringToRgb } from "../client-server-shared/Colors";
-import { GetPlayerVehicleData } from "../../angular-fivem-shared/nui-events/callbacks";
 import { VehicleToJSON } from "./serialization/VehicleToJSON";
+import { NuiCB } from "../../angular-fivem-shared/nui-events/callbacks";
+import { Nui } from "../../angular-fivem-shared/nui-events/messages";
 
 @NuiCallbackEvents
 export class VehicleManager {
@@ -19,8 +19,8 @@ export class VehicleManager {
 
     private eventsService = CfxNuiEventsService.getInstance();
 
-    @NuiCallbackListener(Callback.SpawnVehicle)
-    private async handleSpawnVehicleEvent(event: Callback.SpawnVehicle): Promise<void> {
+    @NuiCallbackListener(NuiCB.VehicleManager.SpawnVehicle)
+    private async handleSpawnVehicleEvent(event: NuiCB.VehicleManager.SpawnVehicle): Promise<void> {
         const data = event.data;
         if (data != null) {
             let message = `Spawned vehicle: "${data.model}"`;
@@ -30,12 +30,12 @@ export class VehicleManager {
                 message = `VehicleSpawner: tried to spawn unavailable vehicle "${data.model}"`
                 console.warn(message)
             }
-            this.eventsService.emitNuiMessage(Message.Notification, { message });
+            this.eventsService.emitNuiMessage(Nui.Main.Notification, { message });
         }
     }
 
-    @NuiCallbackListener(Callback.ChangeVehicleColor)
-    private async handleChangeVehicleColorEvent(event: Callback.ChangeVehicleColor): Promise<void> {
+    @NuiCallbackListener(NuiCB.VehicleManager.ChangeVehicleColor)
+    private async handleChangeVehicleColorEvent(event: NuiCB.VehicleManager.ChangeVehicleColor): Promise<void> {
         const data = event.data;
         if (data != null && Cfx.Game.PlayerPed.isInAnyVehicle()) {
             const primary = cssHexStringToRgb(event.data.primaryColor);
@@ -52,16 +52,16 @@ export class VehicleManager {
         }
     }
 
-    @NuiCallbackListener(Callback.UpdateVehicleMod)
-    private async handleUpdateVehicleModEvent(event: Callback.UpdateVehicleMod): Promise<void> {
+    @NuiCallbackListener(NuiCB.VehicleManager.UpdateVehicleMod)
+    private async handleUpdateVehicleModEvent(event: NuiCB.VehicleManager.UpdateVehicleMod): Promise<void> {
         const data = event.data;
         if (data != null) {
             SetVehicleMod(data.vehicleHandle, data.modType, data.modValue, false);
         }
     }
 
-    @NuiCallbackListener(GetPlayerVehicleData)
-    public async getPlayerVehicleData(event: GetPlayerVehicleData) {
+    @NuiCallbackListener(NuiCB.VehicleManager.GetPlayerVehicleData)
+    public async getPlayerVehicleData(event: NuiCB.VehicleManager.GetPlayerVehicleData) {
         if (Cfx.Game.PlayerPed.isInAnyVehicle()) {
             const vehicle = Cfx.Game.PlayerPed.CurrentVehicle;
             return VehicleToJSON(vehicle);

@@ -1,4 +1,4 @@
-import { GetFileServerBaseUrl } from "../../angular-fivem-shared/nui-events/callbacks";
+import { NuiCB } from "../../angular-fivem-shared/nui-events/callbacks";
 import { NuiCallbackEvents, NuiCallbackListener } from "./NuiEventsService";
 
 @NuiCallbackEvents
@@ -11,8 +11,8 @@ export class ClientConfiguration {
         return ClientConfiguration.instance;
     }
 
-    @NuiCallbackListener(GetFileServerBaseUrl)
-    private async getFileServerBaseUrl(event: GetFileServerBaseUrl) {
+    @NuiCallbackListener(NuiCB.ClientConfiguration.GetFileServerBaseUrl)
+    private async getFileServerBaseUrl(event: NuiCB.ClientConfiguration.GetFileServerBaseUrl) {
         return { baseUrl: `http://${GetCurrentServerEndpoint()}/${GetCurrentResourceName()}` };
     }
 }

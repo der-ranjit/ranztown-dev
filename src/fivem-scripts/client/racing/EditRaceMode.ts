@@ -2,9 +2,9 @@ import { BlipSprite } from "fivem-js/lib/enums/Blip";
 import { CheckpointIcon } from "fivem-js/lib/enums/Checkpoint";
 import { Vector3 } from "fivem-js/lib/utils/Vector3";
 
-import { EditRaceAddTempPosition, EditRaceSave, EditRaceStopEdit } from "../../../angular-fivem-shared/nui-events/callbacks";
+import { NuiCB } from "../../../angular-fivem-shared/nui-events/callbacks";
 import { CheckpointPosition, Race } from "../../../angular-fivem-shared/Racing";
-import { ClientSaveRaceTrack } from "../../client-server-shared/events";
+import { Client } from "../../client-server-shared/events";
 import { ClientEventsService } from "../ClientEventsService";
 import { NuiCallbackEvents, NuiCallbackListener } from "../NuiEventsService";
 import { RaceCheckpoint, RingTripleArrowGroundHeight } from "./Checkpoint";
@@ -12,8 +12,6 @@ import { RaceCheckpoint, RingTripleArrowGroundHeight } from "./Checkpoint";
 /**
  * Adds temporary checkpoints and blips to the creating players minimap and world
  */
-
-
 @NuiCallbackEvents
 export class EditRaceMode {
     private static instance: EditRaceMode | null = null;
@@ -29,21 +27,21 @@ export class EditRaceMode {
     private editModeBlipHandles: number[] = [];
     private editModeCheckpointHandles: number[] = [];
 
-    @NuiCallbackListener(EditRaceStopEdit)
-    public async editRaceStopEdit(event: EditRaceStopEdit) {
+    @NuiCallbackListener(NuiCB.Racing.EditRaceStopEdit)
+    public async editRaceStopEdit(event: NuiCB.Racing.EditRaceStopEdit) {
         this.stopEditRace();
     }
 
-    @NuiCallbackListener(EditRaceAddTempPosition)
-    public async handleEditRaceAddTempPositionEvent(event: EditRaceAddTempPosition) {
+    @NuiCallbackListener(NuiCB.Racing.EditRaceAddTempPosition)
+    public async handleEditRaceAddTempPositionEvent(event: NuiCB.Racing.EditRaceAddTempPosition) {
         if (event.data.position) {
             this.addTempCheckpointPosition(event.data);
         }
     }
 
-    @NuiCallbackListener(EditRaceSave)
-    private async onSaveRace(event: EditRaceSave): Promise<void> {
-        this.events.emitNet(ClientSaveRaceTrack, { track: event.data.track });
+    @NuiCallbackListener(NuiCB.Racing.EditRaceSave)
+    private async onSaveRace(event: NuiCB.Racing.EditRaceSave): Promise<void> {
+        this.events.emitNet(Client.Racing.SaveRaceTrack, { track: event.data.track });
     }
 
     public stopEditRace() {

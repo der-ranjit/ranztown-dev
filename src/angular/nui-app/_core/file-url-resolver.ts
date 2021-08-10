@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
-import { GetFileServerBaseUrl } from "../../../angular-fivem-shared/nui-events/callbacks";
+
+import { NuiCB } from "../../../angular-fivem-shared/nui-events/callbacks";
 import { AppNuiEventsService } from "./nui-events/nui-events.service";
 
 @Injectable({providedIn: "root"})
@@ -14,7 +15,7 @@ export class FileUrlResolver {
     }
 
     private async setFileServerBaseUrl(): Promise<void> {
-        const result = await this.events.emitNuiCallback(GetFileServerBaseUrl, null);
+        const result = await this.events.emitNuiCallback(NuiCB.ClientConfiguration.GetFileServerBaseUrl, null);
         this.fileServerBaseUrl = result.baseUrl;
     }
 }

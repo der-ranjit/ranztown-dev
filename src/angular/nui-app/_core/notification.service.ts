@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { MatSnackBar } from "@angular/material/snack-bar";
 
-import { Message } from "../../../angular-fivem-shared/nui-events";
+import { Nui } from "../../../angular-fivem-shared/nui-events/messages";
 import { BaseNuiService } from "./nui-events/base.service";
 import { NuiMessageEvents, NuiMessageListener } from "./nui-events/decorators";
 
@@ -18,8 +18,8 @@ export class NotificationService extends BaseNuiService {
         setTimeout(() => snackbar.dismiss(), 10000);
     }
 
-    @NuiMessageListener(Message.Notification)
-    private handleNotification(event: Message.Notification): void {
+    @NuiMessageListener(Nui.Main.Notification)
+    private handleNotification(event: Nui.Main.Notification): void {
         const snackbar = this.snackBar.open(event?.data?.message ?? "?? NO MESSAGE ??", 'Ok');
         setTimeout(() => snackbar.dismiss(), notificationTimeoutMS);
     }

@@ -1,6 +1,7 @@
 import { CfxNuiEventsService, NuiCallbackListener, NuiCallbackEvents } from "./NuiEventsService";
-import { Callback, Message } from "../../angular-fivem-shared/nui-events";
 import { sleep } from "../../angular-fivem-shared/utils";
+import { Nui } from "../../angular-fivem-shared/nui-events/messages";
+import { NuiCB } from "../../angular-fivem-shared/nui-events/callbacks";
 
 @NuiCallbackEvents
 export class PedSpawner {
@@ -14,8 +15,8 @@ export class PedSpawner {
 
     private eventsService = CfxNuiEventsService.getInstance();
 
-    @NuiCallbackListener(Callback.ChangePed)
-    private async handleChangePedEvent(event: Callback.ChangePed): Promise<void> {
+    @NuiCallbackListener(NuiCB.PedManager.ChangePed)
+    private async handleChangePedEvent(event: NuiCB.PedManager.ChangePed): Promise<void> {
         const data = event.data;
         if (data != null) {
             let message = `Change Ped: "${data.ped}"`;
@@ -25,7 +26,7 @@ export class PedSpawner {
                 message = `PedSpawner: tried to change unavailable ped "${data.ped}"`
                 console.warn(message)
             }
-            this.eventsService.emitNuiMessage(Message.Notification, { message });
+            this.eventsService.emitNuiMessage(Nui.Main.Notification, { message });
         }
     }
 

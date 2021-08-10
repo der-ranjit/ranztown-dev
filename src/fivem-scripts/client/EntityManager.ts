@@ -1,13 +1,13 @@
 import { Vector3, Entity, Vehicle } from "fivem-js";
 
 import { NuiCallbackEvents, NuiCallbackListener } from "./NuiEventsService";
-import { DeleteEntity, GetEntityDataAtNuiCursor, GetEntityData, UpdateEntity, EntityType } from "../../angular-fivem-shared/nui-events/callbacks";
 import { raycastFromScreenPointerToWorld } from "./NuiRaycast";
 import { isVec3 } from "../../angular-fivem-shared/Vector";
 import { FivemEntityJSON } from "../../angular-fivem-shared/serialization/FivemEntityJSON";
 import { FivemVehicleJSON } from "../../angular-fivem-shared/serialization/FivemVehicleJSON";
 import { VehicleToJSON } from "./serialization/VehicleToJSON";
 import { EntityToJSON } from "./serialization/EntityToJSON";
+import { NuiCB } from "../../angular-fivem-shared/nui-events/callbacks";
 
 @NuiCallbackEvents
 export class EntityManager {
@@ -18,13 +18,13 @@ export class EntityManager {
         }
         return EntityManager.instance;
     }
-    @NuiCallbackListener(DeleteEntity)
-    public async deleteEntity(event: DeleteEntity) {
+    @NuiCallbackListener(NuiCB.EntityManager.DeleteEntity)
+    public async deleteEntity(event: NuiCB.EntityManager.DeleteEntity) {
         Entity.fromHandle(event.data.handle)?.delete();
     }
 
-    @NuiCallbackListener(GetEntityDataAtNuiCursor)
-    public async getEntityDataAtNuiCursor(event: GetEntityDataAtNuiCursor) {
+    @NuiCallbackListener(NuiCB.EntityManager.GetEntityDataAtNuiCursor)
+    public async getEntityDataAtNuiCursor(event: NuiCB.EntityManager.GetEntityDataAtNuiCursor) {
         const raycastResult = raycastFromScreenPointerToWorld();
         if (raycastResult.DidHit && raycastResult.HitEntity) {
             const entity = raycastResult.HitEntity;
@@ -36,8 +36,8 @@ export class EntityManager {
         return null;
     }
 
-    @NuiCallbackListener(GetEntityData)
-    public async getEntityData(event: GetEntityData) {
+    @NuiCallbackListener(NuiCB.EntityManager.GetEntityData)
+    public async getEntityData(event: NuiCB.EntityManager.GetEntityData) {
         const data = event.data;
         if (data?.handle) {
             const entity = Entity.fromHandle(data.handle);
@@ -49,8 +49,8 @@ export class EntityManager {
         return null;
     }
 
-    @NuiCallbackListener(UpdateEntity)
-    public async updateEntity(event: UpdateEntity) {
+    @NuiCallbackListener(NuiCB.EntityManager.UpdateEntity)
+    public async updateEntity(event: NuiCB.EntityManager.UpdateEntity) {
         const data = event.data;
         if (data?.handle && data?.propertyPaths && data?.value !== undefined) {
             const entity = Entity.fromHandle(data.handle);
@@ -65,7 +65,7 @@ export class EntityManager {
 
     private createJSONForEntity(entity: Entity): FivemEntityJSON | FivemVehicleJSON | null {
         const eType = GetEntityType(entity.Handle);
-        let type: EntityType = "no entity";
+        let type: NuiCB.EntityManager.EntityType = "no entity";
         if(eType === 1) {
             type = "ped";
             return EntityToJSON(entity);

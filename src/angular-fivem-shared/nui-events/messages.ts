@@ -11,8 +11,18 @@ export abstract class AbstractMessage<D = void> {
 }
 export type MessageConstructor<T, D> = { new (data: D): T}
 
-export class Notification extends AbstractMessage<{ message: string }> {}
-export type NuiMode = "menu" | "inspector" | "inactive";
-export class SetNuiMode extends AbstractMessage<{ nuiMode: NuiMode }> {}
-export class UserLocationsUpdate extends AbstractMessage<{ locations: UserSavedLocation[] }> {}
-export class RaceTracksUpdated extends AbstractMessage<{raceTracks: Race[]}> {}
+export namespace Nui {
+    export namespace Locations {
+        export class UserLocationsUpdate extends AbstractMessage<{ locations: UserSavedLocation[] }> {}
+    }
+
+    export namespace Main {
+        export class Notification extends AbstractMessage<{ message: string }> {}
+        export type NuiMode = "menu" | "inspector" | "inactive";
+        export class SetNuiMode extends AbstractMessage<{ nuiMode: NuiMode }> {}
+    }
+
+    export namespace Racing {
+        export class RaceTracksUpdated extends AbstractMessage<{raceTracks: Race[]}> {}
+    }
+}

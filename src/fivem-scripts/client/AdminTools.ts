@@ -1,6 +1,7 @@
 import { take } from "rxjs/operators";
-import { IsAdmin } from "../../angular-fivem-shared/nui-events/callbacks";
-import { ClientGetIsAdmin, ServerEmitIsAdmin } from "../client-server-shared/events";
+
+import { NuiCB } from "../../angular-fivem-shared/nui-events/callbacks";
+import { Client, Server } from "../client-server-shared/events";
 import { ClientEventsService } from "./ClientEventsService";
 import { NuiCallbackEvents, NuiCallbackListener } from "./NuiEventsService";
 
@@ -16,10 +17,10 @@ export class AdminTools {
 
     private events = ClientEventsService.getInstance();
 
-    @NuiCallbackListener(IsAdmin)
-    private async handleGetIsAdmin(event: IsAdmin) {
-        this.events.emitNet(ClientGetIsAdmin);
-        const serverEvent$ = this.events.getObservableForServerEvent(ServerEmitIsAdmin);
+    @NuiCallbackListener(NuiCB.AdminTools.IsAdmin)
+    private async handleGetIsAdmin(event: NuiCB.AdminTools.IsAdmin) {
+        this.events.emitNet(Client.AdminTools.GetIsAdmin);
+        const serverEvent$ = this.events.getObservableForServerEvent(Server.AdminTools.EmitIsAdmin);
         const eventResult = await serverEvent$.pipe(take(1)).toPromise();
         return { isAdmin: eventResult.data.isAdmin }
     }

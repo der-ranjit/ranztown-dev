@@ -1,7 +1,8 @@
 import { ensureDirSync } from "fs-extra";
 import { relative, resolve } from "path";
+
 import { UserSavedLocation } from "../../../angular-fivem-shared/serialization/UserSavedLocation";
-import { ClientGetUserLocations, ClientSaveUserLocation, ServerUserLocationsUpdated } from "../../client-server-shared/events";
+import { Client, Server } from "../../client-server-shared/events";
 import { requestClientScreenshot } from "../../screenshot-basic/server";
 import { Identifiers } from "../Identifiers";
 import { ClientEventListener, ClientEvents, ServerEventsService } from "../ServerEventsService";
@@ -25,8 +26,8 @@ export class UserLocationsDatabase extends LowDatabase<UserSavedLocation>{
 
     private events = ServerEventsService.getInstance();
 
-    @ClientEventListener(ClientGetUserLocations)
-    private async handleEmitUserLocations(event: ClientGetUserLocations, source: number) {
+    @ClientEventListener(Client.Locations.GetUserLocations)
+    private async handleEmitUserLocations(event: Client.Locations.GetUserLocations, source: number) {
         this.emitUserLocations(source);
     }
 
@@ -34,12 +35,12 @@ export class UserLocationsDatabase extends LowDatabase<UserSavedLocation>{
         const id = Identifiers.getFivemId(source);
         await this.read();
         const locations = this.database.chain.filter({userId: id}).value();
-        this.events.emitNet(ServerUserLocationsUpdated, source, { locations });
+        this.events.emitNet(Server.Locations.UserLocationsUpdated, source, { locations });
 
     }
 
-    @ClientEventListener(ClientSaveUserLocation)
-    private async saveUserLocation(event: ClientSaveUserLocation, source: number) {
+    @ClientEventListener(Client.Locations.SaveUserLocation)
+    private async saveUserLocation(event: Client.Locations.SaveUserLocation, source: number) {
         const id = Identifiers.getFivemId(source);
         const location = event.data.location;
         const previewPath = await this.getClientScreenshot(id, location, source);

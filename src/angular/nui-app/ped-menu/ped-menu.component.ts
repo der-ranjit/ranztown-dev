@@ -4,6 +4,7 @@ import { Subject } from 'rxjs';
 
 import { Peds } from '../../../angular-fivem-shared/gta-data/Peds';
 import { Callback } from '../../../angular-fivem-shared/nui-events';
+import { NuiCB } from '../../../angular-fivem-shared/nui-events/callbacks';
 import { slideIn } from '../_core/animations';
 import { AppNuiEventsService } from '../_core/nui-events/nui-events.service';
 
@@ -76,7 +77,7 @@ export class PedMenuComponent {
     }
 
     public handleSpawn(pedModel: string): void {
-        this.events.emitNuiCallback(Callback.ChangePed, { ped: pedModel });
+        this.events.emitNuiCallback(NuiCB.PedManager.ChangePed, { ped: pedModel });
     }
 
     public onCloseAnimationDone(event: AnimationEvent) {

@@ -1,7 +1,7 @@
 import { Observable, Observer } from "rxjs";
 
 import { Callback, Message } from "../../angular-fivem-shared/nui-events";
-import { DefaultCallbackResponse } from "../../angular-fivem-shared/nui-events/callbacks";
+import { NuiCB } from "../../angular-fivem-shared/nui-events/callbacks";
 
 export class CfxNuiEventsService {
     private static instance: CfxNuiEventsService | null = null;
@@ -65,7 +65,7 @@ export function NuiCallbackEvents<T extends constructor>(base: T) {
             nuiCallbackFunctions.forEach((eventType: any, functionName: string) => {
                 const observable = eventService.getObservableForNuiCallback(eventType);
                 observable.subscribe(async (event: any) => {
-                    const result = await this[functionName](event) ?? DefaultCallbackResponse;
+                    const result = await this[functionName](event) ?? NuiCB.Main.DefaultCallbackResponse;
                     // make sure we always resolve the nui callback with some value
                     event.cb(result);
                 })

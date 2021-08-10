@@ -1,12 +1,12 @@
 import { Component, ViewChild } from '@angular/core';
-import { Message } from '../../angular-fivem-shared/nui-events';
-import { NuiMode } from '../../angular-fivem-shared/nui-events/messages';
+
 import { fade, slideIn } from './_core/animations';
 import { NuiMessageEvents, NuiMessageListener } from './_core/nui-events/decorators';
 
 // init screen-shot basic script
 import "./_core/screenshot-basic";
 import { EntityContextMenuComponent } from './entity-context-menu/entity-context-menu';
+import { Nui } from '../../angular-fivem-shared/nui-events/messages';
 
 type MenuType = 'vehicleMenu' | 'pedMenu' |'locationMenu' | 'flyHighSpecial' | 'racing' | null;
 
@@ -76,12 +76,12 @@ export class AppRootComponent {
     @ViewChild(EntityContextMenuComponent)
     public entityContextMenu: EntityContextMenuComponent | null = null;
 
-    public nuiMode: NuiMode = "inactive";
+    public nuiMode: Nui.Main.NuiMode = "inactive";
     public activeMenu: MenuType = null;
     public previouslyActiveMenu: MenuType = null;
 
-    @NuiMessageListener(Message.SetNuiMode)
-    private handleSetNuiMode(event: Message.SetNuiMode) {
+    @NuiMessageListener(Nui.Main.SetNuiMode)
+    private handleSetNuiMode(event: Nui.Main.SetNuiMode) {
         this.setNuiMode(event.data.nuiMode);
     }
 
@@ -97,7 +97,7 @@ export class AppRootComponent {
         return this.nuiMode === "menu";
     }
 
-    private setNuiMode(nuiMode: NuiMode): void {
+    private setNuiMode(nuiMode: Nui.Main.NuiMode): void {
         this.nuiMode = nuiMode;
         if (nuiMode === "inactive") {
             this.entityContextMenu?.close();

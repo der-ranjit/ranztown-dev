@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Vec3 } from "fivem-js/lib/utils/Vector3";
+import { NuiCB } from "../../../../angular-fivem-shared/nui-events/callbacks";
 
-import { GetEntityData, UpdateEntity } from "../../../../angular-fivem-shared/nui-events/callbacks";
 import { FivemEntityJSON, isFivemEntityJSON } from "../../../../angular-fivem-shared/serialization/FivemEntityJSON";
 import { FivemVehicleJSON } from "../../../../angular-fivem-shared/serialization/FivemVehicleJSON";
 import { isVec3 } from "../../../../angular-fivem-shared/Vector";
@@ -51,7 +51,7 @@ export class EntityDebuggerComponent implements OnInit, OnDestroy {
         const vector = (<any>this.entityJSON)[propertyKey].value as Vec3;
         const handle = this.getHandle();
         if (handle != null) {
-            await this.events.emitNuiCallback(UpdateEntity, {handle, propertyPaths: [propertyKey], value: vector});
+            await this.events.emitNuiCallback(NuiCB.EntityManager.UpdateEntity, {handle, propertyPaths: [propertyKey], value: vector});
             await this.updateData();
         }
     }
@@ -61,7 +61,7 @@ export class EntityDebuggerComponent implements OnInit, OnDestroy {
     private async updateData() {
         const handle = this.getHandle();
         if (handle) {
-            const result = await this.events.emitNuiCallback(GetEntityData, { handle });
+            const result = await this.events.emitNuiCallback(NuiCB.EntityManager.GetEntityData, { handle });
             if (isFivemEntityJSON(result)) {
                 this.entityJSON = result;
             }

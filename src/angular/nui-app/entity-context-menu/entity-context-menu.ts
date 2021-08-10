@@ -1,7 +1,7 @@
 import { Component, HostListener, ViewChild } from "@angular/core";
 import { MatMenuTrigger } from "@angular/material/menu";
+import { NuiCB } from "../../../angular-fivem-shared/nui-events/callbacks";
 
-import { DeleteEntity, EntityType, GetEntityDataAtNuiCursor } from "../../../angular-fivem-shared/nui-events/callbacks";
 import { FivemEntityJSON, isFivemEntityJSON } from "../../../angular-fivem-shared/serialization/FivemEntityJSON";
 import { FivemVehicleJSON, isFivemVehicleJSON } from "../../../angular-fivem-shared/serialization/FivemVehicleJSON";
 import { sleep } from "../../../angular-fivem-shared/utils";
@@ -29,7 +29,7 @@ export class EntityContextMenuComponent  {
     @ViewChild(MatMenuTrigger)
     private contextMenuTrigger!: MatMenuTrigger;
 
-    public entityType: EntityType = "no entity";
+    public entityType: NuiCB.EntityManager.EntityType = "no entity";
 
     public entityJSON: FivemEntityJSON | FivemVehicleJSON | null = null;
     public contextMenuPosition = { x: "0px", y: "0px" };
@@ -43,7 +43,7 @@ export class EntityContextMenuComponent  {
     @HostListener("window:contextmenu", ["$event"])
     public async onContextMenu(event: MouseEvent) {
         event.preventDefault();
-        const result = await this.events.emitNuiCallback(GetEntityDataAtNuiCursor, null);
+        const result = await this.events.emitNuiCallback(NuiCB.EntityManager.GetEntityDataAtNuiCursor, null);
         if (this.contextMenuTrigger.menuOpen) {
             this.contextMenuTrigger.closeMenu();
             // wait for menu closing animation
@@ -61,7 +61,7 @@ export class EntityContextMenuComponent  {
 
     public deleteEntity(handle?: number) {
         if (handle) {
-            this.events.emitNuiCallback(DeleteEntity, { handle });
+            this.events.emitNuiCallback(NuiCB.EntityManager.DeleteEntity, { handle });
         }
     }
 }

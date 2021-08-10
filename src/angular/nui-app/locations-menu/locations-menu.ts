@@ -3,14 +3,14 @@ import { Component, Input, OnInit, Output, ViewChild } from "@angular/core";
 import { Vec3 } from "fivem-js/lib/utils/Vector3";
 import { BehaviorSubject, Subject } from "rxjs";
 
-import { GetCurrentPlayerPosition, GetUserLocations, IsAdmin, MovePlayerToCoords, MovePlayerToLocation, SaveUserLocation } from "../../../angular-fivem-shared/nui-events/callbacks";
-import { UserLocationsUpdate } from "../../../angular-fivem-shared/nui-events/messages";
 import { UserSavedLocation } from "../../../angular-fivem-shared/serialization/UserSavedLocation";
 import { VirtualFilterListComponent } from "../_core/virtual-filter-list";
 import { slideIn } from "../_core/animations";
 import { FileUrlResolver } from "../_core/file-url-resolver";
 import { NuiMessageEvents, NuiMessageListener } from "../_core/nui-events/decorators";
 import { AppNuiEventsService } from "../_core/nui-events/nui-events.service";
+import { NuiCB } from "../../../angular-fivem-shared/nui-events/callbacks";
+import { Nui } from "../../../angular-fivem-shared/nui-events/messages";
 
 @Component({
     selector: "nui-app-locations-menu",
@@ -77,21 +77,21 @@ export class LocationsMenuComponent implements OnInit {
 
     public async ngOnInit() {
         this.requestUpdateUserLocations();
-        this.isAdmin = (await this.events.emitNuiCallback(IsAdmin, null)).isAdmin;
+        this.isAdmin = (await this.events.emitNuiCallback(NuiCB.AdminTools.IsAdmin, null)).isAdmin;
     }
 
-    @NuiMessageListener(UserLocationsUpdate)
-    private onUserLocationsUpdate(event: UserLocationsUpdate) {
+    @NuiMessageListener(Nui.Locations.UserLocationsUpdate)
+    private onUserLocationsUpdate(event: Nui.Locations.UserLocationsUpdate) {
         setTimeout(() => this.locations$.next(event.data.locations), 0)
     }
 
 
     private requestUpdateUserLocations() {
-        this.events.emitNuiCallback(GetUserLocations, null);
+        this.events.emitNuiCallback(NuiCB.Locations.GetUserLocations, null);
     }
 
     public onLocationClick(location: UserSavedLocation) {
-        this.events.emitNuiCallback(MovePlayerToLocation, { location });
+        this.events.emitNuiCallback(NuiCB.Locations.MovePlayerToLocation, { location });
     }
 
     public teleport(x: string, y: string, z: string) {
@@ -100,7 +100,7 @@ export class LocationsMenuComponent implements OnInit {
             y: parseInt(y),
             z: parseInt(z),
          };
-        this.events.emitNuiCallback(MovePlayerToCoords, { coords } );
+        this.events.emitNuiCallback(NuiCB.Locations.MovePlayerToCoords, { coords } );
     }
 
     public isLocationNameValid(locationName: string): boolean {
@@ -117,7 +117,7 @@ export class LocationsMenuComponent implements OnInit {
     }
 
     public async saveCurrentUserLocation() {
-        const playerPosition = await this.events.emitNuiCallback(GetCurrentPlayerPosition, null);
+        const playerPosition = await this.events.emitNuiCallback(NuiCB.Locations.GetCurrentPlayerPosition, null);
         const location = {
             // will be set correctly by server
             userId: "-1",
@@ -127,7 +127,7 @@ export class LocationsMenuComponent implements OnInit {
             previewFilePath: "none",
             ...playerPosition
         }
-        const result = await this.events.emitNuiCallback(SaveUserLocation, { location });
+        const result = await this.events.emitNuiCallback(NuiCB.Locations.SaveUserLocation, { location });
     }
 
     public onCloseAnimationDone(event: AnimationEvent) {

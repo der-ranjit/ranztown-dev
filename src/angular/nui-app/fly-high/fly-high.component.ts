@@ -1,8 +1,8 @@
 import { AnimationEvent } from "@angular/animations";
 import { Component, Input, Output } from "@angular/core";
 import { Subject } from "rxjs";
+import { NuiCB } from "../../../angular-fivem-shared/nui-events/callbacks";
 
-import { FlyHigh } from "../../../angular-fivem-shared/nui-events/callbacks";
 import { slideIn } from "../_core/animations";
 import { AppNuiEventsService } from "../_core/nui-events/nui-events.service";
 
@@ -48,7 +48,7 @@ export class FlyHighComponent {
     constructor(private events: AppNuiEventsService) {}
 
     public flyHigh() {
-        this.events.emitNuiCallback(FlyHigh, null);
+        this.events.emitNuiCallback(NuiCB.FlyHigh.FlyHigh, null);
     }
 
     public onCloseAnimationDone(event: AnimationEvent) {

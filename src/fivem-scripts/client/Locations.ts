@@ -1,12 +1,11 @@
 import * as Cfx from "fivem-js";
 import { Vector3 } from "fivem-js";
 
-import { GetCurrentPlayerPosition, GetUserLocations, MovePlayerToCoords, MovePlayerToLocation, PlayerPosition,
-         SaveUserLocation, SetNoClipAboveGround } from "../../angular-fivem-shared/nui-events/callbacks";
-import { UserLocationsUpdate } from "../../angular-fivem-shared/nui-events/messages";
+import { NuiCB } from "../../angular-fivem-shared/nui-events/callbacks";
+import { Nui } from "../../angular-fivem-shared/nui-events/messages";
 import { UserSavedLocation } from "../../angular-fivem-shared/serialization/UserSavedLocation";
 import { isVec3 } from "../../angular-fivem-shared/Vector";
-import { ClientGetUserLocations, ClientSaveUserLocation, ServerUserLocationsUpdated } from "../client-server-shared/events";
+import { Client, Server } from "../client-server-shared/events";
 import { ClientEventsService, ServerEventListener, ServerEvents } from "./ClientEventsService";
 import { CfxNuiEventsService, NuiCallbackEvents, NuiCallbackListener } from "./NuiEventsService";
 
@@ -24,28 +23,28 @@ export class Locations {
     private nuiEvents = CfxNuiEventsService.getInstance();
     private events = ClientEventsService.getInstance();
 
-    @ServerEventListener(ServerUserLocationsUpdated)
-    private handleServerUserLocationsUpdated(event: ServerUserLocationsUpdated) {
-        this.nuiEvents.emitNuiMessage(UserLocationsUpdate, { locations: event.data.locations })
+    @ServerEventListener(Server.Locations.UserLocationsUpdated)
+    private handleServerUserLocationsUpdated(event: Server.Locations.UserLocationsUpdated) {
+        this.nuiEvents.emitNuiMessage(Nui.Locations.UserLocationsUpdate, { locations: event.data.locations })
     }
 
-    @NuiCallbackListener(GetUserLocations)
-    private async onGetUserLocations(event: GetUserLocations): Promise<void> {
-        this.events.emitNet(ClientGetUserLocations);
+    @NuiCallbackListener(NuiCB.Locations.GetUserLocations)
+    private async onGetUserLocations(event: NuiCB.Locations.GetUserLocations): Promise<void> {
+        this.events.emitNet(Client.Locations.GetUserLocations);
     }
 
-    @NuiCallbackListener(SaveUserLocation)
-    private async onSaveUserLocation(event: SaveUserLocation): Promise<void> {
-        this.events.emitNet(ClientSaveUserLocation, {location: event.data.location});
+    @NuiCallbackListener(NuiCB.Locations.SaveUserLocation)
+    private async onSaveUserLocation(event: NuiCB.Locations.SaveUserLocation): Promise<void> {
+        this.events.emitNet(Client.Locations.SaveUserLocation, {location: event.data.location});
     }
 
-    @NuiCallbackListener(MovePlayerToLocation)
-    private async onMovePlayerToLocation(event: MovePlayerToLocation): Promise<void> {
+    @NuiCallbackListener(NuiCB.Locations.MovePlayerToLocation)
+    private async onMovePlayerToLocation(event: NuiCB.Locations.MovePlayerToLocation): Promise<void> {
         this.movePlayerToLocation(event.data.location);
     }
 
-    @NuiCallbackListener(GetCurrentPlayerPosition)
-    private async onGetCurrentPlayerPosition(event: GetCurrentPlayerPosition) {
+    @NuiCallbackListener(NuiCB.Locations.GetCurrentPlayerPosition)
+    private async onGetCurrentPlayerPosition(event: NuiCB.Locations.GetCurrentPlayerPosition) {
         return this.getCurrentPlayerPosition();
     }
 
@@ -58,19 +57,19 @@ export class Locations {
         Cfx.GameplayCamera.RelativeHeading = 0;
     }
 
-    @NuiCallbackListener(MovePlayerToCoords)
-    public async teleportPlayer(event: MovePlayerToCoords) {
+    @NuiCallbackListener(NuiCB.Locations.MovePlayerToCoords)
+    public async teleportPlayer(event: NuiCB.Locations.MovePlayerToCoords) {
         if (isVec3(event?.data?.coords)) {
             Cfx.Game.PlayerPed.Position = Vector3.create(event.data.coords);
         }
     }
 
-    @NuiCallbackListener(SetNoClipAboveGround)
-    public async setNoClipAboveGround(event: SetNoClipAboveGround) {
+    @NuiCallbackListener(NuiCB.NoClip.SetNoClipAboveGround)
+    public async setNoClipAboveGround(event: NuiCB.NoClip.SetNoClipAboveGround) {
         exports[GetCurrentResourceName()].SetNoClipAboveGround(event.data.active);
     }
 
-    public getCurrentPlayerPosition(): PlayerPosition {
+    public getCurrentPlayerPosition(): NuiCB.Locations.PlayerPosition {
         const player = Cfx.Game.Player.Character;
         const target = player.isInAnyVehicle() ? player.CurrentVehicle: player;
 

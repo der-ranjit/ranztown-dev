@@ -1,8 +1,8 @@
 import * as Cfx from "fivem-js";
 import { Entity } from "fivem-js";
 
-import { Callback, Message } from "../../angular-fivem-shared/nui-events";
-import { NuiMode } from "../../angular-fivem-shared/nui-events/messages";
+import { NuiCB } from "../../angular-fivem-shared/nui-events/callbacks";
+import { Nui } from "../../angular-fivem-shared/nui-events/messages";
 import { CfxNuiEventsService, NuiCallbackEvents, NuiCallbackListener } from "./NuiEventsService";
 import { raycastFromScreenPointerToWorld } from "./NuiRaycast";
 
@@ -18,7 +18,7 @@ export class MenuControls {
 
     private events = CfxNuiEventsService.getInstance();
     private nuiActive = false;
-    private nuiMode: NuiMode = "inactive";
+    private nuiMode: Nui.Main.NuiMode = "inactive";
     private readonly preventPauseMenuTimer = 300;
     private readonly inspectorModeHoldTime = 500;
 
@@ -31,8 +31,8 @@ export class MenuControls {
         this.initControls();
     }
 
-    @NuiCallbackListener(Callback.SetControlsDisabled)
-    public async setControlsDisabled(event: Callback.SetControlsDisabled): Promise<void> {
+    @NuiCallbackListener(NuiCB.Main.SetControlsDisabled)
+    public async setControlsDisabled(event: NuiCB.Main.SetControlsDisabled): Promise<void> {
         this.controlsDisabled = event.data.disabled;
     }
 
@@ -102,12 +102,12 @@ export class MenuControls {
         }
     }
 
-    private setNuiMode(nuiMode: NuiMode): void {
+    private setNuiMode(nuiMode: Nui.Main.NuiMode): void {
         this.nuiMode = nuiMode;
         this.nuiActive = nuiMode !== "inactive";
         SetNuiFocus(this.nuiActive, this.nuiActive);
         SetNuiFocusKeepInput(this.nuiActive);
-        this.events.emitNuiMessage(Message.SetNuiMode, { nuiMode });
+        this.events.emitNuiMessage(Nui.Main.SetNuiMode, { nuiMode });
     }
 
     private disableNUI(): void {
@@ -115,7 +115,7 @@ export class MenuControls {
         SetNuiFocus(false, false);
         SetNuiFocusKeepInput(false);
         this.resetLastInspectedOpacity();
-        this.events.emitNuiMessage(Message.SetNuiMode, { nuiMode: "inactive" });
+        this.events.emitNuiMessage(Nui.Main.SetNuiMode, { nuiMode: "inactive" });
         // setTimeout to disable controls some longer; in case esc is pressed the pause menu would open
         setTimeout(() => {
             this.nuiActive = false;

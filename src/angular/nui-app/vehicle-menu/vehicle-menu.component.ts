@@ -3,12 +3,11 @@ import { Component, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { VehicleModType } from 'fivem-js';
 import { Subject } from 'rxjs';
 
-import { Callback } from '../../../angular-fivem-shared/nui-events';
-import { GetPlayerVehicleData } from '../../../angular-fivem-shared/nui-events/callbacks';
 import { FivemVehicleJSON, isFivemVehicleJSON, ModTypeSlot } from '../../../angular-fivem-shared/serialization/FivemVehicleJSON';
 import { Vehicles } from '../../../angular-fivem-shared/gta-data/Vehicles';
 import { slideIn } from '../_core/animations';
 import { AppNuiEventsService } from '../_core/nui-events/nui-events.service';
+import { NuiCB } from '../../../angular-fivem-shared/nui-events/callbacks';
 
 type ModValue = {modType: VehicleModType, modValue: number};
 
@@ -121,14 +120,14 @@ export class VehicleMenuComponent implements OnInit, OnDestroy {
     }
 
     public async updateVehicleData() {
-        const result = await this.events.emitNuiCallback(GetPlayerVehicleData, null);
+        const result = await this.events.emitNuiCallback(NuiCB.VehicleManager.GetPlayerVehicleData, null);
         if (isFivemVehicleJSON(result)) {
             this.vehicleJSON = result;
         }
     }
 
     public async handleSpawn(carModel: string) {
-        await this.events.emitNuiCallback(Callback.SpawnVehicle, { model: carModel });
+        await this.events.emitNuiCallback(NuiCB.VehicleManager.SpawnVehicle, { model: carModel });
         this.updateVehicleData();
     }
 
@@ -148,7 +147,7 @@ export class VehicleMenuComponent implements OnInit, OnDestroy {
     public async updateVehicleMod(modType: VehicleModType, modValue: number, updateData = true) {
         const vehicleHandle = this.vehicleJSON?.Handle?.value;
         if (vehicleHandle) {
-            await this.events.emitNuiCallback(Callback.UpdateVehicleMod, { vehicleHandle, modType, modValue });
+            await this.events.emitNuiCallback(NuiCB.VehicleManager.UpdateVehicleMod, { vehicleHandle, modType, modValue });
             if (updateData) {
                 this.updateVehicleData();
             }

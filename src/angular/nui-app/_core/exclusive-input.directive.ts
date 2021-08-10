@@ -1,5 +1,6 @@
 import { Directive, ElementRef, HostListener } from "@angular/core";
-import { Callback } from "../../../angular-fivem-shared/nui-events";
+
+import { NuiCB } from "../../../angular-fivem-shared/nui-events/callbacks";
 import { AppNuiEventsService } from "./nui-events/nui-events.service";
 
 @Directive({
@@ -13,12 +14,12 @@ export class ExclusiveInputDirective {
 
     @HostListener("blur")
     public enableAllControls(): void {
-        this.events.emitNuiCallback(Callback.SetControlsDisabled, {disabled: false});
+        this.events.emitNuiCallback(NuiCB.Main.SetControlsDisabled, {disabled: false});
     }
 
     @HostListener("focus")
     public disableAllControls(): void {
-        this.events.emitNuiCallback(Callback.SetControlsDisabled, {disabled: true});
+        this.events.emitNuiCallback(NuiCB.Main.SetControlsDisabled, {disabled: true});
     }
 
     @HostListener("keyup.escape")

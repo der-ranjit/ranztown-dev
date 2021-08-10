@@ -1,7 +1,7 @@
 import { v4 } from 'uuid';
 
 import { Race } from "../../../angular-fivem-shared/Racing";
-import { ClientGetRaceTracks, ClientSaveRaceTrack, ServerEmitRaceTracks } from '../../client-server-shared/events';
+import { Client, Server } from '../../client-server-shared/events';
 import { Identifiers } from "../Identifiers";
 import { ClientEventListener, ClientEvents, ServerEventsService } from '../ServerEventsService';
 import { LowDatabase } from "./LowDatabase.abstract";
@@ -26,13 +26,13 @@ export class RaceTrackDatabase extends LowDatabase<Race>{
         return track ?? null;
     }
 
-    @ClientEventListener(ClientGetRaceTracks)
-    private async handleClientGetRaceTracks(event: ClientGetRaceTracks, source: number) {
+    @ClientEventListener(Client.Racing.GetRaceTracks)
+    private async handleClientGetRaceTracks(event: Client.Racing.GetRaceTracks, source: number) {
         this.emitRaceTracks();
     }
 
-    @ClientEventListener(ClientSaveRaceTrack)
-    private async saveRace(event: ClientSaveRaceTrack, source: number, ) {
+    @ClientEventListener(Client.Racing.SaveRaceTrack)
+    private async saveRace(event: Client.Racing.SaveRaceTrack, source: number, ) {
         const userId = Identifiers.getFivemId(source);
         const id = v4();
         await this.read();
@@ -45,7 +45,7 @@ export class RaceTrackDatabase extends LowDatabase<Race>{
         await this.read();
         const tracks = this.database.data?.entries;
         if (tracks) {
-            this.serverEvents.emitNet(ServerEmitRaceTracks, -1, { tracks });
+            this.serverEvents.emitNet(Server.Racing.EmitRaceTracks, -1, { tracks });
         }
     }
 }
