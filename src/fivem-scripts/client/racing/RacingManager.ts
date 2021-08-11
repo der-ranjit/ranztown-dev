@@ -29,6 +29,7 @@ export class RacingManager {
 
     private activeRaceName: string | null = null;
     private activeRaceTickHandler: number | null = null;
+    private activeRaceCountdownCancel: Function | null = null;
     private raceStartPosition: CheckpointPosition | null = null;
     private raceCheckpoints: RaceCheckpoint[] = [];
     private activeCheckpointIndex = -1;
@@ -95,7 +96,9 @@ export class RacingManager {
         this.currentCheckpoint?.show();
         this.movePlayerToStartPosition();
         this.freezePlayer(true);
-        await Text.createCountdown(["3", "2", "1"], 1000, "Go!", 0.0, 10.0);
+        const { promise, cancel } = Text.createCountdown(["3", "2", "1"], 1000, "Go!", 0.0, 10.0);
+        this.activeRaceCountdownCancel = cancel;
+        await promise;
         this.activeRaceTickHandler = setTick(() => this.raceLoop());
         this.freezePlayer(false);
     }
@@ -113,6 +116,8 @@ export class RacingManager {
     private stopActiveRace() {
         console.log(`stopping race: ${this.activeRaceName}`);
         this.activeRaceName = null;
+        this.activeRaceCountdownCancel?.();
+        this.activeRaceCountdownCancel = null
         this.currentRoundIndex = -1;
         this.currentCheckpoint?.hide();
         this.activeCheckpointIndex = -1;

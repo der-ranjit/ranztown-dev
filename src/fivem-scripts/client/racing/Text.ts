@@ -21,7 +21,12 @@ export class Text {
         animationMinScaleFloat: number,
         animationMaxScaleFloat: number
     ) {
-        return new Promise<void>(async resolve => {
+        const cancel = () => {
+            cancelled = true;
+        }
+
+        let cancelled = false;
+        const promise = new Promise<void>(async resolve => {
             let currentStep = 0;
             let displayText = steps[currentStep];
             let currentAnimationScale = animationMaxScaleFloat;
@@ -29,6 +34,12 @@ export class Text {
 
             let stepStartTime = Date.now();
             const tickHandler = setTick(() => {
+                if (cancelled) {
+                    clearTick(tickHandler);
+                    resolve();
+                    return;
+                }
+
                 const elapsed = Date.now() - stepStartTime;
 
                 const progress = elapsed/intervalMS;
@@ -51,6 +62,8 @@ export class Text {
                 // TODO better centering
                 Text.draw2DText(0.5, 0.4, displayText, currentAnimationScale)
             })
-        })
+        });
+
+        return {promise, cancel};
     }
 }
