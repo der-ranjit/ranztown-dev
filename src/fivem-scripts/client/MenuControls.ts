@@ -110,7 +110,7 @@ export class MenuControls {
         this.events.emitNuiMessage(Nui.Main.SetNuiMode, { nuiMode });
     }
 
-    private disableNUI(): void {
+    public disableNUI(): void {
         this.nuiMode = "inactive";
         SetNuiFocus(false, false);
         SetNuiFocusKeepInput(false);

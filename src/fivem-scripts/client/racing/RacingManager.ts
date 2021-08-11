@@ -4,8 +4,10 @@ import { Vector3 } from "fivem-js/lib/utils/Vector3";
 import { NuiCB } from "../../../angular-fivem-shared/nui-events/callbacks";
 import { Nui } from "../../../angular-fivem-shared/nui-events/messages";
 import {  CheckpointPosition, Race } from "../../../angular-fivem-shared/Racing";
+import { sleep } from "../../../angular-fivem-shared/utils";
 import { Client, Server } from "../../client-server-shared/events";
 import { ClientEventsService, ServerEventListener, ServerEvents } from "../ClientEventsService";
+import { MenuControls } from "../MenuControls";
 import { CfxNuiEventsService, NuiCallbackEvents, NuiCallbackListener } from "../NuiEventsService";
 import { RaceCheckpoint } from "./Checkpoint";
 import { EditRaceMode } from "./EditRaceMode";
@@ -24,6 +26,7 @@ export class RacingManager {
 
     private nuiEvents = CfxNuiEventsService.getInstance();
     private clientEvents = ClientEventsService.getInstance();
+    private menuControls = MenuControls.getInstance();
 
     private editRaceMode = EditRaceMode.getInstance();
 
@@ -91,13 +94,14 @@ export class RacingManager {
 
         this.activeRaceName = race.name;
         console.log(`starting race: ${this.activeRaceName}`);
+        this.menuControls.disableNUI();
 
         this.raceStartPosition = race.checkpointPositions[0];
         this.raceCheckpoints = this.createCheckpointsForRace(race);
         this.activeCheckpointIndex = 0;
         this.currentCheckpoint?.show();
-        this.movePlayerToStartPosition();
         this.freezePlayer(true);
+        await this.movePlayerToStartPosition();
         const { promise, cancel } = Text.createCountdown(["3", "2", "1"], 1000, "Go!", 0.0, 10.0);
         this.activeRaceCountdownCancel = cancel;
         await promise;
@@ -105,13 +109,16 @@ export class RacingManager {
         this.freezePlayer(false);
     }
 
-    private movePlayerToStartPosition() {
+    private async movePlayerToStartPosition() {
         if (this.raceStartPosition) {
             const target = Game.PlayerPed.isInAnyVehicle() ? Game.PlayerPed.CurrentVehicle : Game.PlayerPed;
             target.Position = Vector3.create(this.raceStartPosition.position);
             target.Heading = this.raceStartPosition.heading;
             // set camera to look in direction of heading
             GameplayCamera.RelativeHeading = 0;
+
+            // wait a bit for the teleported location to render; else checkpoints may be created at the wrong coordinates :shrug:
+            await sleep(2000);
         }
     }
 
