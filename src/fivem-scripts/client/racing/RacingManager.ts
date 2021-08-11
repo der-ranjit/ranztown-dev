@@ -90,6 +90,8 @@ export class RacingManager {
         this.editRaceMode.stopEditRace();
 
         this.activeRaceName = race.name;
+        console.log(`starting race: ${this.activeRaceName}`);
+
         this.raceStartPosition = race.checkpointPositions[0];
         this.raceCheckpoints = this.createCheckpointsForRace(race);
         this.activeCheckpointIndex = 0;
